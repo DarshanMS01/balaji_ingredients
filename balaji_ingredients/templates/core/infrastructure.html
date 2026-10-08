@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Infrastructure — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Balaji Ingredients infrastructure — how we source, process, package, store and dispatch food and agricultural ingredients.{% endblock %}
+
+{% block content %}
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-eyebrow light">INFRASTRUCTURE</div>
+    <h1 class="page-hero-heading">How We Operate</h1>
+  </div>
+</section>
+
+<!-- Infrastructure Sections -->
+<section class="infra-page">
+  <div class="page-container">
+
+    <div class="infra-intro reveal-up">
+      <p class="lead-text">
+        This page outlines how Balaji Ingredients operates across sourcing, processing,
+        packaging, storage and dispatch. Detailed infrastructure information will be
+        updated as our operations are formalised and expanded.
+      </p>
+    </div>
+
+    <div class="infra-areas">
+
+      <div class="infra-area reveal-up">
+        <div class="infra-icon-wrap">
+          <div class="infra-icon">⊛</div>
+        </div>
+        <div class="infra-content">
+          <div class="infra-number">01</div>
+          <h3>Farm-Gate Sourcing & Aggregation</h3>
+          <p>
+            Ingredients are procured directly from certified agricultural producer clusters across Karnataka, Maharashtra, and Andhra Pradesh. We conduct rigorous pre-procurement batch sampling, grain moisture verification, and foreign matter screening at the collection center before loading.
+          </p>
+          <div class="infra-specs-grid">
+            <div class="infra-spec-badge">Direct APMC & Farmer Aggregation</div>
+            <div class="infra-spec-badge">On-site Moisture Testing (<11%)</div>
+            <div class="infra-spec-badge">Traceable Lot Numbering</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="infra-area reveal-up delay-1">
+        <div class="infra-icon-wrap">
+          <div class="infra-icon">⊙</div>
+        </div>
+        <div class="infra-content">
+          <div class="infra-number">02</div>
+          <h3>Precision Cleaning & Sortex Processing</h3>
+          <p>
+            Our processing lines feature multi-stage destoners, gravity separators, and advanced Buhler optical Sortex color sorters delivering 99.5%+ product purity. Pulses undergo calibrated dehusking, splitting, and grading, while whole grains are graded by sieve mesh size to maintain consistent physical characteristics.
+          </p>
+          <div class="infra-specs-grid">
+            <div class="infra-spec-badge">Trichromatic Color Sorting</div>
+            <div class="infra-spec-badge">Ferrous & Non-ferrous Metal Detection</div>
+            <div class="infra-spec-badge">Uniform Grain Sizing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="infra-area reveal-up delay-2">
+        <div class="infra-icon-wrap">
+          <div class="infra-icon">◻</div>
+        </div>
+        <div class="infra-content">
+          <div class="infra-number">03</div>
+          <h3>Industrial Packaging & Private Labeling</h3>
+          <p>
+            We supply high-barrier, food-grade packaging formats tailored for institutional processors, commercial mills, and FMCG brands. Options range from 25kg / 50kg multi-layer woven polypropylene (PP) sacks with inner LDPE liners to 500kg – 1000kg FIBC Jumbo bulk tote bags with vacuum-seal capabilities.
+          </p>
+          <div class="infra-specs-grid">
+            <div class="infra-spec-badge">25kg / 50kg Heavy-Duty PP Sacks</div>
+            <div class="infra-spec-badge">1000kg FIBC Bulk Bags</div>
+            <div class="infra-spec-badge">Custom Private Label Stenciling</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="infra-area reveal-up delay-3">
+        <div class="infra-icon-wrap">
+          <div class="infra-icon">◫</div>
+        </div>
+        <div class="infra-content">
+          <div class="infra-number">04</div>
+          <h3>Climate-Controlled & Fumigated Warehousing</h3>
+          <p>
+            Our dedicated central storage facilities operate under controlled temperature (below 22°C) and relative humidity (under 60%) to preserve grain vitality, prevent aflatoxin development, and eliminate weevil infestation. Palletized racking ensures strict First-In, First-Out (FIFO) inventory turnover.
+          </p>
+          <div class="infra-specs-grid">
+            <div class="infra-spec-badge">3,500+ MT Palletized Capacity</div>
+            <div class="infra-spec-badge">Scheduled Prophylactic Fumigation</div>
+            <div class="infra-spec-badge">Digital ERP Inventory Tracking</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="infra-area reveal-up">
+        <div class="infra-icon-wrap">
+          <div class="infra-icon">⇢</div>
+        </div>
+        <div class="infra-content">
+          <div class="infra-number">05</div>
+          <h3>Logistics, Transit & Fast Fleet Dispatch</h3>
+          <p>
+            We manage pan-India logistics coordination through contracted GPS-enabled freight carriers and rail freight for bulk volumes. All shipments are accompanied by digital Goods Consignment Notes (LR), e-Way bills, Certificates of Analysis (CoA), and dispatch weight slips from certified weighbridges.
+          </p>
+          <div class="infra-specs-grid">
+            <div class="infra-spec-badge">24 to 48-Hour Regional Dispatch</div>
+            <div class="infra-spec-badge">Full Truckload (FTL) & Part Truckload (PTL)</div>
+            <div class="infra-spec-badge">Certified Weighbridge Slips</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="b2b-cta">
+  <div class="b2b-container">
+    <div class="b2b-content reveal-up">
+      <h2 class="b2b-heading">Want to know more about how we operate?</h2>
+      <p class="b2b-text">Contact us directly. We are happy to discuss our operations and how we can meet your specific requirements.</p>
+      <div class="b2b-actions">
+        <a href="{% url 'core:contact' %}" class="btn btn-primary btn-large">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .profile-grid-layout {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
+    gap: 28px;
+  }
+
+  .profile-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+  }
+
+  .profile-section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+  }
+
+  .profile-section-sub {
+    font-size: 13px;
+    color: var(--text-body);
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .profile-grid-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:28px;">
+  <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; letter-spacing:-0.03em;">
+    Enterprise Profile & Corporate Settings
+  </h1>
+  <p style="font-size:13.5px; color:var(--text-body); margin-top:2px;">
+    Manage your registered company details, GSTIN compliance, delivery addresses, and login security credentials.
+  </p>
+</div>
+
+<div class="profile-grid-layout">
+  
+  <!-- Left: Company Profile Info Form -->
+  <div class="profile-card">
+    <div class="profile-section-title">Company & Operational Information</div>
+    <div class="profile-section-sub">Update contact credentials for tax invoices and delivery consignments.</div>
+
+    <form method="POST" action="/profile/">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="update_profile">
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">First Name</label>
+          <input type="text" name="first_name" class="portal-input" value="{{ request.user.first_name }}" required>
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">Last Name</label>
+          <input type="text" name="last_name" class="portal-input" value="{{ request.user.last_name }}">
+        </div>
+      </div>
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">Registered E-mail Address</label>
+          <input type="email" name="email" class="portal-input" value="{{ request.user.email }}" required>
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">Official Contact Mobile</label>
+          <input type="tel" name="phone" class="portal-input" value="{{ profile.phone }}" required>
+        </div>
+      </div>
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">Registered Company Name</label>
+          <input type="text" name="company_name" class="portal-input" value="{{ profile.company_name }}" required>
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">Business Enterprise Type</label>
+          <select name="business_type" class="portal-select">
+            <option value="manufacturer" {% if profile.business_type == 'manufacturer' %}selected{% endif %}>Food Manufacturer / FMCG</option>
+            <option value="processor" {% if profile.business_type == 'processor' %}selected{% endif %}>Flour Mill / Spice Processor</option>
+            <option value="distributor" {% if profile.business_type == 'distributor' %}selected{% endif %}>Wholesaler / Distributor</option>
+            <option value="retail_chain" {% if profile.business_type == 'retail_chain' %}selected{% endif %}>Supermarket / Retail Chain</option>
+            <option value="horeca" {% if profile.business_type == 'horeca' %}selected{% endif %}>HoReCa Institutional Supply</option>
+            <option value="exporter" {% if profile.business_type == 'exporter' %}selected{% endif %}>Export / Trading House</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">GSTIN / Tax ID</label>
+          <input type="text" name="gstin" class="portal-input" value="{{ profile.gstin }}" placeholder="29AAACA9876Q1Z2">
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">PAN Number</label>
+          <input type="text" name="pan_number" class="portal-input" value="{{ profile.pan_number }}" placeholder="AAACA9876Q">
+        </div>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Primary Delivery & Billing Address</label>
+        <input type="text" name="address_line1" class="portal-input" value="{{ profile.address_line1 }}" placeholder="Plot 48-A, Industrial Area" required>
+      </div>
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">City</label>
+          <input type="text" name="city" class="portal-input" value="{{ profile.city }}" required>
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">State & Pincode</label>
+          <input type="text" name="state" class="portal-input" value="{{ profile.state }} {{ profile.pincode }}" required>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+        <button type="submit" class="btn-primary-gold" style="padding:12px 32px;">
+          Save Profile Changes
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right: Change Password Card -->
+  <div class="profile-card" style="height:fit-content;">
+    <div class="profile-section-title">Change Password</div>
+    <div class="profile-section-sub">Update authentication password for this enterprise login.</div>
+
+    <form method="POST" action="/profile/">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="change_password">
+
+      <div class="portal-form-group">
+        <label class="portal-label">Current Password</label>
+        <input type="password" name="old_password" class="portal-input" required>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">New Password (Min 6 chars)</label>
+        <input type="password" name="new_password" class="portal-input" required>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Confirm New Password</label>
+        <input type="password" name="confirm_new_password" class="portal-input" required>
+      </div>
+
+      <button type="submit" class="btn-secondary-outline" style="width:100%; justify-content:center; padding:12px; margin-top:8px;">
+        Update Password
+      </button>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}

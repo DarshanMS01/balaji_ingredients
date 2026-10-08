@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enterprise Portal Dashboard — Balaji Ingredients</title>
+  <meta name="description" content="Balaji Ingredients B2B enterprise procurement portal, live mandi rates, consignment tracker, and quality CoAs." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0B0E14;
+      --bg-surface: #111622;
+      --bg-surface-elevated: #182030;
+      --bg-card: rgba(17, 22, 34, 0.75);
+      --bg-card-hover: rgba(24, 32, 48, 0.9);
+      
+      --gold: #D4A343;
+      --gold-light: #F6D57E;
+      --gold-dark: #B88523;
+      --gold-glow: rgba(212, 163, 67, 0.25);
+      
+      --red-accent: #A82B1D;
+      --emerald-accent: #10B981;
+      --emerald-glow: rgba(16, 185, 129, 0.2);
+      --whatsapp-green: #25D366;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-light: rgba(255, 255, 255, 0.14);
+      --border-gold: rgba(212, 163, 67, 0.35);
+      
+      --text-white: #FFFFFF;
+      --text-body: #94A3B8;
+      --text-muted: #64748B;
+      
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      height: 100%;
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; }
+
+    /* ══════════════════════════════════════════════════════════
+       TOP STICKY NAVBAR
+    ══════════════════════════════════════════════════════════ */
+    .portal-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 14, 20, 0.88);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+    }
+
+    .portal-nav-container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #A82B1D, #6B170E);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFF;
+      box-shadow: 0 4px 14px rgba(168, 43, 29, 0.4);
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-meta strong {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: #FFF;
+    }
+    .brand-meta span {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+
+    /* Live Mandi Status Pill */
+    .mandi-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--emerald-accent);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald-accent);
+      box-shadow: 0 0 10px var(--emerald-accent);
+      animation: pulseAnim 1.8s infinite;
+    }
+
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Search Bar */
+    .nav-search-bar {
+      position: relative;
+      width: 280px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-search-bar svg {
+      position: absolute;
+      left: 12px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    .nav-search-input {
+      width: 100%;
+      padding: 8px 14px 8px 36px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      color: #FFF;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .nav-search-input:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px var(--gold-glow);
+    }
+
+    /* Nav Right Actions */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-whatsapp-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37, 211, 102, 0.12);
+      border: 1px solid rgba(37, 211, 102, 0.3);
+      color: #25D366;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-whatsapp-header:hover {
+      background: #25D366;
+      color: #0C0A09;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+    }
+
+    /* User Profile Dropdown */
+    .user-profile-widget {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 14px 5px 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-light);
+      border-radius: 999px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .user-profile-widget:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: var(--gold);
+    }
+
+    .user-avatar-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #D4A343, #B88523);
+      color: #0C0A09;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .user-name-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFF;
+      line-height: 1.1;
+    }
+    .user-role-badge {
+      font-size: 10px;
+      color: var(--gold-light);
+      font-weight: 500;
+    }
+
+    /* Dropdown menu */
+    .profile-dropdown-menu {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      width: 220px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      display: none;
+      z-index: 200;
+    }
+    .profile-dropdown-menu.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: var(--text-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFF;
+    }
+    .dropdown-item.logout {
+      color: #F87171;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: 4px;
+      border-radius: 0 0 10px 10px;
+    }
+    .dropdown-item.logout:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #FCA5A5;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MAIN LAYOUT: SIDEBAR + CONTENT
+    ══════════════════════════════════════════════════════════ */
+    .dashboard-layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      padding: 24px 28px 60px;
+      gap: 28px;
+    }
+
+    /* Sidebar Navigation */
+    .dashboard-sidebar {
+      width: 250px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 96px;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 10px 14px 4px;
+    }
+
+    .nav-tab-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      color: var(--text-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      border: 1px solid transparent;
+      text-align: left;
+      width: 100%;
+    }
+
+    .nav-tab-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #FFF;
+    }
+
+    .nav-tab-item.active {
+      background: linear-gradient(135deg, rgba(212, 163, 67, 0.18), rgba(184, 133, 35, 0.08));
+      color: var(--gold-light);
+      border-color: rgba(212, 163, 67, 0.35);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+
+    .nav-tab-item svg {
+      flex-shrink: 0;
+      color: inherit;
+    }
+
+    .badge-pill {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(212, 163, 67, 0.2);
+      color: var(--gold-light);
+    }
+
+    /* Sidebar quick contact box */
+    .sidebar-contact-card {
+      margin-top: 20px;
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.08), rgba(17, 24, 39, 0.8));
+      border: 1px solid rgba(37, 211, 102, 0.25);
+      border-radius: 18px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .sidebar-contact-card h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 4px;
+    }
+    .sidebar-contact-card p {
+      font-size: 11.5px;
+      color: var(--text-body);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .btn-quick-wa {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 8px;
+      border-radius: 10px;
+      background: var(--whatsapp-green);
+      color: #0C0A09;
+      font-size: 12.5px;
+      font-weight: 700;
+      transition: transform 0.15s;
+    }
+    .btn-quick-wa:hover {
+      transform: translateY(-1px);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MAIN CONTENT CONTAINER
+    ══════════════════════════════════════════════════════════ */
+    .dashboard-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       1. HERO BANNER
+    ══════════════════════════════════════════════════════════ */
+    .hero-banner-card {
+      background: linear-gradient(135deg, rgba(28, 36, 52, 0.9) 0%, rgba(15, 19, 28, 0.98) 100%),
+                  radial-gradient(circle at top right, rgba(212, 163, 67, 0.15) 0%, transparent 60%);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 34px 38px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-banner-card::after {
+      content: '';
+      position: absolute;
+      right: -30px;
+      bottom: -30px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(212, 163, 67, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 650px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 163, 67, 0.15);
+      border: 1px solid rgba(212, 163, 67, 0.3);
+      color: var(--gold-light);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 30px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      color: var(--text-body);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-gold-action {
+      background: linear-gradient(135deg, #E0B04E 0%, #B88523 100%);
+      color: #0C0A09;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px var(--gold-glow);
+      transition: all 0.2s;
+    }
+    .btn-gold-action:hover {
+      background: linear-gradient(135deg, #F6D57E 0%, #D4A343 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 163, 67, 0.45);
+    }
+
+    .btn-outline-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-light);
+      color: #FFF;
+      padding: 11px 20px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-outline-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       KEY KPI METRIC TILES
+    ══════════════════════════════════════════════════════════ */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      position: relative;
+      transition: all 0.25s;
+    }
+    .metric-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+    }
+
+    .metric-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .metric-icon-gold { background: rgba(212, 163, 67, 0.15); color: var(--gold-light); }
+    .metric-icon-green { background: rgba(16, 185, 129, 0.15); color: var(--emerald-accent); }
+    .metric-icon-blue { background: rgba(59, 130, 246, 0.15); color: #60A5FA; }
+    .metric-icon-red { background: rgba(168, 43, 29, 0.2); color: #F87171; }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: #FFF;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .metric-footer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-body);
+    }
+    .trend-up { color: var(--emerald-accent); font-weight: 700; }
+    .trend-neutral { color: var(--gold-light); font-weight: 600; }
+
+    /* ══════════════════════════════════════════════════════════
+       SECTION CARD & HEADERS
+    ══════════════════════════════════════════════════════════ */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 26px 28px;
+      margin-bottom: 28px;
+    }
+
+    .section-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-action-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold-light);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.2s;
+    }
+    .section-action-link:hover {
+      gap: 8px;
+      text-decoration: underline;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LIVE COMMODITY MANDI RATES MATRIX
+    ══════════════════════════════════════════════════════════ */
+    .commodity-rates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .commodity-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .commodity-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--border-gold);
+      transform: translateY(-2px);
+    }
+
+    .commodity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .commodity-title-group h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 2px;
+    }
+    .commodity-title-group span {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .commodity-price-tag {
+      text-align: right;
+    }
+
+    .rate-curr {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gold-light);
+      font-family: var(--font-mono);
+    }
+    .rate-unit {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .commodity-specs-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+      padding: 8px 0;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .spec-badge {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-body);
+    }
+
+    .commodity-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .rate-change {
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .rate-change.up { color: var(--emerald-accent); }
+    .rate-change.down { color: #F87171; }
+
+    .btn-buy-lot {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(212, 163, 67, 0.15);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-buy-lot:hover {
+      background: var(--gold);
+      color: #0C0A09;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       ORDERS & CONSIGNMENT TRACKING TABLE
+    ══════════════════════════════════════════════════════════ */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .orders-table th {
+      padding: 12px 16px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .orders-table td {
+      padding: 16px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      vertical-align: middle;
+    }
+
+    .orders-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #FFF;
+    }
+
+    .order-id-code {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .status-pill.transit {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60A5FA;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .status-pill.quality {
+      background: rgba(212, 163, 67, 0.15);
+      color: var(--gold-light);
+      border: 1px solid rgba(212, 163, 67, 0.3);
+    }
+    .status-pill.delivered {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald-accent);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-table-action {
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-light);
+      color: #FFF;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-table-action:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SPOT RFQ / PRICE CALCULATOR
+    ══════════════════════════════════════════════════════════ */
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .calc-form-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .calc-summary-box {
+      background: linear-gradient(145deg, rgba(28, 36, 52, 0.9), rgba(15, 19, 28, 0.95));
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .calc-group {
+      margin-bottom: 16px;
+    }
+
+    .calc-group label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #EDE8E1;
+      margin-bottom: 6px;
+    }
+
+    .calc-select, .calc-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      color: #FFF;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+    .calc-select:focus, .calc-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px var(--gold-glow);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13.5px;
+      color: var(--text-body);
+    }
+
+    .summary-row.total {
+      border-bottom: none;
+      padding-top: 16px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFF;
+    }
+
+    .summary-row.total .total-price {
+      font-size: 24px;
+      color: var(--gold-light);
+      font-family: var(--font-mono);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MODALS
+    ══════════════════════════════════════════════════════════ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #151A24;
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 560px;
+      padding: 32px 30px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      position: relative;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      color: #FFF;
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 20px;
+      padding: 4px;
+    }
+    .btn-close-modal:hover { color: #FFF; }
+
+    /* Shipment Tracking Timeline */
+    .tracking-timeline {
+      position: relative;
+      margin: 20px 0;
+      padding-left: 28px;
+    }
+    .tracking-timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border-light);
+    }
+
+    .timeline-step {
+      position: relative;
+      margin-bottom: 22px;
+    }
+    .timeline-step:last-child { margin-bottom: 0; }
+
+    .step-dot {
+      position: absolute;
+      left: -28px;
+      top: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 2px solid var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .timeline-step.done .step-dot {
+      background: var(--emerald-accent);
+      border-color: var(--emerald-accent);
+      color: #0C0A09;
+    }
+    .timeline-step.active .step-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    .step-info strong {
+      display: block;
+      font-size: 14px;
+      color: #FFF;
+      margin-bottom: 2px;
+    }
+    .step-info span {
+      font-size: 12px;
+      color: var(--text-body);
+    }
+
+    /* Toast Notification */
+    .toast-popup {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 24, 36, 0.95);
+      backdrop-filter: blur(16px);
+      color: #FFF;
+      border: 1px solid var(--gold);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 600;
+      display: none;
+      z-index: 2000;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.8);
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout { flex-direction: column; }
+      .dashboard-sidebar { width: 100%; position: relative; top: 0; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .calculator-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .portal-navbar { padding: 0 16px; }
+      .brand-meta { display: none; }
+      .nav-search-bar { display: none; }
+      .hero-banner-card { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .dashboard-layout { padding: 16px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════ TOP STICKY NAVBAR ════════════════ -->
+  <header class="portal-navbar">
+    <div class="portal-nav-container">
+      
+      <div class="nav-left">
+        <a href="index.html" class="portal-brand">
+          <div class="brand-logo-badge">B</div>
+          <div class="brand-meta">
+            <strong>Balaji Ingredients</strong>
+            <span>Enterprise B2B Hub</span>
+          </div>
+        </a>
+
+        <!-- Live Mandi Status -->
+        <div class="mandi-status-pill">
+          <span class="pulse-dot"></span>
+          <span>APMC Hub: Live Trading Open</span>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="nav-search-bar">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" class="nav-search-input" placeholder="Search lots, PO #, COA..." id="globalSearchInput" oninput="filterCommodities(this.value)">
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <!-- Direct WhatsApp Trade Manager -->
+        <a href="https://wa.me/919480123456?text=Hello%20Balaji%20Ingredients,%20I%20am%20reviewing%20the%20portal%20and%20would%20like%20a%20spot%20rate%20quote" target="_blank" class="btn-whatsapp-header">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.181-.076.355.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/>
+          </svg>
+          WhatsApp Desk
+        </a>
+
+        <!-- User Profile Dropdown -->
+        <div class="user-profile-widget" onclick="toggleProfileDropdown()">
+          <div class="user-avatar-circle" id="userAvatarLetter">C</div>
+          <div>
+            <div class="user-name-text" id="headerUserName">Chandan Shetty</div>
+            <div class="user-role-badge" id="headerUserRole">Apex Agro Proc.</div>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+
+          <!-- Dropdown Options -->
+          <div class="profile-dropdown-menu" id="profileDropdown">
+            <div class="dropdown-item" onclick="switchPortalTab('tabOrders')">
+              📦 My Active Orders
+            </div>
+            <div class="dropdown-item" onclick="switchPortalTab('tabCalculator')">
+              ⚡ Spot Rate RFQ
+            </div>
+            <div class="dropdown-item" onclick="switchPortalTab('tabQuality')">
+              🧪 Lab COA Reports
+            </div>
+            <div class="dropdown-item logout" onclick="handleLogout()">
+              🚪 Logout from Portal
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ════════════════ DASHBOARD MAIN CONTAINER ════════════════ -->
+  <div class="dashboard-layout">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-section-title">Trading Hub</div>
+      
+      <button class="nav-tab-item active" id="btnNavOverview" onclick="switchPortalTab('tabOverview')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        Overview
+      </button>
+
+      <button class="nav-tab-item" id="btnNavRates" onclick="switchPortalTab('tabRates')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+        </svg>
+        Live Mandi Rates
+        <span class="badge-pill">8 Live</span>
+      </button>
+
+      <button class="nav-tab-item" id="btnNavOrders" onclick="switchPortalTab('tabOrders')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+        </svg>
+        Consignments &amp; PO
+        <span class="badge-pill">4 Active</span>
+      </button>
+
+      <button class="nav-tab-item" id="btnNavCalculator" onclick="switchPortalTab('tabCalculator')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        Spot RFQ Calculator
+      </button>
+
+      <button class="nav-tab-item" id="btnNavQuality" onclick="switchPortalTab('tabQuality')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+        Lab Test Reports (COA)
+      </button>
+
+      <!-- Sidebar Quick Contact -->
+      <div class="sidebar-contact-card">
+        <h4>Procurement Hotline</h4>
+        <p>Instant APMC lot bidding &amp; direct container dispatches.</p>
+        <a href="https://wa.me/919480123456?text=Hello%20Balaji%20Ingredients,%20I%20need%20urgent%20container%20quote" target="_blank" class="btn-quick-wa">
+          <span>💬 Chat on WhatsApp</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT -->
+    <main class="dashboard-main">
+
+      <!-- ════════════════ TAB 1: OVERVIEW ════════════════ -->
+      <div class="tab-pane active" id="tabOverview">
+        
+        <!-- Hero Welcome Card -->
+        <div class="hero-banner-card">
+          <div class="hero-content">
+            <div class="hero-tag">🌾 Direct-Mill B2B Trading Portal</div>
+            <h1 class="hero-title">Welcome Back, <span id="welcomeUserName">Chandan Shetty</span></h1>
+            <p class="hero-desc">
+              Your verified enterprise account has active allocation in Byadgi Chilli, Malabar Pepper, and Salem Turmeric lots with live GPS dispatch tracking.
+            </p>
+            <div class="hero-actions">
+              <button class="btn-gold-action" onclick="openRfqModal('Byadgi Chilli Stemless')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                Place Spot Order
+              </button>
+              <button class="btn-outline-action" onclick="switchPortalTab('tabOrders')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Track Live Shipments
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-top-row">
+              <span class="metric-label">Active Orders</span>
+              <div class="metric-icon-box metric-icon-gold">📦</div>
+            </div>
+            <div class="metric-value">4 Lots</div>
+            <div class="metric-footer">
+              <span class="trend-up">● In Transit</span> to Nhava Sheva &amp; BLR
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top-row">
+              <span class="metric-label">Procured Volume</span>
+              <div class="metric-icon-box metric-icon-green">⚖️</div>
+            </div>
+            <div class="metric-value">48.5 MT</div>
+            <div class="metric-footer">
+              <span class="trend-up">+12.4%</span> this quarter
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top-row">
+              <span class="metric-label">Quality Score</span>
+              <div class="metric-icon-box metric-icon-blue">🧪</div>
+            </div>
+            <div class="metric-value">99.8%</div>
+            <div class="metric-footer">
+              <span class="trend-up">Aflatoxin &lt; 5ppb</span> Verified
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top-row">
+              <span class="metric-label">Credit / Balance</span>
+              <div class="metric-icon-box metric-icon-red">💳</div>
+            </div>
+            <div class="metric-value">₹24,50,000</div>
+            <div class="metric-footer">
+              <span class="trend-neutral">Approved</span> 30-Day LC Term
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Mandi Rates Preview Section -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3 class="section-title">
+              <span>🌾 Live Mandi Spot Rates</span>
+              <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);">(Real-time APMC Hub Rates)</span>
+            </h3>
+            <span class="section-action-link" onclick="switchPortalTab('tabRates')">View All Commodities →</span>
+          </div>
+
+          <div class="commodity-rates-grid" id="previewRatesGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Recent Shipments Overview -->
+        <div class="section-card">
+          <div class="section-card-header">
+            <h3 class="section-title">📦 Active Shipments &amp; Consignments</h3>
+            <span class="section-action-link" onclick="switchPortalTab('tabOrders')">Full Tracking List →</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>PO # / Tracking</th>
+                  <th>Commodity &amp; Grade</th>
+                  <th>Tonnage</th>
+                  <th>Destination</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="overviewOrdersTableBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════ TAB 2: LIVE MANDI RATES ════════════════ -->
+      <div class="tab-pane" id="tabRates">
+        <div class="section-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-title">🌾 Full APMC Commodity Matrix &amp; Spot Bidding</h3>
+              <p style="font-size: 13px; color: var(--text-body); margin-top: 4px;">
+                Direct sourcing from Byadgi, Guntur, Wayanad, and Salem APMC yards with certified lab specs.
+              </p>
+            </div>
+            <button class="btn-gold-action" onclick="openRfqModal('Custom Commodity RFQ')">
+              + Custom RFQ
+            </button>
+          </div>
+
+          <div class="commodity-rates-grid" id="fullRatesGrid">
+            <!-- Full rates rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ TAB 3: ORDERS & TRACKING ════════════════ -->
+      <div class="tab-pane" id="tabOrders">
+        <div class="section-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-title">📦 Consignment Logistics &amp; GPS Tracker</h3>
+              <p style="font-size: 13px; color: var(--text-body); margin-top: 4px;">
+                Track mill grinding, batch inspection, and cold chain road transit.
+              </p>
+            </div>
+            <button class="btn-outline-action" onclick="showToast('Downloading consolidated dispatch manifest...')">
+              📥 Export Manifest
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>PO # / Batch</th>
+                  <th>Commodity</th>
+                  <th>Volume</th>
+                  <th>Origin &amp; Mill</th>
+                  <th>Destination</th>
+                  <th>Status</th>
+                  <th>Tracking</th>
+                </tr>
+              </thead>
+              <tbody id="fullOrdersTableBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ TAB 4: SPOT RFQ CALCULATOR ════════════════ -->
+      <div class="tab-pane" id="tabCalculator">
+        <div class="section-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-title">⚡ Instant Spot Rate &amp; CIF/FOB Quote Estimator</h3>
+              <p style="font-size: 13px; color: var(--text-body); margin-top: 4px;">
+                Select commodity specifications, packaging mode, and logistics destination for instant quotes.
+              </p>
+            </div>
+          </div>
+
+          <div class="calculator-grid">
+            
+            <!-- Input Form -->
+            <div class="calc-form-box">
+              <div class="calc-group">
+                <label>Select Commodity</label>
+                <select class="calc-select" id="calcCommodity" onchange="recalculateQuote()">
+                  <option value="218">Byadgi Chilli Stemless (Grade A) — ₹218/kg</option>
+                  <option value="185">Guntur Teja S17 Chilli (Hot) — ₹185/kg</option>
+                  <option value="620">Malabar Bold Black Pepper (550 GL) — ₹620/kg</option>
+                  <option value="2350">Green Cardamom 8mm Bold Export — ₹2,350/kg</option>
+                  <option value="142">Salem Golden Turmeric Bulbs &amp; Powder — ₹142/kg</option>
+                  <option value="38.5">Organic Cleaned Finger Millet (Ragi) — ₹38.50/kg</option>
+                  <option value="295">Unjha Machine Cleaned Cumin (Jeera) — ₹295/kg</option>
+                </select>
+              </div>
+
+              <div class="calc-group">
+                <label>Quantity in Metric Tonnes (MT)</label>
+                <input type="number" class="calc-input" id="calcQty" value="5" min="0.5" step="0.5" oninput="recalculateQuote()">
+              </div>
+
+              <div class="calc-group">
+                <label>Packaging Specification</label>
+                <select class="calc-select" id="calcPkg" onchange="recalculateQuote()">
+                  <option value="0">Standard Jute Bags (50kg Gunny)</option>
+                  <option value="1.5">Food-Grade HDPE Laminated Bags (25kg) (+₹1.5/kg)</option>
+                  <option value="3.5">Nitrogen Vacuum Sealed Barrier Bags (10kg) (+₹3.5/kg)</option>
+                </select>
+              </div>
+
+              <div class="calc-group">
+                <label>Delivery Hub / Destination</label>
+                <select class="calc-select" id="calcDestination" onchange="recalculateQuote()">
+                  <option value="2.5">Domestic Freight: Bengaluru / Chennai Hubs (+₹2.5/kg)</option>
+                  <option value="3.8">Domestic Freight: Mumbai / Nhava Sheva CFS (+₹3.8/kg)</option>
+                  <option value="4.5">Domestic Freight: Delhi NCR / Mundra Port (+₹4.5/kg)</option>
+                  <option value="0">Ex-Mill Pick Up (Bellary Mill Gate)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Price Breakdown Summary -->
+            <div class="calc-summary-box">
+              <div>
+                <h4 style="font-size: 16px; font-weight: 700; color: #FFF; margin-bottom: 16px;">
+                  📋 Proforma Cost Breakdown
+                </h4>
+
+                <div class="summary-row">
+                  <span>Base Commodity Cost:</span>
+                  <span id="sumBaseCost" style="color: #FFF; font-weight: 600;">₹10,90,000</span>
+                </div>
+
+                <div class="summary-row">
+                  <span>Packaging &amp; Bagging:</span>
+                  <span id="sumPkgCost" style="color: #FFF; font-weight: 600;">₹0</span>
+                </div>
+
+                <div class="summary-row">
+                  <span>Freight &amp; Transit Insurance:</span>
+                  <span id="sumFreightCost" style="color: #FFF; font-weight: 600;">₹12,500</span>
+                </div>
+
+                <div class="summary-row">
+                  <span>GST (5% Agricultural Produce):</span>
+                  <span id="sumGstCost" style="color: #FFF; font-weight: 600;">₹55,125</span>
+                </div>
+
+                <div class="summary-row total">
+                  <span>Estimated Total (CIF):</span>
+                  <span class="total-price" id="sumTotalPrice">₹11,57,625</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button class="btn-gold-action" style="flex: 1;" onclick="submitRfqViaWhatsapp()">
+                  <span>💬 Lock Quote via WhatsApp</span>
+                </button>
+                <button class="btn-outline-action" onclick="generateProformaPdf()">
+                  📄 Download Estimate
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ TAB 5: QUALITY & COA ════════════════ -->
+      <div class="tab-pane" id="tabQuality">
+        <div class="section-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-title">🧪 Certificates of Analysis (COA) &amp; Lab Audits</h3>
+              <p style="font-size: 13px; color: var(--text-body); margin-top: 4px;">
+                NABL Accredited lab reports for aflatoxin, moisture %, capsaicin Scoville Heat Units, and ASTA color.
+              </p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Batch / Lab Sample ID</th>
+                  <th>Commodity</th>
+                  <th>Moisture %</th>
+                  <th>Key Active Marker</th>
+                  <th>Aflatoxin Status</th>
+                  <th>Lab Certificate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: #FFF;">COA-BYD-2026-084</strong></td>
+                  <td>Byadgi Stemless Chilli Grade A</td>
+                  <td>9.2% (Standard &lt;10%)</td>
+                  <td>ASTA 158 Color / 14k SHU</td>
+                  <td><span class="status-pill delivered">Passed (&lt; 2.5 ppb)</span></td>
+                  <td>
+                    <button class="btn-table-action" onclick="viewCoaModal('COA-BYD-2026-084', 'Byadgi Stemless Chilli', 'ASTA 158 / SHU 14,200', 'Passed (<2.5ppb)')">
+                      🔍 View CoA
+                    </button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color: #FFF;">COA-PEP-2026-019</strong></td>
+                  <td>Malabar Garbled Black Pepper</td>
+                  <td>10.4% (Standard &lt;11%)</td>
+                  <td>Piperine 5.8% / 560 GL</td>
+                  <td><span class="status-pill delivered">Passed (&lt; 1.0 ppb)</span></td>
+                  <td>
+                    <button class="btn-table-action" onclick="viewCoaModal('COA-PEP-2026-019', 'Malabar Garbled Pepper', 'Piperine 5.8% / 560 GL', 'Passed (<1.0ppb)')">
+                      🔍 View CoA
+                    </button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color: #FFF;">COA-TUR-2026-052</strong></td>
+                  <td>Salem Golden Turmeric Finger</td>
+                  <td>8.8% (Standard &lt;10%)</td>
+                  <td>Curcumin 3.82% Active</td>
+                  <td><span class="status-pill delivered">Passed (Heavy Metal Free)</span></td>
+                  <td>
+                    <button class="btn-table-action" onclick="viewCoaModal('COA-TUR-2026-052', 'Salem Turmeric Finger', 'Curcumin 3.82%', 'Heavy Metal Free')">
+                      🔍 View CoA
+                    </button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><strong style="color: #FFF;">COA-RAG-2026-110</strong></td>
+                  <td>Pure Cleaned Finger Millet (Ragi)</td>
+                  <td>10.1% (Standard &lt;12%)</td>
+                  <td>Protein 7.6% / Calcium 344mg</td>
+                  <td><span class="status-pill delivered">100% Organic Certified</span></td>
+                  <td>
+                    <button class="btn-table-action" onclick="viewCoaModal('COA-RAG-2026-110', 'Cleaned Finger Millet', 'Calcium 344mg / 100g', 'Cleaned & Sorted')">
+                      🔍 View CoA
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ════════════════ MODAL: SHIPMENT TRACKING ════════════════ -->
+  <div class="modal-backdrop" id="trackingModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTrackTitle">Live Consignment Timeline</h3>
+        <button class="btn-close-modal" onclick="closeModal('trackingModal')">✕</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted);" id="modalTrackSub">
+        PO: #PO-2026-8941 • 10 MT Byadgi Stemless Chilli
+      </p>
+
+      <div class="tracking-timeline">
+        <div class="timeline-step done">
+          <div class="step-dot">✓</div>
+          <div class="step-info">
+            <strong>Farm Harvesting &amp; APMC Procurement</strong>
+            <span>Completed at Bellary Yard Hub • Oct 04, 2026</span>
+          </div>
+        </div>
+
+        <div class="timeline-step done">
+          <div class="step-dot">✓</div>
+          <div class="step-info">
+            <strong>Quality Milling &amp; Sieving</strong>
+            <span>Roller-Milled at Balaji Clean Facility • Oct 05, 2026</span>
+          </div>
+        </div>
+
+        <div class="timeline-step done">
+          <div class="step-dot">✓</div>
+          <div class="step-info">
+            <strong>Lab Testing &amp; Batch COA Approved</strong>
+            <span>Aflatoxin &lt; 2.5ppb verified by QA Head • Oct 06, 2026</span>
+          </div>
+        </div>
+
+        <div class="timeline-step active">
+          <div class="step-dot">●</div>
+          <div class="step-info">
+            <strong style="color: var(--gold-light);">GPS Fleet in Transit</strong>
+            <span>En route on NH-48 (ETA: Tomorrow 11:30 AM)</span>
+          </div>
+        </div>
+
+        <div class="timeline-step">
+          <div class="step-dot">○</div>
+          <div class="step-info">
+            <strong>Delivery &amp; Client Weighbridge Check-in</strong>
+            <span>Destination: Nhava Sheva CFS Container Freight Station</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 24px;">
+        <button class="btn-gold-action" style="flex: 1;" onclick="showToast('Contacting Assigned Fleet Driver: +91 94801 88990')">
+          📞 Contact Driver
+        </button>
+        <button class="btn-outline-action" onclick="closeModal('trackingModal')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════ MODAL: PLACE SPOT ORDER / RFQ ════════════════ -->
+  <div class="modal-backdrop" id="rfqModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalRfqTitle">Place Spot Purchase Order</h3>
+        <button class="btn-close-modal" onclick="closeModal('rfqModal')">✕</button>
+      </div>
+
+      <form onsubmit="handleOrderSubmission(event)">
+        <div class="calc-group">
+          <label>Commodity Lot</label>
+          <input type="text" class="calc-input" id="rfqCommodityName" value="Byadgi Chilli Stemless" readonly>
+        </div>
+
+        <div class="calc-group">
+          <label>Order Tonnage Required (MT)</label>
+          <input type="number" class="calc-input" id="rfqOrderQty" value="10" min="1" step="1" required>
+        </div>
+
+        <div class="calc-group">
+          <label>Delivery Port / Destination Address</label>
+          <input type="text" class="calc-input" id="rfqOrderDest" placeholder="e.g. CFS Nhava Sheva, Mumbai" value="Bengaluru Industrial Area Hub" required>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <button type="submit" class="btn-gold-action" style="flex: 1;">
+            Confirm &amp; Issue PO
+          </button>
+          <button type="button" class="btn-outline-action" onclick="closeModal('rfqModal')">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ════════════════ MODAL: LAB COA PREVIEW ════════════════ -->
+  <div class="modal-backdrop" id="coaModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="coaModalTitle">Certificate of Analysis (COA)</h3>
+        <button class="btn-close-modal" onclick="closeModal('coaModal')">✕</button>
+      </div>
+
+      <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-light); border-radius: 14px; padding: 18px; margin: 16px 0;">
+        <p style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
+          <strong>Batch Reference:</strong> <span id="coaBatchRef" style="color: var(--gold-light); font-family: var(--font-mono);">COA-BYD-2026-084</span>
+        </p>
+        <p style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
+          <strong>Tested Item:</strong> <span id="coaTestedItem" style="color: #FFF;">Byadgi Stemless Chilli</span>
+        </p>
+        <p style="font-size: 13px; color: var(--text-body); margin-bottom: 8px;">
+          <strong>Active Compounds:</strong> <span id="coaActiveMarker" style="color: #FFF;">ASTA 158 / SHU 14,200</span>
+        </p>
+        <p style="font-size: 13px; color: var(--text-body);">
+          <strong>Aflatoxin &amp; Purity:</strong> <span id="coaPurity" style="color: var(--emerald-accent); font-weight: 700;">Passed (&lt;2.5ppb)</span>
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-gold-action" style="flex: 1;" onclick="showToast('📥 COA Certificate PDF downloaded successfully!')">
+          📥 Download PDF Certificate
+        </button>
+        <button class="btn-outline-action" onclick="closeModal('coaModal')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Popup -->
+  <div class="toast-popup" id="toastBox"></div>
+
+  <script>
+    // Commodity dataset
+    const commodities = [
+      { id: 1, name: "Byadgi Chilli Stemless", grade: "Grade A Export", price: 218, unit: "kg", change: "+2.4%", up: true, specs: ["ASTA 150+", "SHU 12k-15k", "Moisture <10%"] },
+      { id: 2, name: "Guntur Teja S17 Chilli", grade: "Premium Hot", price: 185, unit: "kg", change: "-0.8%", up: false, specs: ["SHU 75k-85k", "Bright Red", "Stemless"] },
+      { id: 3, name: "Malabar Bold Black Pepper", grade: "550 GL Garbled", price: 620, unit: "kg", change: "+1.2%", up: true, specs: ["550 GL", "Moisture <11%", "Pure Cleaned"] },
+      { id: 4, name: "Green Cardamom 8mm Bold", grade: "Export Extra Bold", price: 2350, unit: "kg", change: "+4.1%", up: true, specs: ["8mm+ Size", "Deep Aroma", "Idukki Origin"] },
+      { id: 5, name: "Salem Golden Turmeric", grade: "High Curcumin", price: 142, unit: "kg", change: "+0.5%", up: true, specs: ["Curcumin 3.8%", "Polished", "Natural Color"] },
+      { id: 6, name: "Cleaned Finger Millet (Ragi)", grade: "Machine Cleaned", price: 38.50, unit: "kg", change: "0.0%", up: true, specs: ["99.5% Purity", "Direct Farmer", "Unpolished"] },
+      { id: 7, name: "Unjha Cumin Seeds (Jeera)", grade: "Singapore Quality", price: 295, unit: "kg", change: "-1.5%", up: false, specs: ["99.5% Machine Clean", "Volatile Oil 2.8%"] },
+      { id: 8, name: "Eagle Quality Coriander", grade: "Green Machine Cleaned", price: 115, unit: "kg", change: "+1.8%", up: true, specs: ["Whole Seeds", "Moisture <9%", "Rich Aroma"] }
+    ];
+
+    // Orders dataset
+    const orders = [
+      { id: "PO-2026-8941", item: "Byadgi Chilli Stemless", qty: "10.0 MT", origin: "Bellary Hub Mill", dest: "CFS Nhava Sheva", status: "In Transit", type: "transit" },
+      { id: "PO-2026-8930", item: "Malabar Black Pepper 550GL", qty: "5.0 MT", origin: "Wayanad Yard", dest: "Bengaluru Hub", status: "Quality Checked", type: "quality" },
+      { id: "PO-2026-8895", item: "Salem Golden Turmeric", qty: "15.0 MT", origin: "Salem Yard", dest: "Chennai Port", status: "In Transit", type: "transit" },
+      { id: "PO-2026-8780", item: "Cleaned Finger Millet (Ragi)", qty: "18.5 MT", origin: "Mysuru Mill", dest: "Hyderabad Facility", status: "Delivered", type: "delivered" }
+    ];
+
+    // Initialize Dashboard on Load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Load user profile from localStorage if present
+      const storedUser = localStorage.getItem('balaji_user');
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          if (user.name) {
+            document.getElementById('welcomeUserName').textContent = user.name;
+            document.getElementById('headerUserName').textContent = user.name;
+            document.getElementById('userAvatarLetter').textContent = user.name.charAt(0).toUpperCase();
+          }
+          if (user.company) {
+            document.getElementById('headerUserRole').textContent = user.company;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      renderRates();
+      renderOrders();
+      recalculateQuote();
+    });
+
+    // Render Mandi Rates
+    function renderRates(filter = '') {
+      const previewContainer = document.getElementById('previewRatesGrid');
+      const fullContainer = document.getElementById('fullRatesGrid');
+      
+      const filtered = commodities.filter(c => 
+        c.name.toLowerCase().includes(filter.toLowerCase()) || 
+        c.grade.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      const htmlCards = filtered.map(c => `
+        <div class="commodity-card">
+          <div class="commodity-header">
+            <div class="commodity-title-group">
+              <h4>${c.name}</h4>
+              <span>${c.grade}</span>
+            </div>
+            <div class="commodity-price-tag">
+              <span class="rate-curr">₹${c.price}</span>
+              <span class="rate-unit">/${c.unit}</span>
+            </div>
+          </div>
+          <div class="commodity-specs-row">
+            ${c.specs.map(s => `<span class="spec-badge">${s}</span>`).join('')}
+          </div>
+          <div class="commodity-footer">
+            <span class="rate-change ${c.up ? 'up' : 'down'}">
+              ${c.up ? '▲' : '▼'} ${c.change} 24h
+            </span>
+            <button class="btn-buy-lot" onclick="openRfqModal('${c.name}')">
+              ⚡ Order Lot
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      if (previewContainer) previewContainer.innerHTML = htmlCards.slice(0, 4);
+      if (fullContainer) fullContainer.innerHTML = htmlCards;
+    }
+
+    // Render Orders
+    function renderOrders() {
+      const overviewTable = document.getElementById('overviewOrdersTableBody');
+      const fullTable = document.getElementById('fullOrdersTableBody');
+
+      const overviewHtml = orders.map(o => `
+        <tr>
+          <td><span class="order-id-code">${o.id}</span></td>
+          <td><strong style="color: #FFF;">${o.item}</strong></td>
+          <td>${o.qty}</td>
+          <td>${o.dest}</td>
+          <td><span class="status-pill ${o.type}">${o.status}</span></td>
+          <td>
+            <button class="btn-table-action" onclick="openTrackingModal('${o.id}', '${o.item}', '${o.qty}')">
+              📍 Track
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      const fullHtml = orders.map(o => `
+        <tr>
+          <td><span class="order-id-code">${o.id}</span></td>
+          <td><strong style="color: #FFF;">${o.item}</strong></td>
+          <td>${o.qty}</td>
+          <td>${o.origin}</td>
+          <td>${o.dest}</td>
+          <td><span class="status-pill ${o.type}">${o.status}</span></td>
+          <td>
+            <button class="btn-table-action" onclick="openTrackingModal('${o.id}', '${o.item}', '${o.qty}')">
+              📍 Live GPS
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      if (overviewTable) overviewTable.innerHTML = overviewHtml;
+      if (fullTable) fullTable.innerHTML = fullHtml;
+    }
+
+    // Tab Switching
+    function switchPortalTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-item').forEach(el => el.classList.remove('active'));
+
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+
+      if (tabId === 'tabOverview') document.getElementById('btnNavOverview').classList.add('active');
+      if (tabId === 'tabRates') document.getElementById('btnNavRates').classList.add('active');
+      if (tabId === 'tabOrders') document.getElementById('btnNavOrders').classList.add('active');
+      if (tabId === 'tabCalculator') document.getElementById('btnNavCalculator').classList.add('active');
+      if (tabId === 'tabQuality') document.getElementById('btnNavQuality').classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Global Search
+    function filterCommodities(query) {
+      renderRates(query);
+    }
+
+    // Calculator logic
+    function recalculateQuote() {
+      const basePerKg = parseFloat(document.getElementById('calcCommodity').value) || 218;
+      const qtyMt = parseFloat(document.getElementById('calcQty').value) || 1;
+      const pkgExtraPerKg = parseFloat(document.getElementById('calcPkg').value) || 0;
+      const freightPerKg = parseFloat(document.getElementById('calcDestination').value) || 0;
+
+      const totalKg = qtyMt * 1000;
+      const baseTotal = totalKg * basePerKg;
+      const pkgTotal = totalKg * pkgExtraPerKg;
+      const freightTotal = totalKg * freightPerKg;
+      const taxableAmount = baseTotal + pkgTotal + freightTotal;
+      const gstTotal = taxableAmount * 0.05;
+      const grandTotal = taxableAmount + gstTotal;
+
+      document.getElementById('sumBaseCost').textContent = '₹' + Math.round(baseTotal).toLocaleString('en-IN');
+      document.getElementById('sumPkgCost').textContent = '₹' + Math.round(pkgTotal).toLocaleString('en-IN');
+      document.getElementById('sumFreightCost').textContent = '₹' + Math.round(freightTotal).toLocaleString('en-IN');
+      document.getElementById('sumGstCost').textContent = '₹' + Math.round(gstTotal).toLocaleString('en-IN');
+      document.getElementById('sumTotalPrice').textContent = '₹' + Math.round(grandTotal).toLocaleString('en-IN');
+    }
+
+    function submitRfqViaWhatsapp() {
+      const select = document.getElementById('calcCommodity');
+      const commodityName = select.options[select.selectedIndex].text.split('—')[0].trim();
+      const qty = document.getElementById('calcQty').value;
+      const total = document.getElementById('sumTotalPrice').textContent;
+
+      const msg = encodeURIComponent(`Hello Balaji Ingredients Trade Desk,\n\nI want to lock spot pricing for:\n• Commodity: ${commodityName}\n• Quantity: ${qty} MT\n• Estimated Quote: ${total}\n\nPlease share official Proforma Invoice & Bank Details.`);
+      window.open(`https://wa.me/919480123456?text=${msg}`, '_blank');
+    }
+
+    function generateProformaPdf() {
+      showToast('📄 Official Proforma Invoice PDF generated & downloaded!');
+    }
+
+    // Modal Handlers
+    function openTrackingModal(po, item, qty) {
+      document.getElementById('modalTrackSub').textContent = `PO: #${po} • ${qty} ${item}`;
+      document.getElementById('trackingModal').style.display = 'flex';
+    }
+
+    function openRfqModal(commodityName) {
+      document.getElementById('rfqCommodityName').value = commodityName;
+      document.getElementById('modalRfqTitle').textContent = `Place Spot Order: ${commodityName}`;
+      document.getElementById('rfqModal').style.display = 'flex';
+    }
+
+    function viewCoaModal(ref, item, active, purity) {
+      document.getElementById('coaBatchRef').textContent = ref;
+      document.getElementById('coaTestedItem').textContent = item;
+      document.getElementById('coaActiveMarker').textContent = active;
+      document.getElementById('coaPurity').textContent = purity;
+      document.getElementById('coaModal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function handleOrderSubmission(e) {
+      e.preventDefault();
+      const commodity = document.getElementById('rfqCommodityName').value;
+      const qty = document.getElementById('rfqOrderQty').value;
+      const dest = document.getElementById('rfqOrderDest').value;
+
+      const newPo = 'PO-2026-' + Math.floor(1000 + Math.random() * 9000);
+      orders.unshift({
+        id: newPo,
+        item: commodity,
+        qty: `${qty}.0 MT`,
+        origin: 'Bellary Hub Mill',
+        dest: dest,
+        status: 'Quality Processing',
+        type: 'quality'
+      });
+
+      renderOrders();
+      closeModal('rfqModal');
+      showToast(`🎉 Purchase Order #${newPo} created successfully!`);
+    }
+
+    function toggleProfileDropdown() {
+      const menu = document.getElementById('profileDropdown');
+      menu.classList.toggle('active');
+    }
+
+    document.addEventListener('click', (e) => {
+      const widget = document.querySelector('.user-profile-widget');
+      if (widget && !widget.contains(e.target)) {
+        const menu = document.getElementById('profileDropdown');
+        if (menu) menu.classList.remove('active');
+      }
+    });
+
+    function handleLogout() {
+      showToast('Logging out from portal...');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 700);
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = text;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+  </script>
+
+</body>
+</html>

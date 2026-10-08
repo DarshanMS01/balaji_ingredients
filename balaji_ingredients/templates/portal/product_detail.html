@@ -1,0 +1,229 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .detail-layout-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1.8fr;
+    gap: 36px;
+    margin-bottom: 40px;
+  }
+
+  .detail-media-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    position: relative;
+  }
+
+  .detail-info-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 36px;
+  }
+
+  .detail-header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .detail-title {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #FFFFFF;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+
+  .detail-subtitle {
+    font-size: 15px;
+    color: var(--text-body);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .specs-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 13.5px;
+  }
+
+  .specs-detail-table th {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+  }
+
+  .specs-detail-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: #E5E7EB;
+  }
+
+  .specs-detail-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .detail-cta-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .cert-badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .cert-badge-pill {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #A7F3D0;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+  }
+
+  @media (max-width: 900px) {
+    .detail-layout-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumbs -->
+<div style="margin-bottom:20px; font-size:13px; color:var(--text-muted); display:flex; align-items:center; gap:8px;">
+  <a href="/products/" style="color:var(--text-body); text-decoration:none;">Products</a>
+  <span>/</span>
+  <a href="/products/?category={{ product.category.slug }}" style="color:var(--text-body); text-decoration:none;">{{ product.category.name }}</a>
+  <span>/</span>
+  <span style="color:#FFFFFF; font-weight:600;">{{ product.name }}</span>
+</div>
+
+<div class="detail-layout-grid">
+  
+  <!-- Left Media & Quick Overview Card -->
+  <div class="detail-media-card" style="background: {{ product.image_gradient }};">
+    <div>
+      <span style="background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); color:#FFFFFF; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; text-transform:uppercase;">
+        {{ product.category.name }}
+      </span>
+    </div>
+
+    <div style="background:rgba(0,0,0,0.75); backdrop-filter:blur(14px); padding:20px; border-radius:18px; border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:12px; color:var(--gold-light); font-weight:700; text-transform:uppercase;">Origin & Processing</div>
+      <div style="font-size:16px; font-weight:700; color:#FFFFFF; margin-top:2px;">{{ product.origin }}</div>
+      <div style="font-size:12.5px; color:rgba(255,255,255,0.8); margin-top:6px;">
+        Sortex Optical Cleaned • Destoned • Zero Adulteration
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Technical Specs & Enquiry Actions -->
+  <div class="detail-info-card">
+    <div class="detail-header-tag">{{ product.grade }}</div>
+    <h1 class="detail-title">{{ product.name }}</h1>
+    <p class="detail-subtitle">{{ product.description }}</p>
+
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:24px;">
+      <div style="background:rgba(255,255,255,0.04); padding:14px; border-radius:12px; border:1px solid var(--border-subtle);">
+        <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Optical Purity</div>
+        <div style="font-size:18px; font-weight:800; color:var(--gold-light); margin-top:2px;">{{ product.purity_percentage }}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); padding:14px; border-radius:12px; border:1px solid var(--border-subtle);">
+        <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Moisture Limit</div>
+        <div style="font-size:18px; font-weight:800; color:#FFFFFF; margin-top:2px;">{{ product.moisture_content }}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); padding:14px; border-radius:12px; border:1px solid var(--border-subtle);">
+        <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase;">Shelf Life</div>
+        <div style="font-size:18px; font-weight:800; color:#FFFFFF; margin-top:2px;">{{ product.shelf_life }}</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px; font-weight:700; color:#FFFFFF; margin-top:24px;">Certified Laboratory Specifications</h3>
+    <table class="specs-detail-table">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Specification Standard</th>
+          <th>Test Method</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for spec in specs %}
+          <tr>
+            <td style="font-weight:600; color:#FFFFFF;">{{ spec.parameter_name }}</td>
+            <td style="color:var(--gold-light); font-weight:700;">{{ spec.parameter_value }}</td>
+            <td style="color:var(--text-muted); font-size:12px;">{{ spec.test_method|default:"AOAC / IS:4333" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3" style="color:var(--text-muted);">Specifications available on official COA sheet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="margin-top:20px;">
+      <div style="font-size:12.5px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Available Packaging Formats</div>
+      <div style="font-size:14px; color:#FFFFFF; margin-top:4px;">
+        {{ product.packaging_options }}
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div style="font-size:12.5px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Compliance & Certifications</div>
+      <div class="cert-badges-row">
+        <span class="cert-badge-pill">FSSAI Central License</span>
+        <span class="cert-badge-pill">ISO 22000:2018</span>
+        <span class="cert-badge-pill">HACCP Certified</span>
+        <span class="cert-badge-pill">NABL Batch COA</span>
+      </div>
+    </div>
+
+    <div class="detail-cta-row">
+      <button type="button" class="btn-primary-gold" style="flex:1; justify-content:center; padding:14px;" onclick="openQuoteModal('{{ product.id }}', '{{ product.name }}')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+        Request Official Commercial Quote
+      </button>
+      <a href="/documents/" class="btn-secondary-outline" style="justify-content:center; padding:14px 20px;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+        Download COA Sheet
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

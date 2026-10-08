@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Request a Formal B2B Quotation — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Direct commercial enquiry and institutional spot quote request for Balaji Ingredients agricultural commodities.{% endblock %}
+
+{% block content %}
+<section class="page-hero-clean">
+  <div class="page-hero-clean-container">
+    <div class="section-tag">COMMERCIAL PROCUREMENT DESK</div>
+    <h1 class="page-hero-clean-title">Request Institutional Spot Quotation</h1>
+    <p class="page-hero-clean-sub">
+      Submit your ingredient volumes, destination facility, and packaging specifications. Our commercial trading desk computes accurate farm-gate spot rates, freight logistics, and delivery schedules.
+    </p>
+  </div>
+</section>
+
+<section class="quote-page-section">
+  <div class="quote-page-container">
+
+    <div class="quote-layout">
+      <!-- Left Form Column -->
+      <div class="quote-form-card">
+        <h2 class="form-title">Procurement Quotation Request</h2>
+        <p class="form-subtitle">Fields marked with an asterisk (*) are required for commercial rate generation.</p>
+
+        <form method="POST" action="{% url 'products:quote_request' %}" class="rfq-form">
+          {% csrf_token %}
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label class="form-label">Select Ingredient from Portfolio</label>
+            <select name="product_id" class="form-select">
+              <option value="">-- General / Multi-Ingredient Requirement --</option>
+              {% for prod in all_products %}
+                <option value="{{ prod.id }}" {% if selected_product and selected_product.id == prod.id %}selected{% endif %}>
+                  {{ prod.name }} ({{ prod.category.name }} — {{ prod.grade }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Authorized Contact Name *</label>
+              {{ form.full_name }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Registered Enterprise / Company Name *</label>
+              {{ form.company_name }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Corporate Email Address *</label>
+              {{ form.email }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Direct Phone / Mobile *</label>
+              {{ form.phone }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">GSTIN / Tax ID (Optional)</label>
+              {{ form.gstin }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Required Volume / Metric Tons *</label>
+              {{ form.quantity_volume }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Packaging Preference *</label>
+              {{ form.packaging_preference }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Delivery Destination City</label>
+              {{ form.destination_city }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Destination Pincode</label>
+              {{ form.destination_pincode }}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Delivery Timeline</label>
+              {{ form.delivery_timeline }}
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1.25rem;">
+            <label class="form-label">Technical Notes or Specific Grade Tolerances</label>
+            {{ form.notes }}
+          </div>
+
+          <div class="form-submit-row">
+            <button type="submit" class="btn-pill btn-pill-gold btn-pill-lg">
+              Submit Quotation Request
+            </button>
+            <span class="rfq-sla-note">Binding Commercial Quotations Issued Within 4 Business Hours</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right Sidebar: Commercial Guarantees -->
+      <div class="quote-sidebar">
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">Institutional Trading Terms</h3>
+          <ul class="sidebar-list">
+            <li>
+              <strong>Verified Farm Gate Sourcing:</strong>
+              <span>Zero intermediate trader markups. Direct aggregation from prime producer clusters in Karnataka, Maharashtra &amp; AP.</span>
+            </li>
+            <li>
+              <strong>Laboratory Tested Parameters:</strong>
+              <span>Batch moisture analyzers, Buhler optical sorting purity test, and aflatoxin screening test sheets delivered with every shipment.</span>
+            </li>
+            <li>
+              <strong>Contract Pricing &amp; Spot Trades:</strong>
+              <span>We support both one-off full truckload (FTL) spot dispatches and multi-month procurement supply agreements.</span>
+            </li>
+            <li>
+              <strong>Client Portal Access:</strong>
+              <span>Registered buyers receive real-time consignment GPS tracking, proforma invoices, and rapid 1-click repeat orders.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-help-card">
+          <div class="help-badge">DIRECT COMMERCIAL HOTLINE</div>
+          <h4>Need Immediate Spot Rates?</h4>
+          <p>Call our central trading desk directly for real-time market quotes:</p>
+          <a href="tel:{{ SITE_PHONE }}" class="help-phone-btn">📞 {{ SITE_PHONE }}</a>
+          <span class="help-subtext">Mon–Sat, 8:30 AM to 7:30 PM IST</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

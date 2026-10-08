@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} — Technical Specifications &amp; Commercial Supply{% endblock %}
+{% block meta_description %}{{ product.name }}: {{ product.subtitle }}. Sortex purity {{ product.purity_percentage }}, moisture {{ product.moisture_content }}. Origin: {{ product.origin }}.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<div class="breadcrumb-strip">
+  <div class="breadcrumb-container">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="bc-sep">/</span>
+    <a href="{% url 'products:catalog' %}">Products</a>
+    <span class="bc-sep">/</span>
+    <a href="{% url 'products:catalog' %}?category={{ product.category.slug }}">{{ product.category.name }}</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current">{{ product.name }}</span>
+  </div>
+</div>
+
+<!-- Product Detail Hero -->
+<section class="product-hero-section">
+  <div class="product-hero-container">
+    <div class="product-hero-visual">
+      <div class="product-visual-box" style="background-image: url('{% static product.category.image_filename %}'); background-size: cover; background-position: center;">
+        <div class="product-badge-corner">{{ product.grade }}</div>
+        <div class="product-visual-overlay"></div>
+      </div>
+      <div class="product-quick-specs">
+        <div class="quick-spec-card">
+          <span class="qs-label">Sortex Optical Purity</span>
+          <span class="qs-val">{{ product.purity_percentage }}</span>
+        </div>
+        <div class="quick-spec-card">
+          <span class="qs-label">Moisture Retention</span>
+          <span class="qs-val">{{ product.moisture_content }}</span>
+        </div>
+        <div class="quick-spec-card">
+          <span class="qs-label">Standard Shelf Life</span>
+          <span class="qs-val">{{ product.shelf_life }}</span>
+        </div>
+        <div class="quick-spec-card">
+          <span class="qs-label">Origin / Sourcing</span>
+          <span class="qs-val">{{ product.origin }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-hero-info">
+      <span class="product-cat-tag">{{ product.category.name }}</span>
+      <h1 class="product-detail-title">{{ product.name }}</h1>
+      <p class="product-detail-sub">{{ product.subtitle }}</p>
+      
+      <!-- Price Display Box -->
+      <div style="background: linear-gradient(135deg, rgba(200, 169, 110, 0.15) 0%, rgba(46, 90, 46, 0.1) 100%); border: 1.5px solid rgba(200, 169, 110, 0.4); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-size: 0.8rem; text-transform: uppercase; color: #475569; font-weight: 700; letter-spacing: 0.5px; display: block;">Commercial Supply Price</span>
+          <span style="font-size: 2rem; font-weight: 800; color: #1b381e; line-height: 1.1;">{{ product.formatted_price }}</span>
+          <span style="font-size: 0.9rem; color: #64748b; font-weight: 600;">per {{ product.unit_name }}</span>
+        </div>
+        <div style="text-align: right;">
+          <span style="display: inline-block; background: #dcfce7; color: #15803d; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.82rem; font-weight: 700;">✓ In Stock &amp; Ready for Loadout</span>
+          <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.3rem;">Ex-Warehouse GST Rate 5%</div>
+        </div>
+      </div>
+
+      <div class="product-desc-box">
+        <p>{{ product.description }}</p>
+      </div>
+
+      <div class="product-logistics-box">
+        <div class="logistics-row">
+          <strong>Minimum Order Quantity (MoQ):</strong>
+          <span>{{ product.min_order_qty }}</span>
+        </div>
+        <div class="logistics-row">
+          <strong>Approved Packaging Formats:</strong>
+          <span>{{ product.packaging_options }}</span>
+        </div>
+        <div class="logistics-row">
+          <strong>Quality Certification:</strong>
+          <span>Batch Certificate of Analysis (CoA) &amp; Weighbridge Slips with every dispatch</span>
+        </div>
+      </div>
+
+      <div class="product-actions-row">
+        <button type="button" class="btn-pill btn-pill-gold btn-pill-lg" style="border: none; cursor: pointer;" onclick="openBuyModal('{{ product.id }}', '{{ product.name|escapejs }}', '{{ product.category.name|escapejs }}', '{{ product.unit_price }}', '{{ product.formatted_price|escapejs }}', '{{ product.unit_name|escapejs }}', '{{ product.min_order_qty|escapejs }}')">
+          ⚡ Buy Now (Instant Order)
+        </button>
+        <a href="#rfqSection" class="btn-pill btn-pill-outline-dark">Request Custom Quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Technical Data Sheet (TDS) Table -->
+<section class="tds-section" id="specifications">
+  <div class="tds-container">
+    <div class="section-tag">LABORATORY SPECIFICATIONS</div>
+    <h2 class="section-title">Technical Data Sheet (TDS)</h2>
+    <p class="section-subtitle">
+      Physical and biochemical parameters validated across calibrated optical sortex and certified testing laboratories.
+    </p>
+
+    <div class="tds-table-wrap">
+      <table class="tds-table">
+        <thead>
+          <tr>
+            <th>Quality &amp; Physical Parameter</th>
+            <th>Standard Specification Limit</th>
+            <th>Testing Methodology</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if specifications %}
+            {% for spec in specifications %}
+              <tr>
+                <td><strong>{{ spec.parameter_name }}</strong></td>
+                <td class="spec-highlight">{{ spec.parameter_value }}</td>
+                <td class="spec-method">{{ spec.test_method|default:"Standard IS / AOAC Test Protocol" }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td><strong>Optical Sortex Purity</strong></td>
+              <td class="spec-highlight">{{ product.purity_percentage }}</td>
+              <td class="spec-method">Image Processing &amp; Sieve Separation</td>
+            </tr>
+            <tr>
+              <td><strong>Moisture Content</strong></td>
+              <td class="spec-highlight">{{ product.moisture_content }}</td>
+              <td class="spec-method">Halogen Moisture Analysis (IS:4333)</td>
+            </tr>
+          {% endif %}
+          <tr>
+            <td><strong>Foreign Matter Tolerance</strong></td>
+            <td class="spec-highlight">&lt; 0.15% w/w Max</td>
+            <td class="spec-method">IS:4333 Manual &amp; Sieve Method</td>
+          </tr>
+          <tr>
+            <td><strong>Pesticide Residue &amp; Heavy Metals</strong></td>
+            <td class="spec-highlight">Compliant with FSSAI &amp; APEDA standards</td>
+            <td class="spec-method">GC-MS / ICP-MS NABL Tested</td>
+          </tr>
+          <tr>
+            <td><strong>Pest / Weevil Infestation</strong></td>
+            <td class="spec-highlight">NIL (Prophylactically fumigated)</td>
+            <td class="spec-method">Visual &amp; Microscopic Examination</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Direct RFQ Form Box -->
+<section class="inline-rfq-section" id="rfqSection">
+  <div class="inline-rfq-container">
+    <div class="rfq-header">
+      <span class="section-tag">PROCUREMENT QUOTATION DESK</span>
+      <h2 class="section-title">Request Quotation for {{ product.name }}</h2>
+      <p class="section-subtitle">
+        Fill out your required delivery volume, packaging format, and destination pincode. We deliver binding commercial proposals with logistics breakdown.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ product.get_absolute_url }}" class="rfq-form">
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ product.id }}">
+
+      <div class="form-grid-2col">
+        <div class="form-group">
+          <label class="form-label">Procurement Contact Name *</label>
+          {{ form.full_name }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Registered Enterprise / Company Name *</label>
+          {{ form.company_name }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Corporate Email Address *</label>
+          {{ form.email }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Commercial Phone / Mobile *</label>
+          {{ form.phone }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">GSTIN / Tax Identification</label>
+          {{ form.gstin }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Required Volume / Metric Tons *</label>
+          {{ form.quantity_volume }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Packaging Preference *</label>
+          {{ form.packaging_preference }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destination Facility City &amp; State</label>
+          {{ form.destination_city }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destination Pincode</label>
+          {{ form.destination_pincode }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Delivery Timeline</label>
+          {{ form.delivery_timeline }}
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 1.25rem;">
+        <label class="form-label">Specific Quality, Mesh Size, or Packaging Requirements</label>
+        {{ form.notes }}
+      </div>
+
+      <div class="form-submit-row">
+        <button type="submit" class="btn-pill btn-pill-gold btn-pill-lg">
+          Submit Commercial Quote Request
+        </button>
+        <span class="rfq-sla-note">🔒 Guaranteed Response within 4 Business Hours</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="related-section">
+  <div class="related-container">
+    <h3 class="related-title">Other Ingredients in {{ product.category.name }}</h3>
+    <div class="related-grid">
+      {% for rel in related_products %}
+        <div class="catalog-card" style="display: flex; flex-direction: column;">
+          <div class="catalog-card-image" style="background-image: url('{% static rel.category.image_filename %}'); background-size: cover; background-position: center;">
+            <span class="card-grade-tag">{{ rel.grade }}</span>
+          </div>
+          <div class="catalog-card-body" style="display: flex; flex-direction: column; flex-grow: 1;">
+            <h4 class="card-title"><a href="{{ rel.get_absolute_url }}" style="color: inherit; text-decoration: none;">{{ rel.name }}</a></h4>
+            <p class="card-subtitle">{{ rel.subtitle|truncatewords:8 }}</p>
+            <div style="font-weight: 800; color: #1b381e; margin: 0.5rem 0; font-size: 1.1rem;">
+              {{ rel.formatted_price }} <small style="font-weight: 400; color: #64748b; font-size: 0.8rem;">/ {{ rel.unit_name }}</small>
+            </div>
+            <div style="margin-top: auto; padding-top: 0.5rem; display: flex; gap: 0.4rem;">
+              <button type="button" class="btn-pill btn-pill-gold" style="flex: 1; padding: 0.5rem 0.6rem; font-size: 0.8rem; font-weight: 800; border: none; cursor: pointer;" onclick="openBuyModal('{{ rel.id }}', '{{ rel.name|escapejs }}', '{{ rel.category.name|escapejs }}', '{{ rel.unit_price }}', '{{ rel.formatted_price|escapejs }}', '{{ rel.unit_name|escapejs }}', '{{ rel.min_order_qty|escapejs }}')">
+                ⚡ Buy
+              </button>
+              <a href="{{ rel.get_absolute_url }}" class="btn-pill btn-pill-outline-dark" style="padding: 0.5rem 0.6rem; font-size: 0.78rem;">
+                Specs →
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

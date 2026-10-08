@@ -1,0 +1,36 @@
+.marquee-container {
+  background-color: var(--dark, #1B1714);
+  color: var(--off-white, #FBF7F0);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 18px 0;
+  width: 100%;
+  display: flex;
+}
+
+.marquee-content {
+  display: inline-flex;
+  align-items: center;
+  animation: marquee-scroll 30s linear infinite;
+}
+
+.marquee-item {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-style: italic;
+  padding: 0 2rem;
+}
+
+.marquee-separator {
+  color: var(--off-white, #FBF7F0);
+  font-size: 1.5rem;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.3333%);
+  }
+}

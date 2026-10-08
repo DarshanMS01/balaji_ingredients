@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Balaji Ingredients — Industrial B2B Food &amp; Agricultural Supply{% endblock %}
+{% block meta_description %}Commercial bulk food ingredient supplier. Precision Sortex cleaned Dal, Pulses, Cereals, Whole Ragi, and Pure Chilli Powders with verified CoA.{% endblock %}
+
+{% block content %}
+
+<!-- ========================================================
+     1. HERO SECTION WITH SECONDARY ANNOUNCEMENT BLOCK
+     ======================================================== -->
+<section class="hero-clinical" id="hero">
+  <div class="hero-bg-photo">
+    <div class="hero-backdrop-overlay"></div>
+  </div>
+
+  <div class="hero-main-container">
+    <div class="hero-text-content reveal-up">
+      <div class="hero-eyebrow-badge">
+        <span class="badge-dot"></span> B2B FOOD &amp; AGRICULTURAL INGREDIENT ENTERPRISE
+      </div>
+      <h1 class="hero-headline">
+        Industrial Ingredients.<br>
+        <span class="gold-accent">Engineered for Consistency.</span>
+      </h1>
+      <p class="hero-lead">
+        Supplying institutional food manufacturers, commercial mills, and FMCG brands with optical Sortex-cleaned pulses, high-protein grains, and verified pure spice ingredients.
+      </p>
+    </div>
+
+    <!-- Secondary Announcement Block Layered on Top -->
+    <div class="hero-announcement-card reveal-up delay-2">
+      <div class="announcement-header">
+        <span class="announcement-tag">2026 Q3 SOURCING UPDATE</span>
+        <h3 class="announcement-title">New Season Commodity &amp; Technical Spec Sheets Available</h3>
+      </div>
+      <p class="announcement-summary">
+        Direct farm-gate aggregation is complete for Kalaburagi Toor Dal, Southern Karnataka Ragi, and Guntur S4 Chillies. Certified batch laboratory analysis reports are ready for procurement audit.
+      </p>
+      <div class="announcement-ctas">
+        <a href="{% url 'products:catalog' %}" class="announcement-link">
+          <span>Explore 2026 Product Catalog</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="{% url 'products:quote_request' %}" class="announcement-link secondary">
+          <span>Request Spot Rate Quotation</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="{% url 'core:quality' %}" class="announcement-link tertiary">
+          <span>Review Lab CoA Protocols</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================================================
+     2. STAT COUNTER STRIP (Three Columns - Credibility Signals)
+     ======================================================== -->
+<section class="stat-counter-strip" id="stats">
+  <div class="stat-strip-container">
+    <div class="stat-column reveal-up">
+      <div class="stat-number">99.7<span class="stat-unit">%</span></div>
+      <div class="stat-divider-line"></div>
+      <div class="stat-label">Sortex Optical Purity</div>
+      <p class="stat-detail">Multi-pass trichromatic color sorting removes chalky kernels and foreign particles.</p>
+    </div>
+
+    <div class="stat-column reveal-up delay-1">
+      <div class="stat-number">3,500<span class="stat-unit"> MT</span></div>
+      <div class="stat-divider-line"></div>
+      <div class="stat-label">Climate-Controlled Warehousing</div>
+      <p class="stat-detail">Palletized, humidity-monitored storage preventing pest and aflatoxin hazards.</p>
+    </div>
+
+    <div class="stat-column reveal-up delay-2">
+      <div class="stat-number">24–48<span class="stat-unit"> Hrs</span></div>
+      <div class="stat-divider-line"></div>
+      <div class="stat-label">Pan-India Dispatch SLA</div>
+      <p class="stat-detail">GPS-tracked dedicated multimodal freight with digital weighbridge receipts.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================================================
+     3. INTRO / MISSION BLOCK (Centered paragraphs, wide line-height)
+     ======================================================== -->
+<section class="mission-block" id="mission">
+  <div class="mission-container reveal-up">
+    <div class="section-tag-centered">COMPANY POSITIONING</div>
+    <h2 class="mission-heading">Reliability is not a promise. It is an engineered supply standard.</h2>
+    <div class="mission-paragraphs">
+      <p class="mission-text-lead">
+        Balaji Ingredients was founded to bridge the gap between volatile agricultural farm gates and the strict, zero-tolerance technical specifications demanded by modern food manufacturers, spice blenders, and industrial food processors.
+      </p>
+      <p class="mission-text-sub">
+        Every metric ton of dal, cereal, finger millet, and chilli powder delivered through our supply network undergoes validated moisture testing, calibrated optical sorting, and tamper-evident barrier packaging. We operate with radical transparency, providing verifiable Certificates of Analysis (CoA) with every dispatch so our enterprise clients can scale production with total peace of mind.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================================================
+     4. CAPABILITY CARD GRID (Four Columns, Whole Card is a Link)
+     ======================================================== -->
+<section class="capability-section" id="capabilities">
+  <div class="capability-container">
+    <div class="capability-header reveal-up">
+      <div class="section-tag">CORE INGREDIENT PORTFOLIO</div>
+      <h2 class="section-title">Industrial Ingredient Categories</h2>
+      <p class="section-subtitle">
+        Standardized commercial grades available in 25kg, 50kg bags and 1,000kg FIBC Jumbo bulk containers.
+      </p>
+    </div>
+
+    <div class="capability-grid-4col">
+      
+      <!-- Card 1: Dal & Pulses (Whole Card is a Link) -->
+      <a href="{% url 'products:catalog' %}?category=dal-pulses" class="capability-tile reveal-up" id="tile-dal">
+        <div class="tile-photo" style="background-image: url('{% static 'images/dal-pulses.jpg' %}');"></div>
+        <div class="tile-body">
+          <div class="tile-category">CATEGORY 01</div>
+          <h3 class="tile-title">Dal &amp; Pulses</h3>
+          <p class="tile-description">
+            Double-Sortexed Toor Dal, Unpolished Chana Dal, and Moong Mogar split to exacting protein and moisture standards.
+          </p>
+          <div class="tile-meta">
+            <span class="meta-tag">Sortex 99.7%</span>
+            <span class="tile-action-link">View Specifications →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2: Cereals & Grains (Whole Card is a Link) -->
+      <a href="{% url 'products:catalog' %}?category=cereals" class="capability-tile reveal-up delay-1" id="tile-cereals">
+        <div class="tile-photo" style="background-image: url('{% static 'images/cereals.jpg' %}');"></div>
+        <div class="tile-body">
+          <div class="tile-category">CATEGORY 02</div>
+          <h3 class="tile-title">Cereals &amp; Grains</h3>
+          <p class="tile-description">
+            Heavy-grain Sharbati Lokwan wheat with high wet gluten and low foreign matter for commercial bakeries and mills.
+          </p>
+          <div class="tile-meta">
+            <span class="meta-tag">Gluten 28%+</span>
+            <span class="tile-action-link">View Specifications →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3: Ragi & Millets (Whole Card is a Link) -->
+      <a href="{% url 'products:catalog' %}?category=ragi" class="capability-tile reveal-up delay-2" id="tile-ragi">
+        <div class="tile-photo" style="background-image: url('{% static 'images/ragi.jpg' %}');"></div>
+        <div class="tile-body">
+          <div class="tile-category">CATEGORY 03</div>
+          <h3 class="tile-title">Ragi (Finger Millet)</h3>
+          <p class="tile-description">
+            High-calcium organic whole finger millet and chilled pin-milled 80-mesh superfine flour for modern health food brands.
+          </p>
+          <div class="tile-meta">
+            <span class="meta-tag">Mesh 80 Fine</span>
+            <span class="tile-action-link">View Specifications →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 4: Chilli Powder (Whole Card is a Link) -->
+      <a href="{% url 'products:catalog' %}?category=chilli-powder" class="capability-tile reveal-up delay-3" id="tile-chilli">
+        <div class="tile-photo" style="background-image: url('{% static 'images/chilli-powder.jpg' %}');"></div>
+        <div class="tile-body">
+          <div class="tile-category">CATEGORY 04</div>
+          <h3 class="tile-title">Chilli Powder</h3>
+          <p class="tile-description">
+            Pure stemless Guntur S4 (35,000 SHU) and high-ASTA natural color Byadgi chilli powders. Zero adulterants or dyes.
+          </p>
+          <div class="tile-meta">
+            <span class="meta-tag">Sudan-Free</span>
+            <span class="tile-action-link">View Specifications →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Centered View All CTA -->
+    <div class="capability-action-center reveal-up">
+      <a href="{% url 'products:catalog' %}" class="btn-pill btn-pill-outline-dark">
+        View All Ingredients &amp; Data Sheets
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================================================
+     5. COMPARISON / LIFECYCLE TABLE (3 Columns Infographic-Style)
+     ======================================================== -->
+<section class="lifecycle-section" id="lifecycle">
+  <div class="lifecycle-container">
+    <div class="lifecycle-header reveal-up">
+      <div class="section-tag">SUPPLY LIFECYCLE MATRIX</div>
+      <h2 class="section-title">The Institutional Supply Architecture</h2>
+      <p class="section-subtitle">
+        How our end-to-end framework eliminates quality variance from source aggregation to facility delivery.
+      </p>
+    </div>
+
+    <div class="lifecycle-table-wrap reveal-up">
+      <table class="lifecycle-table">
+        <thead>
+          <tr>
+            <th class="col-phase">
+              <span class="phase-number">PHASE 01</span>
+              <h3 class="phase-name">Specification &amp; Sourcing</h3>
+            </th>
+            <th class="col-phase highlighted">
+              <span class="phase-number">PHASE 02</span>
+              <h3 class="phase-name">Sortex Processing &amp; QC</h3>
+            </th>
+            <th class="col-phase">
+              <span class="phase-number">PHASE 03</span>
+              <h3 class="phase-name">Logistics &amp; Continuity</h3>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="lifecycle-cell">
+              <div class="cell-label">Procurement Protocol</div>
+              <p class="cell-text">Direct aggregation at APMC hubs across Karnataka, Maharashtra, and Andhra Pradesh.</p>
+              <ul class="cell-checks">
+                <li>Pre-purchase farm lot sampling</li>
+                <li>Moisture verification (< 10%)</li>
+                <li>Pesticide &amp; heavy metal audit</li>
+              </ul>
+            </td>
+            <td class="lifecycle-cell highlighted">
+              <div class="cell-label">Refinement Protocol</div>
+              <p class="cell-text">Multi-pass destoning, gravity separation, and Buhler trichromatic color sorting.</p>
+              <ul class="cell-checks">
+                <li>99.7% Sortex optical purity</li>
+                <li>Ferrous / non-ferrous metal detection</li>
+                <li>Calibrated sieve mesh sizing</li>
+              </ul>
+            </td>
+            <td class="lifecycle-cell">
+              <div class="cell-label">Dispatch &amp; Service</div>
+              <p class="cell-text">Climate-shielded warehousing and scheduled GPS-monitored multimodal fleet delivery.</p>
+              <ul class="cell-checks">
+                <li>24 to 48-Hour regional SLA</li>
+                <li>Certified weighbridge documentation</li>
+                <li>Pre-cleared e-Way bill &amp; batch CoA</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="lifecycle-cell">
+              <div class="cell-label">Packaging Options</div>
+              <span class="cell-badge">25kg / 50kg PP with LDPE</span>
+            </td>
+            <td class="lifecycle-cell highlighted">
+              <div class="cell-label">Batch Documentation</div>
+              <span class="cell-badge gold">Certified Laboratory CoA</span>
+            </td>
+            <td class="lifecycle-cell">
+              <div class="cell-label">Client Portal Access</div>
+              <span class="cell-badge">Live Consignment Tracking</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ========================================================
+     6. FULL-BLEED CTA BANNER (Background photo, pill-shaped CTA)
+     ======================================================== -->
+<section class="fullbleed-cta" id="cta">
+  <div class="fullbleed-cta-bg">
+    <div class="fullbleed-overlay"></div>
+  </div>
+  <div class="fullbleed-content reveal-up">
+    <div class="cta-eyebrow">INSTITUTIONAL PROCUREMENT</div>
+    <h2 class="fullbleed-heading">
+      Lock in consistent ingredient supply for your production cycle.
+    </h2>
+    <p class="fullbleed-sub">
+      Submit your grade requirements, target volumes, and delivery timelines. Our commercial desk delivers formal binding quotations within 4 business hours.
+    </p>
+    <div class="fullbleed-action">
+      <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-gold btn-pill-lg">
+        Initiate Commercial Enquiry
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

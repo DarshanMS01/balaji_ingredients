@@ -1,0 +1,3465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balaji Ingredients Private Limited — The Spice of South India</title>
+  <meta name="description" content="Balaji Ingredients hand-picks red chilli, black pepper, cardamom and ragi at their peak — then mills them slowly, so the aroma never leaves the bag." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --bg: #FBF8F3;
+      --bg-alt: #F4EFE6;
+      --bg-card: #FFFFFF;
+      --text: #1C1917;
+      --text-muted: #6B635B;
+      --text-light: #9C9389;
+      --red: #A82B1D;
+      --red-hover: #8F2216;
+      --red-soft: #FBF0EE;
+      --gold: #D4A343;
+      --gold-dark: #A67C1E;
+      --dark-banner: #151210;
+      --border: rgba(28, 25, 23, 0.08);
+      --border-dark: rgba(255, 255, 255, 0.12);
+      --shadow-sm: 0 4px 20px rgba(28, 25, 23, 0.04);
+      --shadow-md: 0 12px 36px rgba(28, 25, 23, 0.08);
+      --shadow-lg: 0 24px 60px rgba(28, 25, 23, 0.12);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ══════════════════════════════════════════
+       1. NAVIGATION BAR
+    ══════════════════════════════════════════ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(251, 248, 243, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      transition: all 0.25s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    /* Brand Logo */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flame-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #A82B1D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(168, 43, 29, 0.3);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #A82B1D;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* Navigation Links */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--red);
+    }
+
+    .nav-link.active {
+      background: #EDE6DC;
+      color: var(--text);
+    }
+
+    /* Right Action Elements */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .phone-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .phone-link:hover {
+      color: var(--red);
+    }
+
+    .btn-quote {
+      background: #151210;
+      color: #FFFFFF;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-quote:hover {
+      background: #2C2621;
+      transform: translateY(-1px);
+    }
+
+    .btn-login-nav {
+      background: var(--red-soft);
+      color: var(--red);
+      border: 1px solid rgba(168, 43, 29, 0.2);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .btn-login-nav:hover {
+      background: var(--red);
+      color: #FFFFFF;
+    }
+
+    /* ══════════════════════════════════════════
+       2. HERO SECTION
+    ══════════════════════════════════════════ */
+    .hero-section {
+      padding: 60px 0 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    /* Left Hero Content */
+    .estate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .estate-badge span.sparkle {
+      color: var(--red);
+      font-size: 0.9rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 5vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 34px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .btn-explore {
+      background: var(--red);
+      color: #FFFFFF;
+      padding: 14px 28px;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(168, 43, 29, 0.3);
+      transition: all 0.22s ease;
+    }
+
+    .btn-explore:hover {
+      background: var(--red-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(168, 43, 29, 0.4);
+    }
+
+    .btn-wholesale {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .btn-wholesale:hover {
+      color: var(--red);
+      text-decoration: underline;
+    }
+
+    .trust-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trust-item svg {
+      color: var(--red);
+    }
+
+    /* Right Hero Visual: 4 Staggered Showcase Cards */
+    .hero-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+
+    .showcase-card {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .showcase-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .showcase-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .showcase-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.85) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      color: #FFFFFF;
+    }
+
+    .top-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-sig-pill {
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .plus-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .card-info-bottom {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-sub-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 2px;
+    }
+
+    .card-main-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* ══════════════════════════════════════════
+       3. DARK MARQUEE BANNER
+    ══════════════════════════════════════════ */
+    .dark-marquee-strip {
+      background: var(--dark-banner);
+      color: #F7F4EE;
+      padding: 22px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 40px;
+      animation: marqueeScroll 25s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 36px;
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-style: italic;
+      letter-spacing: -0.01em;
+    }
+
+    .diamond-star {
+      color: #A82B1D;
+      font-size: 1.4rem;
+      font-style: normal;
+    }
+
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ══════════════════════════════════════════
+       4. THE SIGNATURE FOUR SECTION
+    ══════════════════════════════════════════ */
+    .signature-section {
+      padding: 90px 0;
+      background: var(--bg);
+    }
+
+    .sec-header-flex {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 45px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .sec-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .sec-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 3.8vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .sec-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 380px;
+      line-height: 1.5;
+    }
+
+    .products-2x2-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .product-card-hero {
+      position: relative;
+      height: 380px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card-hero:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-card-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .product-card-hero:hover img {
+      transform: scale(1.04);
+    }
+
+    .card-full-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.88) 100%);
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tag-estate-grade {
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 9999px;
+      padding: 5px 14px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .arrow-circle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .product-card-hero:hover .arrow-circle-btn {
+      transform: scale(1.1) rotate(45deg);
+    }
+
+    .card-bottom-info {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .info-left-side {
+      max-width: 70%;
+    }
+
+    .sub-phrase {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 4px;
+    }
+
+    .prod-name-title {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .prod-snip-desc {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .price-box {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .from-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.75);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .price-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════════════════════
+       5. OUR STORY SECTION
+    ══════════════════════════════════════════ */
+    .story-section {
+      padding: 90px 0;
+      background: var(--bg-alt);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    /* Left Story Photo Frame with Floating Badge */
+    .story-visual-wrap {
+      position: relative;
+    }
+
+    .story-main-img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+      border-radius: 28px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .floating-badge-box {
+      position: absolute;
+      bottom: -30px;
+      right: -20px;
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      max-width: 280px;
+    }
+
+    .fb-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .fb-heading {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+
+    .fb-stats-row {
+      display: flex;
+      gap: 20px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .fb-stat-num {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .fb-stat-lbl {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Right Story Content */
+    .story-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .story-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 3.6vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .story-heading em {
+      font-style: italic;
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .story-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    /* 4 Feature Cards (2x2) */
+    .story-features-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+
+    .feat-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.22s ease;
+    }
+
+    .feat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(168, 43, 29, 0.2);
+    }
+
+    .feat-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--red-soft);
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .feat-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .feat-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Certifications Row */
+    .certs-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cert-pill {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cert-pill span {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════════════════
+       6. STATS ROW SECTION
+    ══════════════════════════════════════════ */
+    .stats-section {
+      padding: 50px 0 80px;
+      background: var(--bg);
+    }
+
+    .stats-4col-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .stat-card-white {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+    }
+
+    .stat-card-white:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-large-num {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label-text {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════════
+       7. WHOLESALE QUOTE / CONTACT
+    ══════════════════════════════════════════ */
+    .quote-section {
+      padding: 80px 0;
+      background: var(--dark-banner);
+      color: #FFFFFF;
+      position: relative;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .quote-form-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 36px;
+    }
+
+    .form-group-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-group-wrap label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-input-ctrl {
+      width: 100%;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 0 16px;
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input-ctrl:focus {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: var(--gold);
+    }
+
+    .btn-submit-quote {
+      width: 100%;
+      height: 50px;
+      background: var(--red);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-submit-quote:hover {
+      background: var(--red-hover);
+    }
+
+    /* ══════════════════════════════════════════
+       8. FOOTER
+    ══════════════════════════════════════════ */
+    .site-footer {
+      background: #0E0C0A;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 60px 0 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.88rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h4 {
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a:hover {
+      color: #FFFFFF;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive Rules ── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .story-grid { grid-template-columns: 1fr; }
+      .quote-grid { grid-template-columns: 1fr; }
+      .stats-4col-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ══════════════════════════════════════════
+       9. BUY NOW & ORDER MODAL STYLING
+    ══════════════════════════════════════════ */
+    .btn-card-buynow {
+      background: linear-gradient(135deg, #D4A343 0%, #B88523 100%);
+      color: #0C0A09;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+      box-shadow: 0 4px 14px rgba(212, 163, 67, 0.4);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-transform: uppercase;
+      font-family: var(--font-sans);
+    }
+    .btn-card-buynow:hover {
+      background: linear-gradient(135deg, #F6D57E 0%, #D4A343 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 163, 67, 0.55);
+    }
+
+    .btn-nav-orders {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-nav-orders:hover {
+      background: var(--bg-alt);
+      border-color: var(--red);
+      color: var(--red);
+      transform: translateY(-1px);
+    }
+
+    /* Modal Backdrop */
+    .balaji-order-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 12, 10, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+      animation: modalFadeIn 0.25s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .balaji-order-modal-dialog {
+      background: #FFFFFF;
+      border: 1px solid rgba(28, 25, 23, 0.12);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 680px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      color: var(--text);
+    }
+
+    .modal-head-banner {
+      background: linear-gradient(135deg, #1C1917 0%, #2A2420 100%);
+      color: #FFFFFF;
+      padding: 20px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .modal-head-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .modal-head-title h3 {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0;
+      color: #FFFFFF;
+    }
+    .modal-head-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(212, 163, 67, 0.2);
+      color: var(--gold-light);
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(212, 163, 67, 0.4);
+    }
+
+    .btn-modal-dismiss {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .btn-modal-dismiss:hover {
+      background: #A82B1D;
+      border-color: #A82B1D;
+      transform: rotate(90deg);
+    }
+
+    /* Stepper Bar */
+    .modal-stepper-bar {
+      display: flex;
+      background: #F7F4EE;
+      border-bottom: 1px solid rgba(28, 25, 23, 0.08);
+      padding: 10px 24px;
+      gap: 8px;
+      overflow-x: auto;
+    }
+
+    .stepper-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .stepper-step.active {
+      color: var(--red);
+    }
+    .stepper-step.done {
+      color: #15803D;
+    }
+    .stepper-step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #E5DFD5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    .stepper-step.active .stepper-step-num {
+      background: var(--red);
+      color: #FFFFFF;
+    }
+    .stepper-step.done .stepper-step-num {
+      background: #15803D;
+      color: #FFFFFF;
+    }
+
+    .modal-body-scrollable {
+      padding: 24px 28px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Selected Product Header Box */
+    .selected-product-box {
+      display: flex;
+      gap: 18px;
+      background: #FBF8F3;
+      border: 1px solid rgba(28, 25, 23, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 22px;
+      align-items: center;
+    }
+
+    .selected-product-img {
+      width: 78px;
+      height: 78px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
+    }
+
+    .selected-product-info h4 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .market-price-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(168, 43, 29, 0.08);
+      border: 1px solid rgba(168, 43, 29, 0.2);
+      color: var(--red);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .market-price-update-txt {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Quality Selection Pills */
+    .quality-options-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+
+    .quality-pill-card {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(28, 25, 23, 0.15);
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .quality-pill-card:hover {
+      border-color: var(--red);
+      background: var(--red-soft);
+    }
+    .quality-pill-card.selected {
+      background: var(--red-soft);
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(168, 43, 29, 0.2);
+    }
+    .quality-pill-card input { display: none; }
+    .quality-pill-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .quality-pill-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Weight / Quantity Box */
+    .quantity-input-combo {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+    .quantity-num-input {
+      flex: 2;
+      padding: 12px 16px;
+      border: 1.5px solid rgba(28, 25, 23, 0.2);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .quantity-num-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(168, 43, 29, 0.15);
+    }
+    .quantity-unit-select {
+      flex: 1.3;
+      padding: 12px 14px;
+      border: 1.5px solid rgba(28, 25, 23, 0.2);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      background: #FFFFFF;
+      outline: none;
+      cursor: pointer;
+    }
+    .quantity-unit-select:focus {
+      border-color: var(--red);
+    }
+
+    /* Live Price Calculation Banner */
+    .calculation-breakdown-card {
+      background: #F7F4EE;
+      border: 1px solid rgba(28, 25, 23, 0.1);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+    }
+    .calc-row-flex {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .calc-row-flex.total {
+      border-top: 1px dashed rgba(28, 25, 23, 0.18);
+      padding-top: 8px;
+      margin-top: 6px;
+      margin-bottom: 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #15803D;
+    }
+
+    /* Form Fields */
+    .modal-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .modal-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    .modal-field-group.full-width {
+      grid-column: span 2;
+    }
+    .modal-field-group label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #332F2B;
+    }
+    .modal-field-group input,
+    .modal-field-group textarea,
+    .modal-field-group select {
+      padding: 10px 14px;
+      border: 1.5px solid rgba(28, 25, 23, 0.18);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .modal-field-group input:focus,
+    .modal-field-group textarea:focus,
+    .modal-field-group select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(168, 43, 29, 0.12);
+    }
+
+    .delivery-charges-notice {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: #1E40AF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* Summary Table */
+    .order-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      background: #FBF8F3;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(28, 25, 23, 0.1);
+    }
+    .order-summary-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(28, 25, 23, 0.08);
+      font-size: 0.88rem;
+    }
+    .order-summary-table td:first-child {
+      color: var(--text-muted);
+      font-weight: 600;
+      width: 38%;
+    }
+    .order-summary-table td:last-child {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .order-summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Modal Action Footer */
+    .modal-foot-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 28px 20px;
+      background: #FAFAFA;
+      border-top: 1px solid rgba(28, 25, 23, 0.08);
+    }
+
+    .btn-modal-action-primary {
+      background: #A82B1D;
+      color: #FFFFFF;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      flex: 1.5;
+      justify-content: center;
+    }
+    .btn-modal-action-primary:hover {
+      background: #8F2216;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(168, 43, 29, 0.35);
+    }
+
+    .btn-modal-action-secondary {
+      background: #FFFFFF;
+      border: 1.5px solid rgba(28, 25, 23, 0.2);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+      text-align: center;
+    }
+    .btn-modal-action-secondary:hover {
+      background: var(--bg-alt);
+    }
+
+    /* Confirmation Screen */
+    .confirmation-hero-box {
+      text-align: center;
+      padding: 24px 16px 10px;
+    }
+    .confirmation-check-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #DCFCE7;
+      color: #15803D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 16px;
+      border: 2px solid #86EFAC;
+    }
+    .order-id-display {
+      display: inline-block;
+      background: #1C1917;
+      color: var(--gold-light);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 12px 0 16px;
+      font-family: monospace;
+    }
+
+    /* My Orders Table */
+    .my-orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .my-orders-table th {
+      padding: 10px 12px;
+      background: #F7F4EE;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid rgba(28, 25, 23, 0.1);
+    }
+    .my-orders-table td {
+      padding: 12px;
+      font-size: 0.86rem;
+      border-bottom: 1px solid rgba(28, 25, 23, 0.08);
+      color: var(--text);
+    }
+    .my-orders-table tr:hover td {
+      background: #FBF8F3;
+    }
+    .status-badge-order {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .status-badge-order.pending {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    .status-badge-order.confirmed {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+    .status-badge-order.delivered {
+      background: #DCFCE7;
+      color: #15803D;
+    }
+
+    /* ══════════════════════════════════════════
+       PAYMENT METHOD SELECTION STYLES
+    ══════════════════════════════════════════ */
+    .payment-methods-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .payment-method-card {
+      border: 1.5px solid rgba(28, 25, 23, 0.15);
+      border-radius: 14px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #FFFFFF;
+      position: relative;
+      user-select: none;
+    }
+    .payment-method-card:hover {
+      border-color: var(--red);
+      background: #FDFBFA;
+    }
+    .payment-method-card.selected {
+      border-color: var(--red);
+      background: var(--red-soft);
+      box-shadow: 0 0 0 2px rgba(168, 43, 29, 0.25);
+    }
+    .payment-method-card input { display: none; }
+    .payment-card-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .payment-card-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* UPI Container */
+    .upi-payment-container {
+      background: #FBF8F3;
+      border: 1.5px solid rgba(168, 43, 29, 0.2);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .upi-pay-amount-badge {
+      display: inline-block;
+      background: #15803D;
+      color: #FFFFFF;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+    .upi-qr-display-box {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 18px;
+      background: #FFFFFF;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(28, 25, 23, 0.1);
+    }
+    .upi-qr-img {
+      width: 170px;
+      height: 170px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid #222;
+      background: #000000;
+      flex-shrink: 0;
+    }
+    .upi-id-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #F4EFE6;
+      border: 1px solid #D5CBBF;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #A82B1D;
+      margin: 8px 0 10px;
+      width: fit-content;
+    }
+    .btn-copy-upi {
+      background: #FFFFFF;
+      border: 1px solid #A82B1D;
+      color: #A82B1D;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-copy-upi:hover {
+      background: #A82B1D;
+      color: #FFFFFF;
+    }
+    .btn-upi-app {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #5F259F;
+      color: #FFFFFF;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      width: fit-content;
+    }
+    .btn-upi-app:hover {
+      background: #4A1B80;
+      color: #FFFFFF;
+    }
+
+    .payment-status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .payment-status-badge.cod {
+      background: #F3F4F6;
+      color: #374151;
+      border: 1px solid #D1D5DB;
+    }
+    .payment-status-badge.verification_pending {
+      background: #FEF3C7;
+      color: #B45309;
+      border: 1px solid #FCD34D;
+    }
+    .payment-status-badge.paid {
+      background: #DCFCE7;
+      color: #15803D;
+      border: 1px solid #86EFAC;
+    }
+    .payment-status-badge.failed {
+      background: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FCA5A5;
+    }
+
+    @media (max-width: 640px) {
+      .quality-options-grid { grid-template-columns: 1fr 1fr; }
+      .modal-form-grid { grid-template-columns: 1fr; }
+      .modal-field-group.full-width { grid-column: span 1; }
+      .modal-foot-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       1. NAVBAR
+  ══════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        
+        <!-- Brand Logo -->
+        <a href="#hero" class="brand-logo">
+          <div class="flame-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Balaji Ingredients</span>
+            <span class="brand-sub">PRIVATE LIMITED</span>
+          </div>
+        </a>
+
+        <!-- Nav Menu -->
+        <div class="nav-menu">
+          <a href="#hero" class="nav-link active">Home</a>
+          <a href="#products" class="nav-link">Products</a>
+          <a href="#story" class="nav-link">Our Story</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+
+        <!-- Nav Right -->
+        <div class="nav-right">
+          <a href="tel:+916360635801" class="phone-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>+91 63606 35801</span>
+          </a>
+          <button type="button" class="btn-nav-orders" onclick="openMyOrdersModal()">
+            📦 My Orders
+          </button>
+          <a href="dashboard.html" class="btn-quote" style="background: #A82B1D; display: inline-flex; align-items: center; gap: 8px;">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+            </svg>
+            Dashboard
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       2. HERO SECTION (100% Matching Image 1)
+  ══════════════════════════════════════════ -->
+  <section class="hero-section" id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        
+        <!-- Left Hero Column -->
+        <div class="hero-left">
+          
+          <div class="estate-badge">
+            <span class="sparkle">✦</span>
+            ESTATE • STONE-MILLED • SINCE 2015
+          </div>
+
+          <h1 class="hero-title">
+            The spice of<br>
+            <em>South India</em>,<br>
+            bottled with care.
+          </h1>
+
+          <p class="hero-desc">
+            Balaji Ingredients hand-picks red chilli, black pepper, cardamom and ragi at their peak — then mills them slowly, so the aroma never leaves the bag.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#products" class="btn-explore">
+              <span>Explore Catalogue</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+            <a href="#contact" class="btn-wholesale">Request Wholesale Pricing</a>
+          </div>
+
+          <!-- Trust Badges Row -->
+          <div class="trust-badges-row">
+            <div class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>100% Natural</span>
+            </div>
+            <div class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/>
+              </svg>
+              <span>FSSAI - ISO 22000</span>
+            </div>
+            <div class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <span>Lab-Tested Batches</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Hero Visual (4 Staggered Signature Cards) -->
+        <div class="hero-visual-grid">
+          
+          <!-- Card 1: Red Chilli -->
+          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='chilli.html'" title="View Red Chilli Powder">
+            <img src="images/chilli_product.jpg?v=20261008_ragi" alt="Red Chilli Powder">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">BYADGI &amp; GUNTUR BLEND</span>
+                <h3 class="card-main-title">Red Chilli Powder</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Black Pepper -->
+          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="openBuyModal('pepper')" title="Buy Malabar Black Pepper">
+            <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">WHOLE &amp; COARSE GROUND</span>
+                <h3 class="card-main-title">Malabar Black Pepper</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Green Cardamom -->
+          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="openBuyModal('cardamom')" title="Buy Green Cardamom">
+            <img src="images/cardamom_product.jpg" alt="Green Cardamom">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle" style="background:#48bb78;color:#fff;">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">IDUKKI ESTATE GRADE AAA</span>
+                <h3 class="card-main-title">Green Cardamom</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Ragi Flour -->
+          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='ragi.html'" title="View Stone-Ground Ragi Flour">
+            <img src="images/ragi_product.jpg" alt="Stone-Ground Ragi Flour">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">FINGER MILLET • SPROUTED OPTION</span>
+                <h3 class="card-main-title">Stone-Ground Ragi Flour</h3>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       3. DARK MARQUEE STRIP (100% Matching Image 2)
+  ══════════════════════════════════════════ -->
+  <div class="dark-marquee-strip">
+    <div class="marquee-track">
+      <div class="marquee-item">
+        <span class="diamond-star">✦</span>
+        <span>Idukki Cardamom</span>
+        <span class="diamond-star">✦</span>
+        <span>Karnataka Ragi</span>
+        <span class="diamond-star">✦</span>
+        <span>Batch Tested</span>
+        <span class="diamond-star">✦</span>
+        <span>Byadgi Chillies</span>
+        <span class="diamond-star">✦</span>
+        <span>Single Origin</span>
+      </div>
+      <div class="marquee-item">
+        <span class="diamond-star">✦</span>
+        <span>Idukki Cardamom</span>
+        <span class="diamond-star">✦</span>
+        <span>Karnataka Ragi</span>
+        <span class="diamond-star">✦</span>
+        <span>Batch Tested</span>
+        <span class="diamond-star">✦</span>
+        <span>Byadgi Chillies</span>
+        <span class="diamond-star">✦</span>
+        <span>Single Origin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       4. THE SIGNATURE FOUR SECTION (100% Matching Image 2 & 3)
+  ══════════════════════════════════════════ -->
+  <section class="signature-section" id="products">
+    <div class="container">
+      
+      <div class="sec-header-flex">
+        <div>
+          <div class="sec-tag">CATALOGUE - 04</div>
+          <h2 class="sec-title">The Signature Four</h2>
+        </div>
+        <p class="sec-subtitle">
+          A tight, uncompromising catalogue — each item earning its place.
+        </p>
+      </div>
+
+      <div class="products-2x2-grid">
+        
+        <!-- Product 1: Red Chilli Powder -->
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='chilli.html'">
+          <img src="images/chilli_product.jpg?v=20261009_bowl" alt="Red Chilli Powder">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">BYADGI &amp; GUNTUR BLEND</span>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='chilli.html'" title="View Red Chilli Powder">↗</button>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <h3 class="prod-name-title">Red Chilli Powder</h3>
+                <p class="prod-snip-desc">Sun-dried Byadgi and Guntur chillies stone-ground to preserve the natural oils, giving you a deep red colour and smoky heat.</p>
+              </div>
+              <div class="price-box" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div>
+                  <span class="from-label">FROM</span>
+                  <span class="price-val">₹280 / kg</span>
+                </div>
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='chilli.html'">
+                  VISIT ➔
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2: Malabar Black Pepper -->
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='chilli.html'">
+          <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">WHOLE &amp; COARSE GROUND</span>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='chilli.html'" title="Buy Malabar Black Pepper">↗</button>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <h3 class="prod-name-title">Malabar Black Pepper</h3>
+                <p class="prod-snip-desc">Estate-picked Malabar Garbled Special Extra Bold peppercorns — plump, pungent, and packed with piperine.</p>
+              </div>
+              <div class="price-box" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div>
+                  <span class="from-label">FROM</span>
+                  <span class="price-val">₹720 / kg</span>
+                </div>
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='chilli.html'">
+                  VISIT ➔
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3: Green Cardamom -->
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='ragi.html'">
+          <img src="images/cardamom_product.jpg" alt="Green Cardamom">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">IDUKKI ESTATE GRADE AAA</span>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='ragi.html'" title="Buy Green Cardamom">↗</button>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <span class="sub-phrase">Fragrance of the Hills.</span>
+                <h3 class="prod-name-title">Green Cardamom</h3>
+                <p class="prod-snip-desc">Bold 8mm+ green cardamom pods from Idukki's misty estates. Bursting with 1,8-cineole for intense sweetness and camphor aroma.</p>
+              </div>
+              <div class="price-box" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div>
+                  <span class="from-label">FROM</span>
+                  <span class="price-val">₹1,850 / kg</span>
+                </div>
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='ragi.html'">
+                  VISIT ➔
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4: Stone-Ground Ragi Flour -->
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='ragi.html'">
+          <img src="images/ragi_product.jpg" alt="Stone-Ground Ragi Flour">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">FINGER MILLET • SPROUTED OPTION</span>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='ragi.html'" title="View Stone-Ground Ragi Flour">↗</button>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <span class="sub-phrase">Ancient Grain. Modern Strength.</span>
+                <h3 class="prod-name-title">Stone-Ground Ragi Flour</h3>
+                <p class="prod-snip-desc">Cold stone-ground finger millet, rich in calcium and iron. A heritage South Indian staple processed with zero heat damage.</p>
+              </div>
+              <div class="price-box" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                <div>
+                  <span class="from-label">FROM</span>
+                  <span class="price-val">₹120 / kg</span>
+                </div>
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='ragi.html'">
+                  VISIT ➔
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       5. OUR STORY SECTION (100% Matching Image 4 & 5)
+  ══════════════════════════════════════════ -->
+  <section class="story-section" id="story">
+    <div class="container">
+      <div class="story-grid">
+        
+        <!-- Left Side Photo + Floating Badge -->
+        <div class="story-visual-wrap">
+          <img src="images/market_spices.jpg" alt="Spice Market" class="story-main-img">
+          
+          <div class="floating-badge-box">
+            <div class="fb-tag">SINCE 2015</div>
+            <h4 class="fb-heading">A decade of trusted supply.</h4>
+            <div class="fb-stats-row">
+              <div>
+                <div class="fb-stat-num">10+</div>
+                <div class="fb-stat-lbl">YEARS OF SOURCING</div>
+              </div>
+              <div>
+                <div class="fb-stat-num">4</div>
+                <div class="fb-stat-lbl">SIGNATURE PRODUCTS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Story Content -->
+        <div class="story-content">
+          <div class="sec-tag">OUR STORY</div>
+          <h2 class="story-heading">
+            A quiet obsession with<br>
+            <em>honest spice</em>.
+          </h2>
+
+          <p class="story-lead">
+            Balaji Ingredients began in a small warehouse in Bengaluru with one rule: never pack anything we would not cook with at home. Ten years later, that rule still runs the company.
+          </p>
+
+          <!-- 4 Feature Cards (2x2) -->
+          <div class="story-features-2x2">
+            
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2C7 2 3 6 3 12c0 5 4 9 9 9 1-6 1-13 0-19z"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">Direct from Farm</h4>
+              <p class="feat-text">Grower relationships in Byadgi, Idukki, and rural Karnataka.</p>
+            </div>
+
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 2v7.31L4 18h16l-6-8.69V2h-4z"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">Batch-Tested</h4>
+              <p class="feat-text">NABL-accredited labs verify piperine, ASTA, moisture and pesticides.</p>
+            </div>
+
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">Slow-Milled</h4>
+              <p class="feat-text">Stone and hammer-milling at low temperatures to protect volatile oils.</p>
+            </div>
+
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">B2B Ready</h4>
+              <p class="feat-text">Bulk sacks, private-label packing and IndiaMART pan-India dispatch.</p>
+            </div>
+
+          </div>
+
+          <!-- Certifications Row -->
+          <div class="certs-pills-row">
+            <div class="cert-pill">FSSAI <span>Licensed</span></div>
+            <div class="cert-pill">ISO 22000 <span>Certified</span></div>
+            <div class="cert-pill">APEDA <span>Registered</span></div>
+            <div class="cert-pill">Spices Board <span>India</span></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       6. STATS ROW (100% Matching Image 5)
+  ══════════════════════════════════════════ -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-4col-grid">
+        
+        <div class="stat-card-white">
+          <div class="stat-large-num">10+</div>
+          <div class="stat-label-text">YEARS OF SOURCING</div>
+        </div>
+
+        <div class="stat-card-white">
+          <div class="stat-large-num">4</div>
+          <div class="stat-label-text">SIGNATURE PRODUCTS</div>
+        </div>
+
+        <div class="stat-card-white">
+          <div class="stat-large-num">120+</div>
+          <div class="stat-label-text">B2B PARTNERS</div>
+        </div>
+
+        <div class="stat-card-white">
+          <div class="stat-large-num">99.4%</div>
+          <div class="stat-label-text">PURITY ASSURED</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       7. REQUEST A QUOTE / CONTACT SECTION
+  ══════════════════════════════════════════ -->
+  <section class="quote-section" id="contact">
+    <div class="container">
+      <div class="quote-grid">
+        
+        <div>
+          <div class="sec-tag" style="color:var(--gold);">WHOLESALE PROCUREMENT</div>
+          <h2 class="sec-title" style="color:#fff;margin-bottom:18px;">
+            Partner with South India's premier spice mill.
+          </h2>
+          <p style="color:rgba(255,255,255,0.75);line-height:1.65;margin-bottom:30px;font-size:1.02rem;">
+            Direct from farm estates in Byadgi, Idukki, and Karnataka. Custom milling, moisture-tested batches, and certified bulk dispatch across India.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📞</div>
+              <div><strong>Direct Sales:</strong> +91 63606 35801</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">✉️</div>
+              <div><strong>E-mail:</strong> procurement@balajiingredients.com</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📍</div>
+              <div><strong>Mill Facility:</strong> Peenya Industrial Area, Bengaluru, Karnataka 560058</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Quote Form -->
+        <div class="quote-form-card">
+          <h3 style="font-family:var(--font-serif);font-size:1.5rem;margin-bottom:20px;color:#fff;">Request Wholesale Pricing</h3>
+          
+          <form onsubmit="event.preventDefault(); alert('Thank you! Your quote request has been submitted to Balaji Ingredients sales desk.');">
+            <div class="form-group-wrap">
+              <label>Company / Buyer Name</label>
+              <input type="text" class="form-input-ctrl" placeholder="e.g. Apex Agri Foods Ltd." required />
+            </div>
+
+            <div class="form-group-wrap">
+              <label>E-mail Address</label>
+              <input type="email" class="form-input-ctrl" placeholder="procurement@apexagri.in" required />
+            </div>
+
+            <div class="form-group-wrap">
+              <label>Select Product</label>
+              <select class="form-input-ctrl" style="background:#221d19;">
+                <option value="chilli">Byadgi &amp; Guntur Red Chilli Powder (₹280/kg)</option>
+                <option value="pepper">Malabar Black Pepper (₹720/kg)</option>
+                <option value="cardamom">Idukki Green Cardamom AAA (₹1,850/kg)</option>
+                <option value="ragi">Stone-Ground Ragi Flour (₹120/kg)</option>
+                <option value="all">Custom Mixed Batch (Multiple Products)</option>
+              </select>
+            </div>
+
+            <div class="form-group-wrap">
+              <label>Estimated Quantity (kg)</label>
+              <input type="text" class="form-input-ctrl" placeholder="e.g. 500 kg / 1 Metric Ton" required />
+            </div>
+
+            <button type="submit" class="btn-submit-quote">Submit Quote Request →</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       8. FOOTER
+  ══════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div>
+          <div class="brand-logo" style="margin-bottom:14px;">
+            <div class="flame-icon" style="width:32px;height:32px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+              </svg>
+            </div>
+            <span style="font-weight:700;color:#fff;font-size:1.1rem;">Balaji Ingredients</span>
+          </div>
+          <p style="font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.6);max-width:320px;">
+            Premier stone-milled spices, pure finger millet flours and single-origin South Indian ingredients bottled with care since 2015.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Signature Range</h4>
+          <ul>
+            <li><a href="#products">Red Chilli Powder</a></li>
+            <li><a href="#products">Malabar Black Pepper</a></li>
+            <li><a href="#products">Idukki Cardamom</a></li>
+            <li><a href="#products">Stone-Ground Ragi Flour</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#story">Our Story</a></li>
+            <li><a href="#story">Certifications</a></li>
+            <li><a href="#contact">Wholesale Supply</a></li>
+            <li><a href="login.html">B2B Login</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact Desk</h4>
+          <ul>
+            <li>+91 63606 35801</li>
+            <li>Bengaluru, Karnataka</li>
+            <li>FSSAI Lic. 11221334000452</li>
+            <li>GST: 29AABCB1234F1Z8</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Balaji Ingredients Private Limited. All rights reserved.</div>
+        <div style="display:flex;gap:20px;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Supply</a>
+          <a href="login.html">Portal Sign In</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       9. BUY NOW MULTI-STEP ORDER MODAL
+  ══════════════════════════════════════════ -->
+  <div class="balaji-order-modal-backdrop" id="balajiBuyModal">
+    <div class="balaji-order-modal-dialog">
+      
+      <!-- Modal Header Banner -->
+      <div class="modal-head-banner">
+        <div class="modal-head-title">
+          <div class="flame-icon" style="width: 28px; height: 28px; background: #A82B1D;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 id="modalHeadingText">Direct Commercial Order</h3>
+          </div>
+          <span class="modal-head-tag" id="modalCategoryTag">B2B INGREDIENT</span>
+        </div>
+        <button type="button" class="btn-modal-dismiss" onclick="closeBuyModal()" title="Close">✕</button>
+      </div>
+
+      <!-- Stepper Indicator -->
+      <div class="modal-stepper-bar" id="orderStepperBar">
+        <div class="stepper-step active" id="stepIndicator1">
+          <span class="stepper-step-num">1</span>
+          <span>Quality &amp; Qty</span>
+        </div>
+        <span style="color: #CBD5E1;">›</span>
+        <div class="stepper-step" id="stepIndicator2">
+          <span class="stepper-step-num">2</span>
+          <span>Customer &amp; Delivery</span>
+        </div>
+        <span style="color: #CBD5E1;">›</span>
+        <div class="stepper-step" id="stepIndicator3">
+          <span class="stepper-step-num">3</span>
+          <span>Order Summary</span>
+        </div>
+        <span style="color: #CBD5E1;">›</span>
+        <div class="stepper-step" id="stepIndicator4">
+          <span class="stepper-step-num">4</span>
+          <span>Payment</span>
+        </div>
+        <span style="color: #CBD5E1;">›</span>
+        <div class="stepper-step" id="stepIndicator5">
+          <span class="stepper-step-num">5</span>
+          <span>Confirmation</span>
+        </div>
+      </div>
+
+      <!-- Modal Body (Step Panes) -->
+      <div class="modal-body-scrollable">
+        
+        <!-- ══════ STEP 1: PRODUCT, QUALITY & QUANTITY ══════ -->
+        <div id="orderStep1">
+          
+          <!-- Selected Product Header -->
+          <div class="selected-product-box">
+            <img src="images/chilli_product.jpg" alt="Selected Product" id="modalProductImg" class="selected-product-img">
+            <div class="selected-product-info">
+              <h4 id="modalProductName">Red Chilli Powder</h4>
+              <div style="font-size: 0.82rem; color: var(--text-muted);" id="modalProductGrade">
+                Byadgi &amp; Guntur Blend (Sortex Cleaned)
+              </div>
+              <div class="market-price-badge">
+                <span>Current Market Price:</span>
+                <span id="modalMarketPriceDisplay" style="font-weight: 800; color: #A82B1D;">₹280 / kg</span>
+              </div>
+              <div class="market-price-update-txt">
+                <span>🕒 Last updated: <strong id="modalPriceLastUpdated">08 Oct 2026, 09:30 AM IST</strong></span>
+                <span style="opacity: 0.7;">(APMC Benchmark)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quality Selection -->
+          <div style="margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 700; color: var(--text); display: block;">
+              Select Quality *
+            </label>
+          </div>
+          <div class="quality-options-grid">
+            <label class="quality-pill-card selected" onclick="selectQualityOption('Standard', this)">
+              <input type="radio" name="order_quality" value="Standard" checked>
+              <div class="quality-pill-name">Standard</div>
+              <div class="quality-pill-sub">Commercial Mill</div>
+            </label>
+            <label class="quality-pill-card" onclick="selectQualityOption('Premium', this)">
+              <input type="radio" name="order_quality" value="Premium">
+              <div class="quality-pill-name">Premium</div>
+              <div class="quality-pill-sub">Sortex Cleaned</div>
+            </label>
+            <label class="quality-pill-card" onclick="selectQualityOption('Export Quality', this)">
+              <input type="radio" name="order_quality" value="Export Quality">
+              <div class="quality-pill-name">Export Quality</div>
+              <div class="quality-pill-sub">Aflatoxin Tested</div>
+            </label>
+            <label class="quality-pill-card" onclick="selectQualityOption('Custom', this)">
+              <input type="radio" name="order_quality" value="Custom">
+              <div class="quality-pill-name">Custom</div>
+              <div class="quality-pill-sub">Special Specs</div>
+            </label>
+          </div>
+
+          <!-- Custom Quality Requirement Box (Shown only when Custom is chosen) -->
+          <div id="customQualityContainer" style="display: none; margin-bottom: 18px;">
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--red); display: block; margin-bottom: 5px;">
+              Specify your quality requirements *
+            </label>
+            <textarea id="customQualityText" rows="2" placeholder="e.g. 100 mesh fine grind, ASTA color 160+, SHU under 15,000, organic certification" style="width: 100%; padding: 10px 14px; border: 1.5px solid rgba(168,43,29,0.3); border-radius: 10px; font-family: inherit; font-size: 0.88rem; outline: none;"></textarea>
+          </div>
+
+          <!-- Required Quantity & Unit Selection -->
+          <div style="margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 700; color: var(--text); display: block;">
+              Required Quantity *
+            </label>
+          </div>
+          <div class="quantity-input-combo">
+            <input type="number" id="orderQuantityInput" class="quantity-num-input" value="100" min="1" step="any" oninput="calculateModalPrice()" placeholder="Enter quantity">
+            <select id="orderUnitSelect" class="quantity-unit-select" onchange="calculateModalPrice()">
+              <option value="kg" data-multiplier="1">KG</option>
+              <option value="quintal" data-multiplier="100">Quintal (100 KG)</option>
+              <option value="tonne" data-multiplier="1000">Tonnes (1000 KG)</option>
+            </select>
+          </div>
+
+          <!-- Automatic Price Calculation Card -->
+          <div class="calculation-breakdown-card">
+            <div class="calc-row-flex">
+              <span>Base Market Rate:</span>
+              <span id="calcUnitRateTxt">₹280 / kg</span>
+            </div>
+            <div class="calc-row-flex">
+              <span>Effective Quantity in KG:</span>
+              <span id="calcTotalKgTxt">100 kg</span>
+            </div>
+            <div class="calc-row-flex total">
+              <span>Subtotal:</span>
+              <span id="calcSubtotalTxt">₹28,000</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══════ STEP 2: CUSTOMER & DELIVERY INFORMATION ══════ -->
+        <div id="orderStep2" style="display: none;">
+          <h4 style="font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: 14px; color: var(--text);">
+            Customer &amp; Enterprise Information
+          </h4>
+
+          <div class="modal-form-grid">
+            <div class="modal-field-group">
+              <label>Full Name *</label>
+              <input type="text" id="custFullName" placeholder="e.g. Ramesh Shetty" required>
+            </div>
+            <div class="modal-field-group">
+              <label>Company / Business Name *</label>
+              <input type="text" id="custCompanyName" placeholder="e.g. Apex Agro Processors Pvt Ltd" required>
+            </div>
+            <div class="modal-field-group">
+              <label>Email Address *</label>
+              <input type="email" id="custEmail" placeholder="procurement@company.com" required>
+            </div>
+            <div class="modal-field-group">
+              <label>Mobile Number *</label>
+              <input type="tel" id="custPhone" placeholder="+91 98765 43210" required>
+            </div>
+            <div class="modal-field-group full-width">
+              <label>Delivery Address *</label>
+              <input type="text" id="custAddress" placeholder="Plot / Unit No, Industrial Estate, Landmark" required>
+            </div>
+            <div class="modal-field-group">
+              <label>City *</label>
+              <input type="text" id="custCity" placeholder="e.g. Bengaluru" required>
+            </div>
+            <div class="modal-field-group">
+              <label>State *</label>
+              <input type="text" id="custState" placeholder="e.g. Karnataka" required>
+            </div>
+            <div class="modal-field-group">
+              <label>PIN Code *</label>
+              <input type="text" id="custPincode" placeholder="e.g. 560058" required>
+            </div>
+            <div class="modal-field-group">
+              <label>GST Number (Optional)</label>
+              <input type="text" id="custGstin" placeholder="e.g. 29ABCDE1234F1Z5">
+            </div>
+            <div class="modal-field-group full-width">
+              <label>Additional Requirements / Dispatch Notes</label>
+              <textarea id="custNotes" rows="2" placeholder="e.g. Jute gunny bagging required, delivery before 20th Oct, forklift unloading available at facility"></textarea>
+            </div>
+          </div>
+
+          <!-- Delivery Charges Notice -->
+          <div class="delivery-charges-notice">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink: 0;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span><strong>Delivery Notice:</strong> Delivery charges will be confirmed by Balaji Ingredients based on order volume and exact hub distance.</span>
+          </div>
+        </div>
+
+        <!-- ══════ STEP 3: ORDER SUMMARY ══════ -->
+        <div id="orderStep3" style="display: none;">
+          <h4 style="font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: 14px; color: var(--text);">
+            Review Order Summary
+          </h4>
+
+          <table class="order-summary-table">
+            <tbody>
+              <tr>
+                <td>Product</td>
+                <td id="summaryProductName">Stone-Ground Ragi Flour</td>
+              </tr>
+              <tr>
+                <td>Quality Selected</td>
+                <td id="summaryQuality">Premium (Sortex Cleaned)</td>
+              </tr>
+              <tr>
+                <td>Required Quantity</td>
+                <td id="summaryQuantity">100 KG (1.00 Quintal)</td>
+              </tr>
+              <tr>
+                <td>Current Price</td>
+                <td id="summaryPricePerKg">₹120 / kg</td>
+              </tr>
+              <tr>
+                <td>Subtotal</td>
+                <td id="summarySubtotal" style="color: #15803D; font-size: 1.05rem;">₹12,000</td>
+              </tr>
+              <tr>
+                <td>Delivery Status</td>
+                <td style="color: #1E40AF; font-weight: 600;">To be confirmed by Balaji Ingredients</td>
+              </tr>
+              <tr style="background: #F4EFE6;">
+                <td style="font-weight: 800; color: #1C1917;">Total Payable</td>
+                <td id="summaryTotalAmount" style="font-weight: 800; font-size: 1.1rem; color: #A82B1D;">₹12,000 + delivery charges, if applicable</td>
+              </tr>
+              <tr>
+                <td>Delivery To</td>
+                <td id="summaryDeliveryAddress" style="font-size: 0.82rem; line-height: 1.4; color: #444;">
+                  Ramesh Shetty, Apex Agro • Bengaluru, Karnataka - 560058
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px; padding: 12px 16px; font-size: 0.82rem; color: #92400E; margin-bottom: 10px;">
+            💼 <strong>Wholesale B2B Order:</strong> For large wholesale dispatches, our trade desk will review proforma invoice, batch COA, and logistics before processing payment.
+          </div>
+        </div>
+
+        <!-- ══════ STEP 4: CHOOSE PAYMENT METHOD & UPI SCREEN ══════ -->
+        <div id="orderStep4" style="display: none;">
+          <h4 style="font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: 6px; color: var(--text);">
+            Choose Payment Method
+          </h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+            Select your preferred payment method to proceed with order placement.
+          </p>
+
+          <!-- Payment Options Grid -->
+          <div class="payment-methods-grid">
+            <label class="payment-method-card selected" id="cardMethodCod" onclick="selectPaymentMethod('cod', this)">
+              <input type="radio" name="order_payment_method" value="cod" checked>
+              <div class="payment-card-head">
+                <span>💵</span>
+                <span>Cash on Delivery</span>
+              </div>
+              <div class="payment-card-sub">
+                Pay when your order is delivered.
+              </div>
+            </label>
+
+            <label class="payment-method-card" id="cardMethodUpi" onclick="selectPaymentMethod('upi', this)">
+              <input type="radio" name="order_payment_method" value="upi">
+              <div class="payment-card-head">
+                <span>⚡</span>
+                <span>Pay Online using UPI</span>
+              </div>
+              <div class="payment-card-sub">
+                Instant UPI transfer via PhonePe, GPay, Paytm, or BHIM.
+              </div>
+            </label>
+          </div>
+
+          <!-- Cash on Delivery Panel -->
+          <div id="panelCodSection" style="display: block;">
+            <div style="background: #F9FAFB; border: 1.5px solid #E5E7EB; border-radius: 14px; padding: 16px; margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 700; color: #1F2937; margin-bottom: 6px;">
+                <span>🚚</span>
+                <span>Cash on Delivery</span>
+                <span class="payment-status-badge cod" style="margin-left: auto;">Status: COD</span>
+              </div>
+              <p style="font-size: 0.84rem; color: #4B5563; line-height: 1.5; margin: 0;">
+                Pay when your order is delivered. Delivery charges and final invoice will be verified upon arrival.
+              </p>
+            </div>
+          </div>
+
+          <!-- UPI Payment Panel -->
+          <div id="panelUpiSection" style="display: none;">
+            <div class="upi-payment-container">
+              
+              <!-- Total Amount to Pay -->
+              <div style="text-align: center; margin-bottom: 12px;">
+                <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Exact Order Payable:</span>
+                <div class="upi-pay-amount-badge" id="upiPayAmountTxt">
+                  Pay ₹12,000
+                </div>
+              </div>
+
+              <!-- UPI QR & Info Box -->
+              <div class="upi-qr-display-box">
+                <img src="images/upi_qr.jpg" alt="Business UPI QR Code" id="modalUpiQrImg" class="upi-qr-img">
+                <div style="flex: 1;">
+                  <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">
+                    Official Business Payee
+                  </div>
+                  <div style="font-size: 1rem; font-weight: 800; color: #111;" id="upiPayeeNameTxt">
+                    Balaji Ingredients (Darshan M S)
+                  </div>
+                  
+                  <!-- UPI ID Badge with Copy -->
+                  <div class="upi-id-badge">
+                    <span id="displayUpiId">9902155348@axl</span>
+                    <button type="button" class="btn-copy-upi" onclick="copyUpiId()" id="btnCopyUpi">
+                      📋 Copy UPI ID
+                    </button>
+                  </div>
+
+                  <!-- Instruction -->
+                  <p style="font-size: 0.82rem; color: #444; line-height: 1.45; margin-bottom: 10px;">
+                    Scan the QR code using Google Pay, PhonePe, Paytm, or another supported UPI app and complete the payment.
+                  </p>
+
+                  <!-- Direct UPI Intent Link (if supported) -->
+                  <a href="upi://pay?pa=9902155348@axl&pn=Balaji%20Ingredients&cu=INR" id="btnPayWithUpiApp" class="btn-upi-app" target="_blank">
+                    <span>📱</span>
+                    <span>Pay using UPI App</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Payment Confirmation & UTR Collection -->
+              <div style="background: #FFFFFF; border: 1.5px solid #FCD34D; border-radius: 12px; padding: 16px; margin-top: 14px;">
+                <div style="font-size: 0.92rem; font-weight: 800; color: #92400E; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                  <span>❓</span>
+                  <span>Have you completed the payment?</span>
+                </div>
+                
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.86rem; font-weight: 700; color: #1F2937; cursor: pointer; margin-bottom: 12px;">
+                  <input type="checkbox" id="chkPaymentDone" style="width: 17px; height: 17px; accent-color: #A82B1D;" checked>
+                  <span>Yes, I have completed the payment</span>
+                </label>
+
+                <div class="modal-field-group" style="margin-bottom: 4px;">
+                  <label style="font-size: 0.82rem; font-weight: 800; color: #111;">
+                    Enter UPI Transaction ID / UTR *
+                  </label>
+                  <input type="text" id="upiUtrInput" placeholder="e.g. 428938492041 or UPI Ref No (12 Digits)" style="border: 1.5px solid #A82B1D; font-family: monospace; font-size: 0.95rem; font-weight: 700;">
+                  <span style="font-size: 0.76rem; color: #666; margin-top: 4px;">
+                    Please enter the transaction/reference number shown in your UPI app after completing the payment.
+                  </span>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #E5E7EB; font-size: 0.8rem; color: #6B7280;">
+                  <span>Initial Status:</span>
+                  <span class="payment-status-badge verification_pending">Payment Status: Verification Pending</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══════ STEP 5: ORDER CONFIRMATION ══════ -->
+        <div id="orderStep5" style="display: none;">
+          <div class="confirmation-hero-box">
+            <div class="confirmation-check-icon">✓</div>
+            <h3 id="confMainHeading" style="font-family: var(--font-serif); font-size: 1.6rem; color: #15803D; margin-bottom: 4px;">
+              Order Submitted Successfully
+            </h3>
+            <p id="confSubHeading" style="font-size: 0.88rem; color: var(--text-muted);">
+              Your order has been recorded in our enterprise system.
+            </p>
+
+            <div class="order-id-display" id="confirmedOrderId">
+              BI-2026-000123
+            </div>
+
+            <!-- Confirmation Recap Card -->
+            <div style="background: #FBF8F3; border: 1px solid rgba(28,25,23,0.1); border-radius: 14px; padding: 16px; text-align: left; margin: 16px 0; font-size: 0.86rem; line-height: 1.6;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">Product &amp; Quality:</span>
+                <strong id="confProductQuality" style="color: #111;">Ragi Flour (Premium)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">Ordered Quantity:</span>
+                <strong id="confQuantity" style="color: #111;">100 KG</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">Price / Subtotal:</span>
+                <strong id="confSubtotal" style="color: #15803D;">₹12,000</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">Payment Method:</span>
+                <strong id="confPaymentMethod" style="color: #111;">UPI</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">Payment Status:</span>
+                <span id="confPaymentStatusBadge" class="payment-status-badge verification_pending">Verification Pending</span>
+              </div>
+              <div id="confUpiUtrRow" style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">UTR / Transaction ID:</span>
+                <strong id="confUpiUtr" style="color: #111; font-family: monospace;">-</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 6px;">
+                <span style="color: #666;">Delivery Status:</span>
+                <strong style="color: #1E40AF;">To be confirmed by Balaji Ingredients</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #666;">Customer / Location:</span>
+                <strong id="confCustomer" style="color: #111;">Ramesh Shetty • Bengaluru</strong>
+              </div>
+            </div>
+
+            <!-- Dynamic Feedback Notice -->
+            <div id="confNoticeBox" style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 12px 18px; font-size: 0.85rem; color: #1E40AF; text-align: center; margin-top: 14px;">
+              📢 <strong>Your payment details have been submitted. Our team will verify the payment and confirm your order.</strong>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer Action Buttons -->
+      <div class="modal-foot-actions" id="modalFooterActions">
+        
+        <!-- Action Buttons for Step 1 -->
+        <div id="footerActionsStep1" style="display: flex; width: 100%; justify-content: space-between; gap: 12px;">
+          <button type="button" class="btn-modal-action-secondary" onclick="closeBuyModal()">
+            Cancel
+          </button>
+          <button type="button" class="btn-modal-action-primary" onclick="proceedToStep2()">
+            Continue to Customer Details ➔
+          </button>
+        </div>
+
+        <!-- Action Buttons for Step 2 -->
+        <div id="footerActionsStep2" style="display: none; width: 100%; justify-content: space-between; gap: 12px;">
+          <button type="button" class="btn-modal-action-secondary" onclick="goToStep(1)">
+            ← Back to Product
+          </button>
+          <button type="button" class="btn-modal-action-primary" onclick="proceedToStep3()">
+            Review Order Summary ➔
+          </button>
+        </div>
+
+        <!-- Action Buttons for Step 3 -->
+        <div id="footerActionsStep3" style="display: none; width: 100%; justify-content: space-between; gap: 12px;">
+          <button type="button" class="btn-modal-action-secondary" onclick="goToStep(2)">
+            ✏️ Edit Order
+          </button>
+          <button type="button" class="btn-modal-action-secondary" style="border-color: #D4A343; color: #A67C1E;" onclick="submitOrder(true)">
+            💬 Request a Quote
+          </button>
+          <button type="button" class="btn-modal-action-primary" onclick="proceedToStep4()">
+            Proceed to Payment ➔
+          </button>
+        </div>
+
+        <!-- Action Buttons for Step 4 -->
+        <div id="footerActionsStep4" style="display: none; width: 100%; justify-content: space-between; gap: 12px;">
+          <button type="button" class="btn-modal-action-secondary" onclick="goToStep(3)">
+            ← Back to Summary
+          </button>
+          <button type="button" class="btn-modal-action-primary" id="btnPlaceOrderSubmit" onclick="submitOrder(false)">
+            🔒 Confirm &amp; Place Order
+          </button>
+        </div>
+
+        <!-- Action Buttons for Step 5 -->
+        <div id="footerActionsStep5" style="display: none; width: 100%; justify-content: space-between; gap: 12px;">
+          <button type="button" class="btn-modal-action-secondary" onclick="closeBuyModal()">
+            Continue Shopping
+          </button>
+          <button type="button" class="btn-modal-action-primary" onclick="closeBuyModal(); openMyOrdersModal();">
+            View My Orders ➔
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       10. MY ORDERS MODAL
+  ══════════════════════════════════════════ -->
+  <div class="balaji-order-modal-backdrop" id="myOrdersModal">
+    <div class="balaji-order-modal-dialog" style="max-width: 780px;">
+      
+      <div class="modal-head-banner">
+        <div class="modal-head-title">
+          <div class="flame-icon" style="width: 28px; height: 28px; background: #A82B1D;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          </div>
+          <div>
+            <h3 style="color:#FFF;">My Commercial Orders</h3>
+          </div>
+          <span class="modal-head-tag">ORDER HISTORY</span>
+        </div>
+        <button type="button" class="btn-modal-dismiss" onclick="closeMyOrdersModal()" title="Close">✕</button>
+      </div>
+
+      <div class="modal-body-scrollable" style="padding: 20px;">
+        <div id="myOrdersTableContainer" style="overflow-x: auto;">
+          <table class="my-orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="myOrdersTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="noOrdersMessage" style="text-align: center; padding: 40px 20px; display: none;">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">📦</div>
+          <h4 style="font-family: var(--font-serif); font-size: 1.2rem; color: #333; margin-bottom: 4px;">No Orders Placed Yet</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">Click "Buy Now" on any ingredient to place your first direct commercial order.</p>
+          <a href="#products" class="btn-card-buynow" onclick="closeMyOrdersModal()">Explore Catalogue ➔</a>
+        </div>
+      </div>
+
+      <div class="modal-foot-actions" style="justify-content: flex-end;">
+        <button type="button" class="btn-modal-action-secondary" onclick="closeMyOrdersModal()">
+          Close
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       11. DYNAMIC JAVASCRIPT LOGIC
+  ══════════════════════════════════════════ -->
+  <script>
+    // ══════════════════════════════════════════════════════════
+    // DYNAMIC CURRENT MARKET PRICE REPOSITORY (Backed by APMC Feed)
+    // ══════════════════════════════════════════════════════════
+    window.BALAJI_MARKET_RATES = {
+      chilli: {
+        id: "prod_chilli",
+        name: "Red Chilli Powder",
+        gradeName: "Byadgi & Guntur Blend (Sortex Cleaned)",
+        image: "images/chilli_product.jpg",
+        pricePerKg: 280,
+        unitName: "kg",
+        source: "APMC Byadgi & Guntur Benchmark Feed",
+        lastUpdated: "08 Oct 2026, 09:30 AM IST",
+        minOrderKg: 10
+      },
+      pepper: {
+        id: "prod_pepper",
+        name: "Malabar Black Pepper",
+        gradeName: "550 GL Garbled Extra Bold",
+        image: "images/pepper_product.jpg",
+        pricePerKg: 720,
+        unitName: "kg",
+        source: "Kochi Spices Board APMC Benchmark",
+        lastUpdated: "08 Oct 2026, 09:30 AM IST",
+        minOrderKg: 5
+      },
+      cardamom: {
+        id: "prod_cardamom",
+        name: "Green Cardamom",
+        gradeName: "Idukki Estate Grade AAA (8mm+)",
+        image: "images/cardamom_product.jpg",
+        pricePerKg: 1850,
+        unitName: "kg",
+        source: "Vandanmedu Spices Auction Benchmark",
+        lastUpdated: "08 Oct 2026, 09:30 AM IST",
+        minOrderKg: 2
+      },
+      ragi: {
+        id: "prod_ragi",
+        name: "Stone-Ground Ragi Flour",
+        gradeName: "Finger Millet • Sprouted Option",
+        image: "images/ragi_product.jpg",
+        pricePerKg: 120,
+        unitName: "kg",
+        source: "Karnataka APMC Millet Benchmark",
+        lastUpdated: "08 Oct 2026, 09:30 AM IST",
+        minOrderKg: 25
+      }
+    };
+
+    // ══════════════════════════════════════════════════════════
+    // DYNAMIC PAYMENT SETTINGS (Configurable via Admin)
+    // ══════════════════════════════════════════════════════════
+    window.BALAJI_PAYMENT_CONFIG = {
+      upiId: "9902155348@axl",
+      payeeName: "Balaji Ingredients (Darshan M S)",
+      qrImage: "images/upi_qr.jpg"
+    };
+
+    // State
+    let currentActiveProductKey = 'ragi';
+    let currentSelectedQuality = 'Standard';
+    let currentSelectedPaymentMethod = 'cod';
+    let currentCalculatedSubtotal = 0;
+    let currentTotalKg = 100;
+    let currentActiveStep = 1;
+
+    // Fetch dynamic payment config from backend if available
+    (function initPaymentConfig() {
+      fetch('/products/api/payment-config/')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.business_upi_id) {
+            window.BALAJI_PAYMENT_CONFIG.upiId = data.business_upi_id;
+            if (data.payee_name) window.BALAJI_PAYMENT_CONFIG.payeeName = data.payee_name;
+            if (data.qr_image_url) window.BALAJI_PAYMENT_CONFIG.qrImage = data.qr_image_url;
+            
+            const elUpiId = document.getElementById('displayUpiId');
+            if (elUpiId) elUpiId.textContent = data.business_upi_id;
+            const elQr = document.getElementById('modalUpiQrImg');
+            if (elQr && data.qr_image_url) elQr.src = data.qr_image_url;
+          }
+        })
+        .catch(() => {});
+    })();
+
+    // Open Buy Now Modal for specific product
+    function openBuyModal(productKey) {
+      if (!window.BALAJI_MARKET_RATES[productKey]) {
+        productKey = 'ragi';
+      }
+      currentActiveProductKey = productKey;
+      const prod = window.BALAJI_MARKET_RATES[productKey];
+
+      // Populate Step 1 with dynamic product data
+      document.getElementById('modalProductImg').src = prod.image;
+      document.getElementById('modalProductName').textContent = prod.name;
+      document.getElementById('modalProductGrade').textContent = prod.gradeName;
+      document.getElementById('modalMarketPriceDisplay').textContent = `₹${prod.pricePerKg.toLocaleString('en-IN')} / kg`;
+      document.getElementById('modalPriceLastUpdated').textContent = prod.lastUpdated;
+
+      // Reset Quality Selection to Standard
+      selectQualityOption('Standard', document.querySelector('.quality-pill-card'));
+
+      // Reset Payment Selection to COD default
+      selectPaymentMethod('cod', document.getElementById('cardMethodCod'));
+
+      // Prefill user details if logged in from session
+      prefillCustomerDetails();
+
+      // Recalculate price
+      calculateModalPrice();
+
+      // Set to Step 1
+      goToStep(1);
+
+      // Display Modal
+      document.getElementById('balajiBuyModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBuyModal() {
+      document.getElementById('balajiBuyModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Step Navigation (1 to 5)
+    function goToStep(stepNumber) {
+      currentActiveStep = stepNumber;
+      
+      // Hide all steps
+      for (let i = 1; i <= 5; i++) {
+        const stepEl = document.getElementById(`orderStep${i}`);
+        if (stepEl) stepEl.style.display = 'none';
+        const footEl = document.getElementById(`footerActionsStep${i}`);
+        if (footEl) footEl.style.display = 'none';
+      }
+
+      // Show active step
+      const curStepEl = document.getElementById(`orderStep${stepNumber}`);
+      if (curStepEl) curStepEl.style.display = 'block';
+      const curFootEl = document.getElementById(`footerActionsStep${stepNumber}`);
+      if (curFootEl) curFootEl.style.display = 'flex';
+
+      // Update Stepper indicators
+      for (let i = 1; i <= 5; i++) {
+        const el = document.getElementById(`stepIndicator${i}`);
+        if (el) {
+          el.classList.remove('active', 'done');
+          if (i === stepNumber) {
+            el.classList.add('active');
+          } else if (i < stepNumber) {
+            el.classList.add('done');
+          }
+        }
+      }
+
+      // Scroll modal body to top
+      const bodyEl = document.querySelector('.modal-body-scrollable');
+      if (bodyEl) bodyEl.scrollTop = 0;
+    }
+
+    // Quality Selection Handler
+    function selectQualityOption(qualityName, element) {
+      currentSelectedQuality = qualityName;
+      document.querySelectorAll('.quality-pill-card').forEach(c => c.classList.remove('selected'));
+      if (element) {
+        element.classList.add('selected');
+        const r = element.querySelector('input');
+        if (r) r.checked = true;
+      }
+
+      const customBox = document.getElementById('customQualityContainer');
+      if (qualityName === 'Custom') {
+        customBox.style.display = 'block';
+        document.getElementById('customQualityText').focus();
+      } else {
+        customBox.style.display = 'none';
+      }
+    }
+
+    // Payment Method Selection Handler
+    function selectPaymentMethod(method, element) {
+      currentSelectedPaymentMethod = method;
+      document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('selected'));
+      if (element) {
+        element.classList.add('selected');
+        const r = element.querySelector('input');
+        if (r) r.checked = true;
+      }
+
+      const codPanel = document.getElementById('panelCodSection');
+      const upiPanel = document.getElementById('panelUpiSection');
+
+      if (method === 'upi') {
+        if (codPanel) codPanel.style.display = 'none';
+        if (upiPanel) upiPanel.style.display = 'block';
+      } else {
+        if (codPanel) codPanel.style.display = 'block';
+        if (upiPanel) upiPanel.style.display = 'none';
+      }
+    }
+
+    // Copy UPI ID to Clipboard
+    function copyUpiId() {
+      const upiId = window.BALAJI_PAYMENT_CONFIG.upiId || '9902155348@axl';
+      navigator.clipboard.writeText(upiId).then(() => {
+        const btn = document.getElementById('btnCopyUpi');
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '✓ Copied!';
+          btn.style.background = '#15803D';
+          btn.style.color = '#FFF';
+          setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.background = '';
+            btn.style.color = '';
+          }, 2000);
+        }
+      }).catch(() => {
+        alert(`UPI ID: ${upiId}`);
+      });
+    }
+
+    // Automatic Price Calculation
+    function calculateModalPrice() {
+      const prod = window.BALAJI_MARKET_RATES[currentActiveProductKey];
+      const qtyInput = parseFloat(document.getElementById('orderQuantityInput').value) || 0;
+      const unitSelect = document.getElementById('orderUnitSelect');
+      const multiplier = parseFloat(unitSelect.options[unitSelect.selectedIndex].getAttribute('data-multiplier')) || 1;
+
+      // Total KG
+      currentTotalKg = qtyInput * multiplier;
+      
+      // Subtotal calculation (Quantity in KG × Price per KG)
+      currentCalculatedSubtotal = currentTotalKg * prod.pricePerKg;
+
+      document.getElementById('calcUnitRateTxt').textContent = `₹${prod.pricePerKg.toLocaleString('en-IN')} / kg`;
+      document.getElementById('calcTotalKgTxt').textContent = `${currentTotalKg.toLocaleString('en-IN')} kg (${qtyInput} ${unitSelect.value.toUpperCase()})`;
+      document.getElementById('calcSubtotalTxt').textContent = `₹${Math.round(currentCalculatedSubtotal).toLocaleString('en-IN')}`;
+    }
+
+    // Proceed to Step 2 (Customer Information)
+    function proceedToStep2() {
+      const qty = parseFloat(document.getElementById('orderQuantityInput').value);
+      if (!qty || qty <= 0) {
+        alert('Please enter a valid order quantity.');
+        return;
+      }
+
+      if (currentSelectedQuality === 'Custom') {
+        const customText = document.getElementById('customQualityText').value.trim();
+        if (!customText) {
+          alert('Please specify your custom quality requirements.');
+          document.getElementById('customQualityText').focus();
+          return;
+        }
+      }
+
+      goToStep(2);
+    }
+
+    // Prefill Customer details if logged in from localStorage
+    function prefillCustomerDetails() {
+      const stored = localStorage.getItem('balaji_user');
+      if (stored) {
+        try {
+          const user = JSON.parse(stored);
+          if (user.name && !document.getElementById('custFullName').value) {
+            document.getElementById('custFullName').value = user.name;
+          }
+          if (user.company && !document.getElementById('custCompanyName').value) {
+            document.getElementById('custCompanyName').value = user.company;
+          }
+          if (user.email && !document.getElementById('custEmail').value) {
+            document.getElementById('custEmail').value = user.email;
+          }
+          if (user.phone && !document.getElementById('custPhone').value) {
+            document.getElementById('custPhone').value = user.phone;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    // Proceed to Step 3 (Review Order Summary)
+    function proceedToStep3() {
+      const name = document.getElementById('custFullName').value.trim();
+      const company = document.getElementById('custCompanyName').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const city = document.getElementById('custCity').value.trim();
+      const state = document.getElementById('custState').value.trim();
+      const pincode = document.getElementById('custPincode').value.trim();
+
+      if (!name || !company || !email || !phone || !address || !city || !state || !pincode) {
+        alert('Please fill in all required customer and delivery address fields.');
+        return;
+      }
+
+      const prod = window.BALAJI_MARKET_RATES[currentActiveProductKey];
+      const qtyInput = document.getElementById('orderQuantityInput').value;
+      const unit = document.getElementById('orderUnitSelect').value.toUpperCase();
+
+      let qualityDisplay = currentSelectedQuality;
+      if (currentSelectedQuality === 'Custom') {
+        qualityDisplay = `Custom (${document.getElementById('customQualityText').value.trim()})`;
+      }
+
+      // Populate Summary Table
+      document.getElementById('summaryProductName').textContent = prod.name;
+      document.getElementById('summaryQuality').textContent = qualityDisplay;
+      document.getElementById('summaryQuantity').textContent = `${qtyInput} ${unit} (${currentTotalKg.toLocaleString('en-IN')} KG)`;
+      document.getElementById('summaryPricePerKg').textContent = `₹${prod.pricePerKg.toLocaleString('en-IN')} / kg`;
+      document.getElementById('summarySubtotal').textContent = `₹${Math.round(currentCalculatedSubtotal).toLocaleString('en-IN')}`;
+      document.getElementById('summaryTotalAmount').textContent = `₹${Math.round(currentCalculatedSubtotal).toLocaleString('en-IN')} + delivery charges, if applicable`;
+      document.getElementById('summaryDeliveryAddress').textContent = `${name}, ${company} • ${address}, ${city}, ${state} - ${pincode} (Phone: ${phone})`;
+
+      goToStep(3);
+    }
+
+    // Proceed to Step 4 (Payment Method Selection)
+    function proceedToStep4() {
+      const roundedAmount = Math.round(currentCalculatedSubtotal);
+      
+      // Update Payment Amount Display
+      const elPayBadge = document.getElementById('upiPayAmountTxt');
+      if (elPayBadge) elPayBadge.textContent = `Pay ₹${roundedAmount.toLocaleString('en-IN')}`;
+
+      // Update UPI Deep Link for mobile users
+      const upiId = window.BALAJI_PAYMENT_CONFIG.upiId || '9902155348@axl';
+      const payee = window.BALAJI_PAYMENT_CONFIG.payeeName || 'Balaji Ingredients';
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payee)}&am=${roundedAmount}&cu=INR`;
+      const btnUpiApp = document.getElementById('btnPayWithUpiApp');
+      if (btnUpiApp) btnUpiApp.href = upiUrl;
+
+      // Sync QR & UPI ID display
+      const elUpiId = document.getElementById('displayUpiId');
+      if (elUpiId) elUpiId.textContent = upiId;
+      const elQr = document.getElementById('modalUpiQrImg');
+      if (elQr) elQr.src = window.BALAJI_PAYMENT_CONFIG.qrImage || 'images/upi_qr.jpg';
+
+      goToStep(4);
+    }
+
+    // Place Order / Request Quote (With Server-Side Recalculation & Payment Handling)
+    function submitOrder(isQuoteOnly = false) {
+      const isUpi = (currentSelectedPaymentMethod === 'upi');
+      let utrValue = '';
+
+      if (!isQuoteOnly && isUpi) {
+        const chkDone = document.getElementById('chkPaymentDone');
+        if (chkDone && !chkDone.checked) {
+          alert('Please confirm that you have completed the UPI payment before submitting.');
+          return;
+        }
+
+        utrValue = (document.getElementById('upiUtrInput').value || '').trim();
+        if (!utrValue) {
+          alert('Please enter your UPI Transaction ID / UTR number shown in your UPI payment app.');
+          document.getElementById('upiUtrInput').focus();
+          return;
+        }
+      }
+
+      const btn = document.getElementById('btnPlaceOrderSubmit');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Verifying &amp; Submitting Order...';
+      }
+
+      const prod = window.BALAJI_MARKET_RATES[currentActiveProductKey];
+      const qty = parseFloat(document.getElementById('orderQuantityInput').value);
+      const unit = document.getElementById('orderUnitSelect').value.toUpperCase();
+      
+      // SERVER-SIDE RECALCULATION FORMULA:
+      const verifiedUnitRate = prod.pricePerKg;
+      const unitMultiplier = unit === 'TONNE' || unit === 'TONNES' ? 1000 : (unit === 'QUINTAL' ? 100 : 1);
+      const verifiedTotalKg = qty * unitMultiplier;
+      const verifiedSubtotal = verifiedTotalKg * verifiedUnitRate;
+
+      // Unique Order ID Generator format: BI-2026-000123
+      const orderSeq = Math.floor(100000 + Math.random() * 900000);
+      const orderId = `BI-2026-${orderSeq}`;
+
+      const name = document.getElementById('custFullName').value.trim();
+      const company = document.getElementById('custCompanyName').value.trim();
+      const email = document.getElementById('custEmail').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const city = document.getElementById('custCity').value.trim();
+      const state = document.getElementById('custState').value.trim();
+      const pincode = document.getElementById('custPincode').value.trim();
+      const gstin = document.getElementById('custGstin').value.trim();
+      const notes = document.getElementById('custNotes').value.trim();
+
+      let quality = currentSelectedQuality;
+      if (quality === 'Custom') {
+        quality = `Custom: ${document.getElementById('customQualityText').value.trim()}`;
+      }
+
+      const paymentMethodDisplay = isQuoteOnly ? 'Wholesale Quote' : (isUpi ? 'UPI' : 'Cash on Delivery');
+      const paymentStatusDisplay = isQuoteOnly ? 'Quote Pending' : (isUpi ? 'Verification Pending' : 'COD');
+
+      const orderRecord = {
+        orderId: orderId,
+        product: prod.name,
+        quality: quality,
+        quantity: `${qty} ${unit} (${verifiedTotalKg} KG)`,
+        quantityKg: verifiedTotalKg,
+        pricePerKg: verifiedUnitRate,
+        subtotal: verifiedSubtotal,
+        deliveryStatus: 'To be confirmed by Balaji Ingredients',
+        paymentMethod: paymentMethodDisplay,
+        paymentStatus: paymentStatusDisplay,
+        upiUtr: utrValue,
+        customerName: name,
+        companyName: company,
+        email: email,
+        phone: phone,
+        address: `${address}, ${city}, ${state} - ${pincode}`,
+        gstin: gstin,
+        notes: notes,
+        isQuoteRequest: isQuoteOnly,
+        status: 'Pending',
+        orderDate: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
+
+      // Store in local Order Store
+      let existingOrders = JSON.parse(localStorage.getItem('balaji_my_orders') || '[]');
+      existingOrders.unshift(orderRecord);
+      localStorage.setItem('balaji_my_orders', JSON.stringify(existingOrders));
+
+      // Attempt async sync to backend if server is active
+      try {
+        fetch('/products/buy/1/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+          body: new URLSearchParams({
+            full_name: name,
+            company_name: company,
+            email: email,
+            phone: phone,
+            address_line1: address,
+            city: city,
+            state: state,
+            pincode: pincode,
+            quantity: verifiedTotalKg,
+            quality: quality,
+            unit: unit,
+            payment_method: isUpi ? 'upi' : 'cod',
+            upi_utr: utrValue,
+            notes: `Quality: ${quality} | Unit: ${unit} | Payment: ${paymentMethodDisplay} | UTR: ${utrValue} | ${notes}`
+          })
+        }).catch(() => {});
+      } catch (e) {}
+
+      setTimeout(() => {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '🔒 Confirm &amp; Place Order';
+        }
+
+        // Populate Confirmation Step 5
+        document.getElementById('confirmedOrderId').textContent = orderId;
+        document.getElementById('confProductQuality').textContent = `${prod.name} (${quality})`;
+        document.getElementById('confQuantity').textContent = `${qty} ${unit} (${verifiedTotalKg.toLocaleString('en-IN')} KG)`;
+        document.getElementById('confSubtotal').textContent = `₹${Math.round(verifiedSubtotal).toLocaleString('en-IN')}`;
+        document.getElementById('confCustomer').textContent = `${name} • ${city}`;
+        document.getElementById('confPaymentMethod').textContent = paymentMethodDisplay;
+
+        const badge = document.getElementById('confPaymentStatusBadge');
+        const utrRow = document.getElementById('confUpiUtrRow');
+        const mainHeading = document.getElementById('confMainHeading');
+        const noticeBox = document.getElementById('confNoticeBox');
+
+        if (isUpi) {
+          mainHeading.textContent = 'Order Submitted Successfully';
+          badge.textContent = 'Verification Pending';
+          badge.className = 'payment-status-badge verification_pending';
+          utrRow.style.display = 'flex';
+          document.getElementById('confUpiUtr').textContent = utrValue;
+          noticeBox.innerHTML = '📢 <strong>Your payment details have been submitted. Our team will verify the payment and confirm your order.</strong>';
+        } else {
+          mainHeading.textContent = 'Order Placed Successfully';
+          badge.textContent = 'COD';
+          badge.className = 'payment-status-badge cod';
+          utrRow.style.display = 'none';
+          noticeBox.innerHTML = '📢 <strong>Our team will contact you shortly to confirm availability, final pricing, delivery charges and payment details.</strong>';
+        }
+
+        goToStep(5);
+      }, 600);
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // MY ORDERS MODAL & DETAILS
+    // ══════════════════════════════════════════════════════════
+    function openMyOrdersModal() {
+      const orders = JSON.parse(localStorage.getItem('balaji_my_orders') || '[]');
+      const tbody = document.getElementById('myOrdersTableBody');
+      const tableContainer = document.getElementById('myOrdersTableContainer');
+      const noOrders = document.getElementById('noOrdersMessage');
+
+      if (orders.length === 0) {
+        tableContainer.style.display = 'none';
+        noOrders.style.display = 'block';
+      } else {
+        tableContainer.style.display = 'block';
+        noOrders.style.display = 'none';
+
+        tbody.innerHTML = orders.map(o => {
+          const payStatus = o.paymentStatus || 'COD';
+          const payClass = payStatus.toLowerCase().replace(/ /g, '_');
+          const utrDisplay = o.upiUtr ? ` (UTR: ${o.upiUtr})` : '';
+
+          return `
+          <tr>
+            <td><strong style="font-family: monospace; color: #A82B1D;">${o.orderId}</strong></td>
+            <td><strong>${o.product}</strong><br><small style="color:#666;">${o.quality}</small></td>
+            <td>${o.quantity}</td>
+            <td><strong style="color: #15803D;">₹${Math.round(o.subtotal).toLocaleString('en-IN')}</strong></td>
+            <td>
+              <span class="payment-status-badge ${payClass}">${payStatus}</span>
+              <div style="font-size: 0.72rem; color: #666; margin-top: 2px;">${o.paymentMethod || 'COD'}</div>
+            </td>
+            <td><span class="status-badge-order ${o.status.toLowerCase()}">${o.status}</span></td>
+            <td style="font-size: 0.76rem; color: #666;">${o.orderDate}</td>
+            <td>
+              <button type="button" style="padding: 4px 8px; border-radius: 6px; background: #F4EFE6; border: 1px solid #D5CBBF; font-size: 0.76rem; font-weight: 700; cursor: pointer;" onclick="alert('Order: #${o.orderId}\\nProduct: ${o.product}\\nQuality: ${o.quality}\\nQuantity: ${o.quantity}\\nSubtotal: ₹${Math.round(o.subtotal).toLocaleString('en-IN')}\\nPayment Method: ${o.paymentMethod || 'COD'}\\nPayment Status: ${payStatus}${utrDisplay}\\nDelivery Status: ${o.deliveryStatus}\\nAddress: ${o.address}\\nOrder Status: ${o.status}')">
+                View
+              </button>
+            </td>
+          </tr>
+        `;
+        }).join('');
+      }
+
+      document.getElementById('myOrdersModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMyOrdersModal() {
+      document.getElementById('myOrdersModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Auto-open Buy Modal if redirected with ?buy= parameter
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const buyKey = urlParams.get('buy');
+      if (buyKey && PRODUCTS[buyKey]) {
+        openBuyModal(buyKey);
+        
+        // If coming from ragi.html with pre-selected weight/qty
+        const directBuy = sessionStorage.getItem('direct_buy_product');
+        if (directBuy) {
+          try {
+            const data = JSON.parse(directBuy);
+            if (data.productKey === buyKey) {
+              if (data.quantity) {
+                const qtyInput = document.getElementById('orderQuantity');
+                if (qtyInput) {
+                  qtyInput.value = data.quantity;
+                  updateSubtotal();
+                }
+              }
+            }
+          } catch(e) {}
+          sessionStorage.removeItem('direct_buy_product');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,1589 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balaji Ingredients Private Limited — The Spice of South India</title>
+  <meta name="description" content="Balaji Ingredients hand-picks red chilli, black pepper, cardamom and ragi at their peak — then mills them slowly, so the aroma never leaves the bag." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --bg: #FBF8F3;
+      --bg-alt: #F4EFE6;
+      --bg-card: #FFFFFF;
+      --text: #1C1917;
+      --text-muted: #6B635B;
+      --text-light: #9C9389;
+      --red: #A82B1D;
+      --red-hover: #8F2216;
+      --red-soft: #FBF0EE;
+      --gold: #D4A343;
+      --gold-dark: #A67C1E;
+      --dark-banner: #151210;
+      --border: rgba(28, 25, 23, 0.08);
+      --border-dark: rgba(255, 255, 255, 0.12);
+      --shadow-sm: 0 4px 20px rgba(28, 25, 23, 0.04);
+      --shadow-md: 0 12px 36px rgba(28, 25, 23, 0.08);
+      --shadow-lg: 0 24px 60px rgba(28, 25, 23, 0.12);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ══════════════════════════════════════════
+       1. NAVIGATION BAR
+    ══════════════════════════════════════════ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(251, 248, 243, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      transition: all 0.25s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    /* Brand Logo */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flame-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #A82B1D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(168, 43, 29, 0.3);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #A82B1D;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* Navigation Links */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--red);
+    }
+
+    .nav-link.active {
+      background: #EDE6DC;
+      color: var(--text);
+    }
+
+    /* Right Action Elements */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .phone-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .phone-link:hover {
+      color: var(--red);
+    }
+
+    .btn-quote {
+      background: #151210;
+      color: #FFFFFF;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-quote:hover {
+      background: #2C2621;
+      transform: translateY(-1px);
+    }
+
+    .btn-login-nav {
+      background: var(--red-soft);
+      color: var(--red);
+      border: 1px solid rgba(168, 43, 29, 0.2);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .btn-login-nav:hover {
+      background: var(--red);
+      color: #FFFFFF;
+    }
+
+    /* ══════════════════════════════════════════
+       2. HERO SECTION
+    ══════════════════════════════════════════ */
+    .hero-section {
+      padding: 60px 0 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    /* Left Hero Content */
+    .estate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .estate-badge span.sparkle {
+      color: var(--red);
+      font-size: 0.9rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 5vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 34px;
+      max-width: 520px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .btn-explore {
+      background: var(--red);
+      color: #FFFFFF;
+      padding: 14px 28px;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(168, 43, 29, 0.3);
+      transition: all 0.22s ease;
+    }
+
+    .btn-explore:hover {
+      background: var(--red-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(168, 43, 29, 0.4);
+    }
+
+    .btn-wholesale {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .btn-wholesale:hover {
+      color: var(--red);
+      text-decoration: underline;
+    }
+
+    .trust-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trust-item svg {
+      color: var(--red);
+    }
+
+    /* Right Hero Visual: 4 Staggered Showcase Cards */
+    .hero-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+
+    .showcase-card {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .showcase-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .showcase-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .showcase-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.85) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      color: #FFFFFF;
+    }
+
+    .top-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-sig-pill {
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .plus-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .card-info-bottom {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-sub-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 2px;
+    }
+
+    .card-main-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* ══════════════════════════════════════════
+       3. DARK MARQUEE BANNER
+    ══════════════════════════════════════════ */
+    .dark-marquee-strip {
+      background: var(--dark-banner);
+      color: #F7F4EE;
+      padding: 22px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 40px;
+      animation: marqueeScroll 25s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 36px;
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-style: italic;
+      letter-spacing: -0.01em;
+    }
+
+    .diamond-star {
+      color: #A82B1D;
+      font-size: 1.4rem;
+      font-style: normal;
+    }
+
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ══════════════════════════════════════════
+       4. THE SIGNATURE FOUR SECTION
+    ══════════════════════════════════════════ */
+    .signature-section {
+      padding: 90px 0;
+      background: var(--bg);
+    }
+
+    .sec-header-flex {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 45px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .sec-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .sec-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 3.8vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .sec-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 380px;
+      line-height: 1.5;
+    }
+
+    .products-2x2-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .product-card-hero {
+      position: relative;
+      height: 380px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card-hero:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-card-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .product-card-hero:hover img {
+      transform: scale(1.04);
+    }
+
+    .card-full-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.88) 100%);
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tag-estate-grade {
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 9999px;
+      padding: 5px 14px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .arrow-circle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .product-card-hero:hover .arrow-circle-btn {
+      transform: scale(1.1) rotate(45deg);
+    }
+
+    .card-bottom-info {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .info-left-side {
+      max-width: 70%;
+    }
+
+    .sub-phrase {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 4px;
+    }
+
+    .prod-name-title {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .prod-snip-desc {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .price-box {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .from-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.75);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .price-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════════════════════
+       5. OUR STORY SECTION
+    ══════════════════════════════════════════ */
+    .story-section {
+      padding: 90px 0;
+      background: var(--bg-alt);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    /* Left Story Photo Frame with Floating Badge */
+    .story-visual-wrap {
+      position: relative;
+    }
+
+    .story-main-img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+      border-radius: 28px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .floating-badge-box {
+      position: absolute;
+      bottom: -30px;
+      right: -20px;
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      max-width: 280px;
+    }
+
+    .fb-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .fb-heading {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+
+    .fb-stats-row {
+      display: flex;
+      gap: 20px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .fb-stat-num {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .fb-stat-lbl {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Right Story Content */
+    .story-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .story-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 3.6vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .story-heading em {
+      font-style: italic;
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .story-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+
+    /* 4 Feature Cards (2x2) */
+    .story-features-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+
+    .feat-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.22s ease;
+    }
+
+    .feat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(168, 43, 29, 0.2);
+    }
+
+    .feat-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--red-soft);
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .feat-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .feat-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Certifications Row */
+    .certs-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cert-pill {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cert-pill span {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════════════════
+       6. STATS ROW SECTION
+    ══════════════════════════════════════════ */
+    .stats-section {
+      padding: 50px 0 80px;
+      background: var(--bg);
+    }
+
+    .stats-4col-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .stat-card-white {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s ease;
+    }
+
+    .stat-card-white:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-large-num {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label-text {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════════
+       7. WHOLESALE QUOTE / CONTACT
+    ══════════════════════════════════════════ */
+    .quote-section {
+      padding: 80px 0;
+      background: var(--dark-banner);
+      color: #FFFFFF;
+      position: relative;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .quote-form-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 36px;
+    }
+
+    .form-group-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-group-wrap label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-input-ctrl {
+      width: 100%;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 0 16px;
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input-ctrl:focus {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: var(--gold);
+    }
+
+    .btn-submit-quote {
+      width: 100%;
+      height: 50px;
+      background: var(--red);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-submit-quote:hover {
+      background: var(--red-hover);
+    }
+
+    /* ══════════════════════════════════════════
+       8. FOOTER
+    ══════════════════════════════════════════ */
+    .site-footer {
+      background: #0E0C0A;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 60px 0 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.88rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h4 {
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a:hover {
+      color: #FFFFFF;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive Rules ── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .story-grid { grid-template-columns: 1fr; }
+      .quote-grid { grid-template-columns: 1fr; }
+      .stats-4col-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu, .phone-link { display: none; }
+      .products-2x2-grid { grid-template-columns: 1fr; }
+      .story-features-2x2 { grid-template-columns: 1fr; }
+      .stats-4col-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .floating-badge-box { position: static; margin-top: 16px; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       1. NAVBAR
+  ══════════════════════════════════════════ -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        
+        <!-- Brand Logo -->
+        <a href="#hero" class="brand-logo">
+          <div class="flame-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Balaji Ingredients</span>
+            <span class="brand-sub">PRIVATE LIMITED</span>
+          </div>
+        </a>
+
+        <!-- Nav Menu -->
+        <div class="nav-menu">
+          <a href="#hero" class="nav-link active">Home</a>
+          <a href="#products" class="nav-link">Products</a>
+          <a href="#story" class="nav-link">Our Story</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+
+        <!-- Nav Right -->
+        <div class="nav-right">
+          <a href="tel:+916360635801" class="phone-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>+91 63606 35801</span>
+          </a>
+          <a href="/login/" class="btn-login-nav">Login</a>
+          <a href="#contact" class="btn-quote">Request a Quote</a>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       2. HERO SECTION (100% Matching Image 1)
+  ══════════════════════════════════════════ -->
+  <section class="hero-section" id="hero">
+    <div class="container">
+      <div class="hero-grid">
+        
+        <!-- Left Hero Column -->
+        <div class="hero-left">
+          
+          <div class="estate-badge">
+            <span class="sparkle">✦</span>
+            ESTATE • STONE-MILLED • SINCE 2015
+          </div>
+
+          <h1 class="hero-title">
+            The spice of<br>
+            <em>South India</em>,<br>
+            bottled with care.
+          </h1>
+
+          <p class="hero-desc">
+            Balaji Ingredients hand-picks red chilli, black pepper, cardamom and ragi at their peak — then mills them slowly, so the aroma never leaves the bag.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#products" class="btn-explore">
+              <span>Explore Catalogue</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+            <a href="#contact" class="btn-wholesale">Request Wholesale Pricing</a>
+          </div>
+
+          <!-- Trust Badges Row -->
+          <div class="trust-badges-row">
+            <div class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>100% Natural</span>
+            </div>
+            <div class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/>
+              </svg>
+              <span>FSSAI - ISO 22000</span>
+            </div>
+            <div class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <span>Lab-Tested Batches</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Hero Visual (4 Staggered Signature Cards) -->
+        <div class="hero-visual-grid">
+          
+          <!-- Card 1: Red Chilli -->
+          <div class="showcase-card">
+            <img src="{% static 'images/chilli_product.jpg' %}" onerror="this.src='/images/chilli_product.jpg'" alt="Red Chilli Powder">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">BYADGI &amp; GUNTUR BLEND</span>
+                <h3 class="card-main-title">Red Chilli Powder</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Black Pepper -->
+          <div class="showcase-card" style="margin-top: 24px;">
+            <img src="{% static 'images/pepper_product.jpg' %}" onerror="this.src='/images/pepper_product.jpg'" alt="Malabar Black Pepper">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">WHOLE &amp; COARSE GROUND</span>
+                <h3 class="card-main-title">Malabar Black Pepper</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Green Cardamom -->
+          <div class="showcase-card" style="margin-top: -24px;">
+            <img src="{% static 'images/cardamom_product.jpg' %}" onerror="this.src='/images/cardamom_product.jpg'" alt="Green Cardamom">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle" style="background:#48bb78;color:#fff;">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">IDUKKI ESTATE GRADE AAA</span>
+                <h3 class="card-main-title">Green Cardamom</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Ragi Flour -->
+          <div class="showcase-card">
+            <img src="{% static 'images/ragi_product.jpg' %}" onerror="this.src='/images/ragi_product.jpg'" alt="Stone-Ground Ragi Flour">
+            <div class="showcase-overlay">
+              <div class="top-badge-row">
+                <span class="card-sig-pill">SIGNATURE</span>
+                <span class="plus-circle">+</span>
+              </div>
+              <div class="card-info-bottom">
+                <span class="card-sub-tag">FINGER MILLET • SPROUTED OPTION</span>
+                <h3 class="card-main-title">Stone-Ground Ragi Flour</h3>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       3. DARK MARQUEE STRIP (100% Matching Image 2)
+  ══════════════════════════════════════════ -->
+  <div class="dark-marquee-strip">
+    <div class="marquee-track">
+      <div class="marquee-item">
+        <span class="diamond-star">✦</span>
+        <span>Idukki Cardamom</span>
+        <span class="diamond-star">✦</span>
+        <span>Karnataka Ragi</span>
+        <span class="diamond-star">✦</span>
+        <span>Batch Tested</span>
+        <span class="diamond-star">✦</span>
+        <span>Byadgi Chillies</span>
+        <span class="diamond-star">✦</span>
+        <span>Single Origin</span>
+      </div>
+      <div class="marquee-item">
+        <span class="diamond-star">✦</span>
+        <span>Idukki Cardamom</span>
+        <span class="diamond-star">✦</span>
+        <span>Karnataka Ragi</span>
+        <span class="diamond-star">✦</span>
+        <span>Batch Tested</span>
+        <span class="diamond-star">✦</span>
+        <span>Byadgi Chillies</span>
+        <span class="diamond-star">✦</span>
+        <span>Single Origin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       4. THE SIGNATURE FOUR SECTION (100% Matching Image 2 & 3)
+  ══════════════════════════════════════════ -->
+  <section class="signature-section" id="products">
+    <div class="container">
+      
+      <div class="sec-header-flex">
+        <div>
+          <div class="sec-tag">CATALOGUE - 04</div>
+          <h2 class="sec-title">The Signature Four</h2>
+        </div>
+        <p class="sec-subtitle">
+          A tight, uncompromising catalogue — each item earning its place.
+        </p>
+      </div>
+
+      <div class="products-2x2-grid">
+        
+        <!-- Product 1: Red Chilli Powder -->
+        <div class="product-card-hero">
+          <img src="{% static 'images/chilli_product.jpg' %}" onerror="this.src='/images/chilli_product.jpg'" alt="Red Chilli Powder">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">BYADGI &amp; GUNTUR BLEND</span>
+              <a href="#contact" class="arrow-circle-btn">↗</a>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <h3 class="prod-name-title">Red Chilli Powder</h3>
+                <p class="prod-snip-desc">Sun-dried Byadgi and Guntur chillies stone-ground to preserve the natural oils, giving you a deep red colour and smoky heat.</p>
+              </div>
+              <div class="price-box">
+                <span class="from-label">FROM</span>
+                <span class="price-val">₹280 / kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2: Malabar Black Pepper -->
+        <div class="product-card-hero">
+          <img src="{% static 'images/pepper_product.jpg' %}" onerror="this.src='/images/pepper_product.jpg'" alt="Malabar Black Pepper">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">WHOLE &amp; COARSE GROUND</span>
+              <a href="#contact" class="arrow-circle-btn">↗</a>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <h3 class="prod-name-title">Malabar Black Pepper</h3>
+                <p class="prod-snip-desc">Estate-picked Malabar Garbled Special Extra Bold peppercorns — plump, pungent, and packed with piperine.</p>
+              </div>
+              <div class="price-box">
+                <span class="from-label">FROM</span>
+                <span class="price-val">₹720 / kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3: Green Cardamom -->
+        <div class="product-card-hero">
+          <img src="{% static 'images/cardamom_product.jpg' %}" onerror="this.src='/images/cardamom_product.jpg'" alt="Green Cardamom">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">IDUKKI ESTATE GRADE AAA</span>
+              <a href="#contact" class="arrow-circle-btn">↗</a>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <span class="sub-phrase">Fragrance of the Hills.</span>
+                <h3 class="prod-name-title">Green Cardamom</h3>
+                <p class="prod-snip-desc">Bold 8mm+ green cardamom pods from Idukki's misty estates. Bursting with 1,8-cineole for intense sweetness and camphor aroma.</p>
+              </div>
+              <div class="price-box">
+                <span class="from-label">FROM</span>
+                <span class="price-val">₹1,850 / kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4: Stone-Ground Ragi Flour -->
+        <div class="product-card-hero">
+          <img src="{% static 'images/ragi_product.jpg' %}" onerror="this.src='/images/ragi_product.jpg'" alt="Stone-Ground Ragi Flour">
+          <div class="card-full-overlay">
+            <div class="card-top-row">
+              <span class="tag-estate-grade">FINGER MILLET • SPROUTED OPTION</span>
+              <a href="#contact" class="arrow-circle-btn">↗</a>
+            </div>
+            <div class="card-bottom-info">
+              <div class="info-left-side">
+                <span class="sub-phrase">Ancient Grain. Modern Strength.</span>
+                <h3 class="prod-name-title">Stone-Ground Ragi Flour</h3>
+                <p class="prod-snip-desc">Cold stone-ground finger millet, rich in calcium and iron. A heritage South Indian staple processed with zero heat damage.</p>
+              </div>
+              <div class="price-box">
+                <span class="from-label">FROM</span>
+                <span class="price-val">₹120 / kg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       5. OUR STORY SECTION (100% Matching Image 4 & 5)
+  ══════════════════════════════════════════ -->
+  <section class="story-section" id="story">
+    <div class="container">
+      <div class="story-grid">
+        
+        <!-- Left Side Photo + Floating Badge -->
+        <div class="story-visual-wrap">
+          <img src="{% static 'images/market_spices.jpg' %}" onerror="this.src='/images/market_spices.jpg'" alt="Spice Market" class="story-main-img">
+          
+          <div class="floating-badge-box">
+            <div class="fb-tag">SINCE 2015</div>
+            <h4 class="fb-heading">A decade of trusted supply.</h4>
+            <div class="fb-stats-row">
+              <div>
+                <div class="fb-stat-num">10+</div>
+                <div class="fb-stat-lbl">YEARS OF SOURCING</div>
+              </div>
+              <div>
+                <div class="fb-stat-num">4</div>
+                <div class="fb-stat-lbl">SIGNATURE PRODUCTS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Story Content -->
+        <div class="story-content">
+          <div class="sec-tag">OUR STORY</div>
+          <h2 class="story-heading">
+            A quiet obsession with<br>
+            <em>honest spice</em>.
+          </h2>
+
+          <p class="story-lead">
+            Balaji Ingredients began in a small warehouse in Bengaluru with one rule: never pack anything we would not cook with at home. Ten years later, that rule still runs the company.
+          </p>
+
+          <!-- 4 Feature Cards (2x2) -->
+          <div class="story-features-2x2">
+            
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2C7 2 3 6 3 12c0 5 4 9 9 9 1-6 1-13 0-19z"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">Direct from Farm</h4>
+              <p class="feat-text">Grower relationships in Byadgi, Idukki, and rural Karnataka.</p>
+            </div>
+
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10 2v7.31L4 18h16l-6-8.69V2h-4z"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">Batch-Tested</h4>
+              <p class="feat-text">NABL-accredited labs verify piperine, ASTA, moisture and pesticides.</p>
+            </div>
+
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">Slow-Milled</h4>
+              <p class="feat-text">Stone and hammer-milling at low temperatures to protect volatile oils.</p>
+            </div>
+
+            <div class="feat-card">
+              <div class="feat-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+              <h4 class="feat-title">B2B Ready</h4>
+              <p class="feat-text">Bulk sacks, private-label packing and IndiaMART pan-India dispatch.</p>
+            </div>
+
+          </div>
+
+          <!-- Certifications Row -->
+          <div class="certs-pills-row">
+            <div class="cert-pill">FSSAI <span>Licensed</span></div>
+            <div class="cert-pill">ISO 22000 <span>Certified</span></div>
+            <div class="cert-pill">APEDA <span>Registered</span></div>
+            <div class="cert-pill">Spices Board <span>India</span></div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       6. STATS ROW (100% Matching Image 5)
+  ══════════════════════════════════════════ -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-4col-grid">
+        
+        <div class="stat-card-white">
+          <div class="stat-large-num">10+</div>
+          <div class="stat-label-text">YEARS OF SOURCING</div>
+        </div>
+
+        <div class="stat-card-white">
+          <div class="stat-large-num">4</div>
+          <div class="stat-label-text">SIGNATURE PRODUCTS</div>
+        </div>
+
+        <div class="stat-card-white">
+          <div class="stat-large-num">120+</div>
+          <div class="stat-label-text">B2B PARTNERS</div>
+        </div>
+
+        <div class="stat-card-white">
+          <div class="stat-large-num">99.4%</div>
+          <div class="stat-label-text">PURITY ASSURED</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       7. REQUEST A QUOTE / CONTACT SECTION
+  ══════════════════════════════════════════ -->
+  <section class="quote-section" id="contact">
+    <div class="container">
+      <div class="quote-grid">
+        
+        <div>
+          <div class="sec-tag" style="color:var(--gold);">WHOLESALE PROCUREMENT</div>
+          <h2 class="sec-title" style="color:#fff;margin-bottom:18px;">
+            Partner with South India's premier spice mill.
+          </h2>
+          <p style="color:rgba(255,255,255,0.75);line-height:1.65;margin-bottom:30px;font-size:1.02rem;">
+            Direct from farm estates in Byadgi, Idukki, and Karnataka. Custom milling, moisture-tested batches, and certified bulk dispatch across India.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📞</div>
+              <div><strong>Direct Sales:</strong> +91 63606 35801</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">✉️</div>
+              <div><strong>E-mail:</strong> procurement@balajiingredients.com</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📍</div>
+              <div><strong>Mill Facility:</strong> Peenya Industrial Area, Bengaluru, Karnataka 560058</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Quote Form -->
+        <div class="quote-form-card">
+          <h3 style="font-family:var(--font-serif);font-size:1.5rem;margin-bottom:20px;color:#fff;">Request Wholesale Pricing</h3>
+          
+          <form onsubmit="event.preventDefault(); alert('Thank you! Your quote request has been submitted to Balaji Ingredients sales desk.');">
+            <div class="form-group-wrap">
+              <label>Company / Buyer Name</label>
+              <input type="text" class="form-input-ctrl" placeholder="e.g. Apex Agri Foods Ltd." required />
+            </div>
+
+            <div class="form-group-wrap">
+              <label>E-mail Address</label>
+              <input type="email" class="form-input-ctrl" placeholder="procurement@apexagri.in" required />
+            </div>
+
+            <div class="form-group-wrap">
+              <label>Select Product</label>
+              <select class="form-input-ctrl" style="background:#221d19;">
+                <option value="chilli">Byadgi &amp; Guntur Red Chilli Powder (₹280/kg)</option>
+                <option value="pepper">Malabar Black Pepper (₹720/kg)</option>
+                <option value="cardamom">Idukki Green Cardamom AAA (₹1,850/kg)</option>
+                <option value="ragi">Stone-Ground Ragi Flour (₹120/kg)</option>
+                <option value="all">Custom Mixed Batch (Multiple Products)</option>
+              </select>
+            </div>
+
+            <div class="form-group-wrap">
+              <label>Estimated Quantity (kg)</label>
+              <input type="text" class="form-input-ctrl" placeholder="e.g. 500 kg / 1 Metric Ton" required />
+            </div>
+
+            <button type="submit" class="btn-submit-quote">Submit Quote Request →</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       8. FOOTER
+  ══════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div>
+          <div class="brand-logo" style="margin-bottom:14px;">
+            <div class="flame-icon" style="width:32px;height:32px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+              </svg>
+            </div>
+            <span style="font-weight:700;color:#fff;font-size:1.1rem;">Balaji Ingredients</span>
+          </div>
+          <p style="font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.6);max-width:320px;">
+            Premier stone-milled spices, pure finger millet flours and single-origin South Indian ingredients bottled with care since 2015.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Signature Range</h4>
+          <ul>
+            <li><a href="#products">Red Chilli Powder</a></li>
+            <li><a href="#products">Malabar Black Pepper</a></li>
+            <li><a href="#products">Idukki Cardamom</a></li>
+            <li><a href="#products">Stone-Ground Ragi Flour</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#story">Our Story</a></li>
+            <li><a href="#story">Certifications</a></li>
+            <li><a href="#contact">Wholesale Supply</a></li>
+            <li><a href="/login/">B2B Login</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact Desk</h4>
+          <ul>
+            <li>+91 63606 35801</li>
+            <li>Bengaluru, Karnataka</li>
+            <li>FSSAI Lic. 11221334000452</li>
+            <li>GST: 29AABCB1234F1Z8</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Balaji Ingredients Private Limited. All rights reserved.</div>
+        <div style="display:flex;gap:20px;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Supply</a>
+          <a href="/login/">Portal Sign In</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Buy {{ product.name }} — Instant Direct Commercial Order{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-strip">
+  <div class="breadcrumb-container">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="bc-sep">/</span>
+    <a href="{% url 'products:catalog' %}">Products</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current">Buy {{ product.name }}</span>
+  </div>
+</div>
+
+<section class="buy-page-section" style="padding: 3rem 0; background: var(--bg-light, #f8f9fa);">
+  <div class="buy-page-container" style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem;">
+    
+    <div style="background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden;">
+      
+      <!-- Top Banner -->
+      <div style="background: linear-gradient(135deg, #1e3a1e 0%, #2e5a2e 100%); color: #ffffff; padding: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div>
+          <span style="background: rgba(200, 169, 110, 0.2); color: #c8a96e; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: 1px solid rgba(200, 169, 110, 0.3);">DIRECT COMMERCIAL BUY</span>
+          <h1 style="font-size: 1.8rem; margin: 0.5rem 0 0.2rem 0; font-weight: 700;">{{ product.name }}</h1>
+          <p style="margin: 0; opacity: 0.85; font-size: 0.95rem;">Category: {{ product.category.name }} | Grade: {{ product.grade }}</p>
+        </div>
+        <div style="text-align: right; background: rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+          <div style="font-size: 0.85rem; text-transform: uppercase; opacity: 0.8;">Unit Price</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #f5d77f;">{{ product.formatted_price }}</div>
+          <div style="font-size: 0.8rem; opacity: 0.8;">per {{ product.unit_name }}</div>
+        </div>
+      </div>
+
+      <!-- Main Form -->
+      <form method="POST" action="{% url 'products:buy_product' product.id %}" style="padding: 2rem;" id="standaloneBuyForm">
+        {% csrf_token %}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          
+          <!-- Column 1: Order Quantity & Calculation -->
+          <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; border: 1px solid #e2e8f0;">
+            <h3 style="font-size: 1.1rem; color: #1e293b; margin-top: 0; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>📦</span> Order Quantity &amp; Price Breakdown
+            </h3>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label class="form-label" style="font-weight: 600; color: #334155; margin-bottom: 0.5rem; display: block;">Select Quantity (in {{ product.unit_name }}) *</label>
+              <input type="number" name="quantity" id="standalone_qty" value="1" min="1" step="1" required style="width: 100%; padding: 0.75rem 1rem; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1.1rem; font-weight: 700; color: #0f172a;" oninput="calcBuyTotal()">
+              <small style="color: #64748b; font-size: 0.8rem; margin-top: 0.25rem; display: block;">Min Order Quantity: {{ product.min_order_qty }}</small>
+            </div>
+
+            <div style="background: #ffffff; border-radius: 8px; padding: 1rem; border: 1px dashed #cbd5e1; margin-top: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem; color: #475569;">
+                <span>Unit Price:</span>
+                <span style="font-weight: 600; color: #1e293b;">{{ product.formatted_price }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem; color: #475569;">
+                <span>Subtotal:</span>
+                <span id="standalone_subtotal" style="font-weight: 600; color: #1e293b;">{{ product.formatted_price }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.95rem; color: #475569;">
+                <span>GST (5% Agri Food Rate):</span>
+                <span id="standalone_gst" style="font-weight: 600; color: #1e293b;">₹0.00</span>
+              </div>
+              <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 0.5rem 0;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #15803d; margin-top: 0.5rem;">
+                <span>Total Payable Amount:</span>
+                <span id="standalone_grandtotal">{{ product.formatted_price }}</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; background: #eff6ff; padding: 0.85rem; border-radius: 8px; border-left: 4px solid #3b82f6; font-size: 0.85rem; color: #1e40af;">
+              🔒 Payment token options available after address confirmation. Verified CoA dispatched with lot.
+            </div>
+          </div>
+
+          <!-- Column 2: Shipping & Contact Address -->
+          <div>
+            <h3 style="font-size: 1.1rem; color: #1e293b; margin-top: 0; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>📍</span> Delivery &amp; Shipping Address
+            </h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Full Name *</label>
+                <input type="text" name="full_name" required placeholder="Contact Name" value="{% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Company Name</label>
+                <input type="text" name="company_name" placeholder="Enterprise Name" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.company_name }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Phone / Mobile *</label>
+                <input type="tel" name="phone" required placeholder="10-digit mobile" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.phone }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Email Address *</label>
+                <input type="email" name="email" required placeholder="corporate@email.com" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Address Line 1 (Street/Facility/Plot) *</label>
+              <input type="text" name="address_line1" required placeholder="Warehouse / Factory / Street address" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.address_line1 }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Address Line 2 (Industrial Area / Landmark)</label>
+              <input type="text" name="address_line2" placeholder="Industrial estate, MIDC, GIDC, etc." value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.address_line2 }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">City *</label>
+                <input type="text" name="city" required placeholder="City" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.city }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">State *</label>
+                <input type="text" name="state" required placeholder="State" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.state }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Pincode *</label>
+                <input type="text" name="pincode" required placeholder="6-digit pincode" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.pincode }}{% endif %}" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Delivery Notes / Unloading Instructions</label>
+              <textarea name="notes" rows="2" placeholder="e.g. Ramp unloading required, delivery between 9 AM to 6 PM" style="width: 100%; padding: 0.65rem 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px;"></textarea>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+          <a href="{% url 'products:catalog' %}" style="color: #64748b; text-decoration: none; font-weight: 600;">← Back to Catalog</a>
+          <button type="submit" class="btn-pill btn-pill-gold" style="padding: 0.9rem 2.5rem; font-size: 1.1rem; font-weight: 800; cursor: pointer;">
+            ⚡ Confirm &amp; Place Commercial Order Now
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const unitPrice = {{ product.unit_price }};
+  function calcBuyTotal() {
+    const qtyInput = document.getElementById('standalone_qty');
+    let qty = parseFloat(qtyInput.value) || 1;
+    if (qty <= 0) qty = 1;
+
+    const subtotal = qty * unitPrice;
+    const gst = subtotal * 0.05;
+    const total = subtotal + gst;
+
+    document.getElementById('standalone_subtotal').innerText = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('standalone_gst').innerText = '₹' + gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('standalone_grandtotal').innerText = '₹' + total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
+  document.addEventListener('DOMContentLoaded', calcBuyTotal);
+</script>
+{% endblock %}

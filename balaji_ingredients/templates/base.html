@@ -1,0 +1,436 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{% block meta_description %}Balaji Ingredients — Industrial B2B Food & Agricultural Ingredient Supplier. Sortex-cleaned Dal & Pulses, Cereals, Ragi, and Pure Chilli Powders with verified CoA.{% endblock %}" />
+  <meta name="robots" content="index, follow" />
+  <title>{% block title %}{{ SITE_NAME }} — Industrial Quality Food Ingredients{% endblock %}</title>
+
+  <!-- Google Fonts: Manrope (Headings) & DM Sans (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  {% block extra_css %}{% endblock %}
+  
+</head>
+<body>
+
+  <!-- ===================== 1. SLIM UTILITY BAR ===================== -->
+  <aside class="utility-bar" aria-label="Quick links">
+    <div class="utility-container">
+      <div class="utility-left">
+        <span class="utility-badge">FSSAI &amp; APEDA Aligned</span>
+        <span class="utility-sep">|</span>
+        <a href="{% url 'core:quality' %}" class="utility-link">Lab Standards &amp; QA Protocols</a>
+        <span class="utility-sep">|</span>
+        <a href="{% url 'products:quote_request' %}" class="utility-link">Institutional Spot Rates</a>
+      </div>
+      <div class="utility-right">
+        <a href="tel:{{ SITE_PHONE }}" class="utility-link hotline-link">
+          <span class="utility-icon">📞</span> Desk: {{ SITE_PHONE }}
+        </a>
+        <span class="utility-sep">|</span>
+        {% if user.is_authenticated %}
+          <a href="{% url 'portal:dashboard' %}" class="utility-link portal-link">
+            <span class="portal-indicator"></span> <strong>{{ user.username }} (Portal)</strong>
+          </a>
+          <span class="utility-sep">|</span>
+          <a href="{% url 'portal:logout' %}" class="utility-link">Logout</a>
+        {% else %}
+          <a href="{% url 'portal:login' %}" class="utility-link portal-link">
+            <span class="utility-icon">🔒</span> B2B Client Portal
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== 2. MAIN NAVIGATION WITH MEGA-MENUS ===================== -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <!-- Logo -->
+      <a href="{% url 'core:home' %}" class="nav-logo">
+        <span class="logo-mark">BI</span>
+        <span class="logo-text">
+          BALAJI<br>
+          <small>INGREDIENTS</small>
+        </span>
+      </a>
+
+      <!-- Primary Nav with Mega-Menus -->
+      <nav class="nav-links" id="navLinks">
+        
+        <!-- Products Dropdown (Mega-Menu 1) -->
+        <div class="nav-item has-dropdown" id="navItemProducts">
+          <a href="{% url 'products:catalog' %}" class="nav-link-item">
+            Products <span class="chevron-down">▾</span>
+          </a>
+          <div class="mega-menu" id="megaProducts">
+            <div class="mega-container">
+              <div class="mega-column">
+                <h4 class="mega-heading">Dal &amp; Pulses</h4>
+                <ul class="mega-list">
+                  <li><a href="{% url 'products:catalog' %}?category=dal-pulses">All Pulses &amp; Dal</a></li>
+                  <li><a href="/products/dal-pulses/premium-sortex-toor-dal/">Premium Sortex Toor Dal</a></li>
+                  <li><a href="/products/dal-pulses/unpolished-chana-dal/">Unpolished Chana Dal</a></li>
+                  <li><a href="/products/dal-pulses/moong-dal-mogar/">Moong Dal Mogar</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4 class="mega-heading">Cereals &amp; Millets</h4>
+                <ul class="mega-list">
+                  <li><a href="{% url 'products:catalog' %}?category=cereals">Sharbati Food Wheat</a></li>
+                  <li><a href="{% url 'products:catalog' %}?category=ragi">Organic Whole Ragi</a></li>
+                  <li><a href="/products/ragi/superfine-processed-ragi-flour/">Superfine Ragi Flour (Mesh 80)</a></li>
+                  <li><a href="{% url 'products:catalog' %}">All Industrial Grains</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4 class="mega-heading">Chilli &amp; Spices</h4>
+                <ul class="mega-list">
+                  <li><a href="{% url 'products:catalog' %}?category=chilli-powder">All Chilli Powders</a></li>
+                  <li><a href="/products/chilli-powder/guntur-s4-stemless-chilli-powder/">Guntur S4 Stemless Powder</a></li>
+                  <li><a href="/products/chilli-powder/byadgi-premium-red-chilli-powder/">Byadgi High-ASTA Color Powder</a></li>
+                </ul>
+              </div>
+              <div class="mega-column mega-highlight">
+                <div class="mega-card">
+                  <div class="mega-badge">Technical TDS</div>
+                  <h5>Standardized Data Sheets</h5>
+                  <p>Certified batch laboratory parameters, moisture, and optical sortex tolerances.</p>
+                  <a href="{% url 'products:quote_request' %}" class="mega-cta-link">Request Batch CoA →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operations & QA Dropdown (Mega-Menu 2) -->
+        <div class="nav-item has-dropdown" id="navItemOps">
+          <a href="{% url 'core:infrastructure' %}" class="nav-link-item">
+            Operations &amp; QA <span class="chevron-down">▾</span>
+          </a>
+          <div class="mega-menu" id="megaOps">
+            <div class="mega-container">
+              <div class="mega-column">
+                <h4 class="mega-heading">Supply Operations</h4>
+                <ul class="mega-list">
+                  <li><a href="{% url 'core:infrastructure' %}">Direct Farm Aggregation</a></li>
+                  <li><a href="{% url 'core:infrastructure' %}">Optical Sortex Cleaning</a></li>
+                  <li><a href="{% url 'core:infrastructure' %}">PP &amp; Jumbo FIBC Packaging</a></li>
+                  <li><a href="{% url 'core:infrastructure' %}">3,500 MT Warehousing</a></li>
+                </ul>
+              </div>
+              <div class="mega-column">
+                <h4 class="mega-heading">Quality Benchmarks</h4>
+                <ul class="mega-list">
+                  <li><a href="{% url 'core:quality' %}">Sortex 99.7% Purity Index</a></li>
+                  <li><a href="{% url 'core:quality' %}">Moisture Control (< 10%)</a></li>
+                  <li><a href="{% url 'core:quality' %}">HPLC Aflatoxin Screening</a></li>
+                  <li><a href="{% url 'core:quality' %}">FSSAI &amp; APEDA Alignment</a></li>
+                </ul>
+              </div>
+              <div class="mega-column mega-highlight">
+                <div class="mega-card">
+                  <div class="mega-badge">SLA Dispatch</div>
+                  <h5>Pan-India Commercial Freight</h5>
+                  <p>24 to 48-hour scheduled regional transit with weighbridge slips and digital consignment notes.</p>
+                  <a href="{% url 'core:contact' %}" class="mega-cta-link">View Transit Zones →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="{% url 'core:about' %}" class="nav-item nav-link-item">About Us</a>
+        <a href="{% url 'core:contact' %}" class="nav-item nav-link-item">Contact</a>
+      </nav>
+
+      <!-- Nav Actions: Pill Buttons -->
+      <div class="nav-actions">
+        <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-primary">Request a Quote</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'portal:dashboard' %}" class="btn-pill btn-pill-ghost">Portal Dashboard</a>
+        {% else %}
+          <a href="{% url 'portal:login' %}" class="btn-pill btn-pill-ghost">Client Sign In</a>
+        {% endif %}
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="{% url 'products:catalog' %}" class="mobile-link">All Products</a>
+      <a href="{% url 'products:catalog' %}?category=dal-pulses" class="mobile-link">› Dal &amp; Pulses</a>
+      <a href="{% url 'products:catalog' %}?category=cereals" class="mobile-link">› Cereals &amp; Grains</a>
+      <a href="{% url 'products:catalog' %}?category=ragi" class="mobile-link">› Ragi (Finger Millet)</a>
+      <a href="{% url 'products:catalog' %}?category=chilli-powder" class="mobile-link">› Pure Chilli Powder</a>
+      <a href="{% url 'core:infrastructure' %}" class="mobile-link">Operations &amp; Infrastructure</a>
+      <a href="{% url 'core:quality' %}" class="mobile-link">Quality &amp; Lab Standards</a>
+      <a href="{% url 'core:about' %}" class="mobile-link">About Us</a>
+      <a href="{% url 'core:contact' %}" class="mobile-link">Contact Desk</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'portal:dashboard' %}" class="mobile-cta">Go to Client Portal</a>
+        <a href="{% url 'portal:logout' %}" class="mobile-link">Sign Out</a>
+      {% else %}
+        <a href="{% url 'portal:login' %}" class="mobile-link">Client Portal Sign In</a>
+        <a href="{% url 'products:quote_request' %}" class="mobile-cta">Request a Quote</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- ===================== NOTIFICATIONS / MESSAGES ===================== -->
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="message message--{{ message.tags }}">
+          <div class="message-text">{{ message }}</div>
+          <button class="message-close" onclick="this.parentElement.remove()" aria-label="Close">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- ===================== MAIN BODY ===================== -->
+  <main id="mainContent">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ===================== MINIMAL, DEEP BUT NARROW FOOTER ===================== -->
+  <footer class="footer-minimal">
+    <div class="footer-minimal-container">
+      <div class="footer-top-row">
+        <!-- Logo & Core Positioning -->
+        <div class="footer-brand-block">
+          <a href="{% url 'core:home' %}" class="footer-logo">
+            <span class="logo-mark">BI</span>
+            <span class="logo-text">BALAJI<br><small>INGREDIENTS</small></span>
+          </a>
+          <p class="footer-brief">
+            Commercial bulk food &amp; agricultural ingredient supply. Direct aggregation, Sortex cleaning, climate-controlled warehousing, and certified batch analysis for enterprise food processors.
+          </p>
+        </div>
+
+        <!-- Single Social / Direct Channel -->
+        <div class="footer-contact-block">
+          <span class="footer-direct-label">Institutional Enquiries</span>
+          <a href="mailto:{{ SITE_EMAIL }}" class="footer-email-link">{{ SITE_EMAIL }}</a>
+          <div class="footer-social-strip">
+            <a href="https://linkedin.com" target="_blank" rel="noopener" class="footer-social-icon" title="LinkedIn">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            </a>
+            <span class="footer-social-text">Corporate Supply Network</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legal Links Strip (Deep but Narrow) -->
+      <div class="footer-bottom-row">
+        <div class="footer-legal-links">
+          <a href="{% url 'core:quality' %}">Quality Assurance</a>
+          <span class="sep">•</span>
+          <a href="{% url 'core:infrastructure' %}">Supply Chain Compliance</a>
+          <span class="sep">•</span>
+          <a href="{% url 'core:contact' %}">Terms of Supply</a>
+          <span class="sep">•</span>
+          <a href="{% url 'portal:login' %}">Client Portal Terms</a>
+        </div>
+        <div class="footer-copyright">
+          &copy; {% now "Y" %} Balaji Ingredients. All rights reserved. B2B Agricultural Commodity Enterprise.
+        </div>
+      </div>
+      <div class="footer-photo-credit">
+        Photography: Ajay Suresh (Flickr, CC BY 2.0); Hans (Pixabay, CC0); Gausanchennai &amp; Adityamadhav83 (Wikimedia Commons, CC BY-SA 4.0 / 3.0). Photos used under the respective Creative Commons licences.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Universal Buy Modal -->
+  <div id="universalBuyModal" class="buy-modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 99999; justify-content: center; align-items: center; padding: 1rem; overflow-y: auto;">
+    <div class="buy-modal-card" style="background: #ffffff; border-radius: 16px; max-width: 850px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; position: relative; animation: modalFadeIn 0.25s ease-out;">
+      
+      <!-- Close Button -->
+      <button onclick="closeBuyModal()" type="button" style="position: absolute; top: 1rem; right: 1.25rem; background: rgba(0,0,0,0.1); border: none; font-size: 1.5rem; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; color: #fff; z-index: 10; display: flex; align-items: center; justify-content: center;">✕</button>
+
+      <!-- Modal Header -->
+      <div style="background: linear-gradient(135deg, #1b381e 0%, #2a522c 100%); color: #ffffff; padding: 1.75rem 2rem;">
+        <span style="background: rgba(200, 169, 110, 0.25); color: #f5d77f; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: 1px solid rgba(200, 169, 110, 0.3);">INSTANT DIRECT BUY</span>
+        <h2 id="modal_product_name" style="margin: 0.4rem 0 0.2rem 0; font-size: 1.5rem; font-weight: 700; color: #ffffff;">Product Name</h2>
+        <div style="display: flex; gap: 1rem; font-size: 0.85rem; opacity: 0.85;">
+          <span id="modal_product_cat">Category</span>
+          <span>•</span>
+          <span>Unit Rate: <strong id="modal_product_price_fmt" style="color: #f5d77f;">₹0.00</strong> / <span id="modal_product_unit">Unit</span></span>
+        </div>
+      </div>
+
+      <!-- Modal Form -->
+      <form id="universalBuyForm" method="POST" action="" style="padding: 1.75rem 2rem;">
+        {% csrf_token %}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-bottom: 1.5rem;">
+          
+          <!-- Left Column: Quantity & Price Calculation -->
+          <div style="background: #f8fafc; border-radius: 12px; padding: 1.25rem; border: 1px solid #e2e8f0;">
+            <h4 style="margin: 0 0 1rem 0; font-size: 0.95rem; color: #1e293b; text-transform: uppercase; letter-spacing: 0.5px;">1. Quantity &amp; Total Price</h4>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label style="font-size: 0.85rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.4rem;">Required Quantity (<span id="modal_qty_unit">Units</span>) *</label>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <input type="number" id="modal_quantity_input" name="quantity" value="1" min="1" step="1" required style="width: 100%; padding: 0.65rem 0.85rem; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1.1rem; font-weight: 700; color: #0f172a;" oninput="updateModalCalculation()">
+              </div>
+              <small style="color: #64748b; font-size: 0.75rem; margin-top: 0.3rem; display: block;">MoQ: <span id="modal_product_moq">1 MT</span></small>
+            </div>
+
+            <!-- Price Breakdown Box -->
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.85rem; border: 1px solid #e2e8f0;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; margin-bottom: 0.3rem;">
+                <span>Subtotal:</span>
+                <strong id="modal_calc_subtotal" style="color: #1e293b;">₹0.00</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem;">
+                <span>5% GST:</span>
+                <strong id="modal_calc_gst" style="color: #1e293b;">₹0.00</strong>
+              </div>
+              <div style="border-top: 1px dashed #cbd5e1; padding-top: 0.5rem; display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: 800; color: #15803d;">
+                <span>Total Amount:</span>
+                <span id="modal_calc_grandtotal">₹0.00</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 1rem; font-size: 0.75rem; color: #0369a1; background: #e0f2fe; padding: 0.6rem; border-radius: 6px;">
+              ✓ Binding commercial rate • Digital Weighbridge Slip &amp; CoA included.
+            </div>
+          </div>
+
+          <!-- Right Column: Address Details -->
+          <div>
+            <h4 style="margin: 0 0 1rem 0; font-size: 0.95rem; color: #1e293b; text-transform: uppercase; letter-spacing: 0.5px;">2. Shipping &amp; Contact Details</h4>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">Full Name *</label>
+                <input type="text" name="full_name" required placeholder="Your Name" value="{% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">Mobile / Phone *</label>
+                <input type="tel" name="phone" required placeholder="Mobile No." value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.phone }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">Email Address *</label>
+                <input type="email" name="email" required placeholder="corporate@mail.com" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">Company / Firm Name</label>
+                <input type="text" name="company_name" placeholder="Company Name" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.company_name }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 0.75rem;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">Shipping Address Line 1 *</label>
+              <input type="text" name="address_line1" required placeholder="Building / Plot No / Street" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.address_line1 }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">City *</label>
+                <input type="text" name="city" required placeholder="City" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.city }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">State *</label>
+                <input type="text" name="state" required placeholder="State" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.state }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 600; color: #475569; display: block; margin-bottom: 0.2rem;">Pincode *</label>
+                <input type="text" name="pincode" required placeholder="PIN" value="{% if user.is_authenticated and user.company_profile %}{{ user.company_profile.pincode }}{% endif %}" style="width: 100%; padding: 0.5rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 1.25rem;">
+          <button type="button" onclick="closeBuyModal()" style="padding: 0.7rem 1.25rem; border: 1px solid #cbd5e1; background: transparent; border-radius: 8px; font-weight: 600; color: #64748b; cursor: pointer;">Cancel</button>
+          <button type="submit" class="btn-pill btn-pill-gold" style="padding: 0.8rem 2rem; font-size: 1.05rem; font-weight: 800; cursor: pointer; border: none;">
+            ⚡ Confirm &amp; Place Order
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <style>
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+
+  <script>
+    let activeModalUnitPrice = 0;
+
+    function openBuyModal(productId, productName, categoryName, unitPrice, unitPriceFmt, unitName, moq) {
+      activeModalUnitPrice = parseFloat(unitPrice) || 0;
+      
+      document.getElementById('modal_product_name').innerText = productName;
+      document.getElementById('modal_product_cat').innerText = categoryName;
+      document.getElementById('modal_product_price_fmt').innerText = unitPriceFmt;
+      document.getElementById('modal_product_unit').innerText = unitName;
+      document.getElementById('modal_qty_unit').innerText = unitName;
+      document.getElementById('modal_product_moq').innerText = moq || '1 Unit';
+
+      const form = document.getElementById('universalBuyForm');
+      form.action = '/products/buy/' + productId + '/';
+
+      document.getElementById('modal_quantity_input').value = 1;
+      updateModalCalculation();
+
+      const modal = document.getElementById('universalBuyModal');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBuyModal() {
+      const modal = document.getElementById('universalBuyModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function updateModalCalculation() {
+      const qty = parseFloat(document.getElementById('modal_quantity_input').value) || 1;
+      const subtotal = qty * activeModalUnitPrice;
+      const gst = subtotal * 0.05;
+      const total = subtotal + gst;
+
+      document.getElementById('modal_calc_subtotal').innerText = '₹' + subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('modal_calc_gst').innerText = '₹' + gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('modal_calc_grandtotal').innerText = '₹' + total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    // Close on clicking backdrop
+    window.addEventListener('click', function(e) {
+      const modal = document.getElementById('universalBuyModal');
+      if (e.target === modal) {
+        closeBuyModal();
+      }
+    });
+  </script>
+
+  <!-- Main Scripts -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

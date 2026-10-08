@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Proforma Invoice — {{ order.order_number }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; color: #1e293b; background: #f8fafc; padding: 2rem 1rem; }
+    .invoice-card { max-width: 860px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); padding: 3rem; }
+    .print-actions { max-width: 860px; margin: 0 auto 1rem auto; display: flex; justify-content: flex-end; gap: 0.75rem; }
+    .btn-print { background: #0f1b29; color: #fff; border: none; padding: 0.6rem 1.5rem; border-radius: 9999px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+    .invoice-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 2rem; border-bottom: 2px solid #0f1b29; }
+    .inv-logo-mark { font-family: 'Manrope', sans-serif; font-size: 1.5rem; font-weight: 800; color: #0f1b29; }
+    .inv-logo-sub { font-size: 0.75rem; letter-spacing: 0.1em; color: #d4a373; font-weight: 700; text-transform: uppercase; }
+    .inv-meta { text-align: right; }
+    .inv-meta h1 { font-family: 'Manrope', sans-serif; font-size: 1.5rem; color: #0f1b29; margin-bottom: 0.25rem; }
+    .inv-meta p { font-size: 0.85rem; color: #64748b; }
+    
+    .inv-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid #e2e8f0; }
+    .party-title { font-family: 'Manrope', sans-serif; font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .party-name { font-size: 1.1rem; font-weight: 700; color: #0f1b29; margin-bottom: 0.25rem; }
+    .party-desc { font-size: 0.85rem; color: #475569; line-height: 1.5; }
+
+    .inv-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+    .inv-table th { text-align: left; padding: 0.75rem 1rem; background: #f8fafc; font-family: 'Manrope', sans-serif; font-size: 0.8rem; font-weight: 700; color: #475569; border-bottom: 1px solid #e2e8f0; }
+    .inv-table td { padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; vertical-align: top; }
+    .text-right { text-align: right; }
+
+    .inv-totals { display: flex; justify-content: flex-end; margin-top: 1rem; }
+    .totals-box { width: 320px; }
+    .totals-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.9rem; color: #475569; }
+    .totals-row.grand { font-size: 1.15rem; font-weight: 800; color: #0f1b29; border-top: 2px solid #0f1b29; padding-top: 0.75rem; margin-top: 0.5rem; }
+
+    .inv-footer-notes { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; font-size: 0.75rem; color: #64748b; line-height: 1.6; }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .print-actions { display: none; }
+      .invoice-card { border: none; box-shadow: none; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-actions">
+    <button onclick="window.print()" class="btn-print">🖨 Print / Save as PDF</button>
+  </div>
+
+  <div class="invoice-card">
+    <div class="invoice-top">
+      <div>
+        <div class="inv-logo-mark">BALAJI INGREDIENTS</div>
+        <div class="inv-logo-sub">Commercial Agricultural Commodity Supply</div>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;">
+          Plot 12, Industrial Sourcing Zone, APMC Yard<br>
+          Karnataka &amp; AP Trading Hubs | GSTIN: 29AAACB8899R1Z1
+        </p>
+      </div>
+      <div class="inv-meta">
+        <h1>PROFORMA INVOICE</h1>
+        <p><strong>Invoice Ref:</strong> {{ order.order_number }}</p>
+        <p><strong>Date of Issue:</strong> {{ order.created_at|date:"d M Y" }}</p>
+        <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+      </div>
+    </div>
+
+    <div class="inv-parties">
+      <div>
+        <div class="party-title">Supplier Details</div>
+        <div class="party-name">Balaji Ingredients Ltd</div>
+        <div class="party-desc">
+          Quality Control, Sortex Refinement &amp; Bulk Dispatch<br>
+          Phone: +91 98765 43210<br>
+          Email: info@balaji-ingredients.com
+        </div>
+      </div>
+      <div>
+        <div class="party-title">Billed To (Institutional Buyer)</div>
+        <div class="party-name">
+          {% if profile %}{{ profile.company_name }}{% else %}{{ order.user.username }}{% endif %}
+        </div>
+        <div class="party-desc">
+          {% if profile %}
+            {{ profile.address_line1 }}{% if profile.address_line2 %}, {{ profile.address_line2 }}{% endif %}<br>
+            {{ profile.city }}, {{ profile.state }} - {{ profile.pincode }}<br>
+            <strong>GSTIN:</strong> {{ profile.gstin|default:"Unregistered" }}<br>
+            Phone: {{ profile.phone }}
+          {% else %}
+            Enterprise account on file
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <table class="inv-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description of Commodity</th>
+          <th>Grade / Specification</th>
+          <th>Packaging</th>
+          <th class="text-right">Quantity</th>
+          <th class="text-right">Unit Rate (INR)</th>
+          <th class="text-right">Amount (INR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><strong>{{ item.product_name }}</strong></td>
+            <td>{{ item.product.grade|default:"Standard Commercial Grade" }}</td>
+            <td>{{ item.packaging }}</td>
+            <td class="text-right">{{ item.quantity }} {{ item.unit }}</td>
+            <td class="text-right">₹{{ item.unit_price|floatformat:2 }}</td>
+            <td class="text-right"><strong>₹{{ item.total_price|floatformat:2 }}</strong></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="inv-totals">
+      <div class="totals-box">
+        <div class="totals-row">
+          <span>Commodity Value:</span>
+          <span>₹{{ order.subtotal|floatformat:2 }}</span>
+        </div>
+        <div class="totals-row">
+          <span>GST (5% Integrated / Central):</span>
+          <span>₹{{ order.tax_amount|floatformat:2 }}</span>
+        </div>
+        <div class="totals-row grand">
+          <span>Invoice Total:</span>
+          <span>₹{{ order.total_amount|floatformat:2 }}</span>
+        </div>
+        {% if order.advance_amount > 0 %}
+          <div class="totals-row" style="color: #16a34a; font-weight: 700; margin-top: 0.5rem;">
+            <span>Advance Token Received:</span>
+            <span>- ₹{{ order.advance_amount|floatformat:2 }}</span>
+          </div>
+          <div class="totals-row" style="font-weight: 700;">
+            <span>Balance Due at Gate Unloading:</span>
+            <span>₹{{ order.total_amount|add:"-0"|floatformat:2 }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="inv-footer-notes">
+      <p><strong>Terms &amp; Declarations:</strong></p>
+      <p>1. This Proforma Invoice is issued in accordance with institutional trade contracts for industrial food ingredients.</p>
+      <p>2. Batch Certificate of Analysis (CoA), weighbridge slips, and e-Way bills accompany the dispatch transport carrier.</p>
+      <p>3. Goods once received and verified against seal integrity and weighbridge tare weight become the property of the consignee.</p>
+      <p>4. Payment terms: RTGS / NEFT transfer or verified payment token advance prior to facility gate unloading.</p>
+    </div>
+  </div>
+
+</body>
+</html>

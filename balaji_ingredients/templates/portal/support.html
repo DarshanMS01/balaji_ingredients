@@ -1,0 +1,226 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .support-3col-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .support-contact-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .support-contact-card:hover {
+    border-color: var(--border-light);
+  }
+
+  .support-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--gold-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .support-layout-2col {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: 28px;
+  }
+
+  .support-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+  }
+
+  @media (max-width: 992px) {
+    .support-3col-cards {
+      grid-template-columns: 1fr;
+    }
+    .support-layout-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:28px;">
+  <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; letter-spacing:-0.03em;">
+    Enterprise Help Desk & Technical Sourcing Support
+  </h1>
+  <p style="font-size:13.5px; color:var(--text-body); margin-top:2px;">
+    Direct commercial assistance for bulk purchase inquiries, lab COA verification, dispatch logistics, and sample requests.
+  </p>
+</div>
+
+<!-- 3 Contact Channels -->
+<div class="support-3col-cards">
+  <div class="support-contact-card">
+    <div>
+      <div class="support-card-icon">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6H2.25m0 0H3m-1.5 0a.75.75 0 00-.75.75v12a.75.75 0 00.75.75h1.5m0-13.5h16.5m-16.5 0V3.75A2.25 2.25 0 016 1.5h12a2.25 2.25 0 012.25 2.25V4.5m0 0v.75a.75.75 0 00.75.75H21m0 0h.75m-1.5 0v12a.75.75 0 01-.75.75H21m-1.5-13.5h-15"/></svg>
+      </div>
+      <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin-bottom:6px;">Contact Sales & Contracts</h3>
+      <p style="font-size:13px; color:var(--text-body); line-height:1.45;">
+        Negotiate recurring monthly supply agreements, volume tiered discounts, and forward delivery contracts.
+      </p>
+    </div>
+    <div style="margin-top:20px; font-size:13px; color:var(--gold-light); font-weight:600;">
+      sales@balaji-ingredients.com • +91 98450 11223
+    </div>
+  </div>
+
+  <div class="support-contact-card">
+    <div>
+      <div class="support-card-icon">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.942A4.5 4.5 0 0116.5 16.5h-9a4.5 4.5 0 01-1.73-.342L4.2 15.3m15.6 0a4.5 4.5 0 001.2-3.15V9.75a4.5 4.5 0 00-4.5-4.5H7.5a4.5 4.5 0 00-4.5 4.5v2.4c0 1.22.48 2.38 1.2 3.15m15.6 0l-1.57.942"/></svg>
+      </div>
+      <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin-bottom:6px;">Technical & Food Science</h3>
+      <p style="font-size:13px; color:var(--text-body); line-height:1.45;">
+        Consult with our food technologists on moisture limits, mesh particle size, gluten profiles, and custom seasoning premixes.
+      </p>
+    </div>
+    <div style="margin-top:20px; font-size:13px; color:var(--gold-light); font-weight:600;">
+      lab@balaji-ingredients.com • NABL Desk
+    </div>
+  </div>
+
+  <div class="support-contact-card">
+    <div>
+      <div class="support-card-icon">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.676V14.25m0-6.676h2.25"/></svg>
+      </div>
+      <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin-bottom:6px;">Order & Dispatch Logistics</h3>
+      <p style="font-size:13px; color:var(--text-body); line-height:1.45;">
+        Track truck status, obtain driver phone numbers, reschedule unloading slots, or check weighbridge reports.
+      </p>
+    </div>
+    <div style="margin-top:20px; font-size:13px; color:var(--gold-light); font-weight:600;">
+      dispatch@balaji-ingredients.com • 24/7 Desk
+    </div>
+  </div>
+</div>
+
+<!-- Support Ticket Form & Active Tickets -->
+<div class="support-layout-2col">
+  
+  <!-- Left: Ticket Submission -->
+  <div class="support-panel">
+    <h2 style="font-size:18px; font-weight:700; color:#FFFFFF; margin-bottom:4px;">Open an Official Support Ticket</h2>
+    <p style="font-size:13px; color:var(--text-body); margin-bottom:20px;">
+      Direct response SLA within 2-4 business hours from our Bengaluru operations desk.
+    </p>
+
+    <form method="POST" action="/support/">
+      {% csrf_token %}
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">Contact Name</label>
+          <input type="text" name="name" class="portal-input" value="{{ request.user.get_full_name|default:request.user.username }}" required>
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">E-mail Address</label>
+          <input type="email" name="email" class="portal-input" value="{{ request.user.email }}" required>
+        </div>
+      </div>
+
+      <div class="portal-input-grid-2">
+        <div class="portal-form-group">
+          <label class="portal-label">Order ID / RFQ (Optional)</label>
+          <input type="text" name="order_id" class="portal-input" placeholder="e.g. BI-ORD-2048">
+        </div>
+        <div class="portal-form-group">
+          <label class="portal-label">Support Category</label>
+          <select name="support_type" class="portal-select">
+            <option value="sales">Contact Sales & Pricing</option>
+            <option value="technical">Technical & Food Science Support</option>
+            <option value="order">Order & Logistics Support</option>
+            <option value="quality">Quality Assurance & COA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Subject</label>
+        <input type="text" name="subject" class="portal-input" placeholder="e.g. Requesting COA and ETA confirmation for Lot #TD-09" required>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Detailed Message</label>
+        <textarea name="message" rows="4" class="portal-textarea" placeholder="Please describe your requirements or inquiry in detail..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary-gold" style="width:100%; justify-content:center; padding:12px; margin-top:8px;">
+        Submit Support Request
+      </button>
+    </form>
+  </div>
+
+  <!-- Right: Official Plant Details & Past Tickets -->
+  <div class="support-panel">
+    <h2 style="font-size:18px; font-weight:700; color:#FFFFFF; margin-bottom:16px;">Processing Facility Contact</h2>
+
+    <div style="display:flex; flex-direction:column; gap:14px; font-size:13.5px; color:var(--text-body);">
+      <div>
+        <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Corporate & Dispatch Office</div>
+        <div style="color:#FFFFFF; font-weight:600; margin-top:2px;">
+          Balaji Ingredients Industrial Facility<br>
+          APMC Yard & Processing Hub, Kalaburagi / Bengaluru, Karnataka, India
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Operational Hours</div>
+        <div style="color:#FFFFFF; margin-top:2px;">
+          Monday – Saturday: 8:00 AM – 8:00 PM IST<br>
+          Logistics Dispatch Desk: 24/7 Active
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11px; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Direct Phone Lines</div>
+        <div style="color:var(--gold-light); font-weight:600; margin-top:2px;">
+          +91 98450 11223 • +91 80 2839 4412
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px; padding-top:20px; border-top:1px solid var(--border-subtle);">
+      <h4 style="font-size:14px; font-weight:700; color:#FFFFFF; margin-bottom:10px;">Recent Support Tickets</h4>
+      {% for t in tickets %}
+        <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:10px; margin-bottom:8px; border:1px solid var(--border-subtle);">
+          <div style="display:flex; justify-content:space-between; font-size:12px;">
+            <span style="font-family:var(--font-mono); color:var(--gold-light); font-weight:700;">#{{ t.ticket_id }}</span>
+            <span style="color:var(--emerald-accent); font-weight:600; text-transform:capitalize;">{{ t.status }}</span>
+          </div>
+          <div style="font-size:13px; font-weight:600; color:#FFFFFF; margin-top:4px;">{{ t.subject }}</div>
+        </div>
+      {% empty %}
+        <div style="font-size:12.5px; color:var(--text-muted);">No open support tickets.</div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

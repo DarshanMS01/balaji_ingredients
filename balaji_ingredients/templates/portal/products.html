@@ -1,0 +1,302 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .products-header-banner {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.6) 0%, rgba(17, 24, 39, 0.9) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .cat-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cat-pill {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-body);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .cat-pill:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .cat-pill.active {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: var(--border-gold);
+    color: var(--gold-light);
+  }
+
+  .search-box-wrap {
+    position: relative;
+    width: 280px;
+  }
+
+  .search-input {
+    width: 100%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    padding: 0 16px 0 38px;
+    color: #FFFFFF;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .search-icon-pos {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+  }
+
+  /* Product Cards Grid */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .product-b2b-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-b2b-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-light);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+  }
+
+  .product-thumb-frame {
+    height: 170px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .product-card-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .product-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .product-card-sub {
+    font-size: 12.5px;
+    color: var(--text-body);
+    line-height: 1.45;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-specs-table {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+
+  .spec-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+  }
+
+  .spec-entry:last-child {
+    border-bottom: none;
+  }
+
+  .spec-entry-key {
+    color: var(--text-muted);
+  }
+
+  .spec-entry-val {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  .product-card-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-quote-card {
+    flex: 1;
+    background: var(--gold-primary);
+    color: #000000;
+    font-weight: 700;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .btn-quote-card:hover {
+    background: #FBBF24;
+  }
+
+  .btn-details-card {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    font-weight: 600;
+    border: 1px solid var(--border-light);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .btn-details-card:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header & Filter Bar -->
+<div class="products-header-banner">
+  <div>
+    <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; margin-bottom:4px; letter-spacing:-0.03em;">
+      Industrial Food Ingredients Portfolio
+    </h1>
+    <p style="font-size:13.5px; color:var(--text-body);">
+      Direct bulk sourcing, double-sortexed pulses, heavy-gluten cereals, and single-origin calibrated spices.
+    </p>
+  </div>
+
+  <form method="GET" action="/products/" class="search-box-wrap">
+    {% if selected_category and selected_category != 'all' %}
+      <input type="hidden" name="category" value="{{ selected_category }}">
+    {% endif %}
+    <span class="search-icon-pos">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </span>
+    <input type="text" name="q" value="{{ search_query }}" class="search-input" placeholder="Search ingredients, origin...">
+  </form>
+</div>
+
+<!-- Category Tabs -->
+<div class="cat-filter-pills" style="margin-bottom:28px;">
+  <a href="/products/?category=all" class="cat-pill {% if selected_category == 'all' or not selected_category %}active{% endif %}">
+    All Ingredients ({{ products.count }})
+  </a>
+  {% for cat in categories %}
+    <a href="/products/?category={{ cat.slug }}" class="cat-pill {% if selected_category == cat.slug %}active{% endif %}">
+      {{ cat.name }}
+    </a>
+  {% endfor %}
+</div>
+
+<!-- Products Grid -->
+<div class="portfolio-grid">
+  {% for prod in products %}
+    <div class="product-b2b-card">
+      <div class="product-thumb-frame" style="background: {{ prod.image_gradient }};">
+        <div style="display:flex; justify-content:space-between; width:100%;">
+          <span style="background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); color:#FFFFFF; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px; text-transform:uppercase;">
+            {{ prod.category.name }}
+          </span>
+          <span style="background:rgba(245,158,11,0.25); border:1px solid rgba(245,158,11,0.4); color:#FDE68A; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px;">
+            MOQ: 1 MT
+          </span>
+        </div>
+        <div>
+          <span style="background:rgba(0,0,0,0.6); color:rgba(255,255,255,0.9); font-size:11.5px; font-weight:600; padding:3px 8px; border-radius:6px;">
+            Origin: {{ prod.origin }}
+          </span>
+        </div>
+      </div>
+
+      <div class="product-card-body">
+        <div>
+          <div class="product-card-title">{{ prod.name }}</div>
+          <div class="product-card-sub">{{ prod.subtitle|default:prod.description }}</div>
+
+          <div class="product-specs-table">
+            <div class="spec-entry">
+              <span class="spec-entry-key">Grade</span>
+              <span class="spec-entry-val">{{ prod.grade }}</span>
+            </div>
+            <div class="spec-entry">
+              <span class="spec-entry-key">Optical Purity</span>
+              <span class="spec-entry-val">{{ prod.purity_percentage }}</span>
+            </div>
+            <div class="spec-entry">
+              <span class="spec-entry-key">Moisture</span>
+              <span class="spec-entry-val">{{ prod.moisture_content }}</span>
+            </div>
+            <div class="spec-entry">
+              <span class="spec-entry-key">Packaging</span>
+              <span class="spec-entry-val">{{ prod.packaging_options|truncatechars:28 }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card-actions">
+          <button type="button" class="btn-quote-card" onclick="openQuoteModal('{{ prod.id }}', '{{ prod.name }}')">
+            Request Quote
+          </button>
+          <a href="/products/{{ prod.slug }}/" class="btn-details-card">
+            Details
+          </a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div style="grid-column: 1 / -1; text-align:center; padding:60px 20px; background:var(--bg-surface); border-radius:18px;">
+      <p style="font-size:16px; color:var(--text-body); margin-bottom:12px;">No ingredients matched your filter criteria.</p>
+      <a href="/products/" class="cat-pill active">Reset Filters</a>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register Enterprise Profile — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container wide">
+    <div class="auth-card">
+      <div class="auth-header">
+        <span class="auth-badge">ENTERPRISE ONBOARDING</span>
+        <h1 class="auth-title">Create B2B Buyer Account</h1>
+        <p class="auth-sub">Register your enterprise to streamline commercial orders, track dispatches, and download VAT/GST tax invoices.</p>
+      </div>
+
+      <form method="POST" action="{% url 'portal:register' %}" class="auth-form">
+        {% csrf_token %}
+
+        {% if form.errors %}
+          <div class="form-errors-banner">
+            Please correct the errors indicated below.
+          </div>
+        {% endif %}
+
+        <h3 class="form-section-heading">Account Credentials</h3>
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Username *</label>
+            {{ form.username }}
+            {% if form.username.errors %}<span class="field-error">{{ form.username.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Corporate Email Address *</label>
+            {{ form.email }}
+            {% if form.email.errors %}<span class="field-error">{{ form.email.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            {{ form.password }}
+            {% if form.password.errors %}<span class="field-error">{{ form.password.errors.0 }}</span>{% endif %}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Password *</label>
+            {{ form.confirm_password }}
+            {% if form.confirm_password.errors %}<span class="field-error">{{ form.confirm_password.errors.0 }}</span>{% endif %}
+          </div>
+        </div>
+
+        <h3 class="form-section-heading" style="margin-top: 2rem;">Company &amp; Tax Information</h3>
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Registered Enterprise / Company Name *</label>
+            {{ form.company_name }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Structure / Type *</label>
+            {{ form.business_type }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">GSTIN (15 Digits)</label>
+            {{ form.gstin }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Corporate PAN Number</label>
+            {{ form.pan_number }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Direct Commercial Phone *</label>
+            {{ form.phone }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">Delivery Pincode *</label>
+            {{ form.pincode }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">City *</label>
+            {{ form.city }}
+          </div>
+          <div class="form-group">
+            <label class="form-label">State *</label>
+            {{ form.state }}
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label">Facility / Factory Address Line 1 *</label>
+          {{ form.address_line1 }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Industrial Area / Landmark (Optional)</label>
+          {{ form.address_line2 }}
+        </div>
+
+        <div class="form-submit-row" style="margin-top: 2rem;">
+          <button type="submit" class="btn-pill btn-pill-gold btn-pill-lg">
+            Complete Enterprise Registration
+          </button>
+        </div>
+      </form>
+
+      <div class="auth-footer-links">
+        <p>Already have an enterprise account? <a href="{% url 'portal:login' %}" class="link-gold">Sign In Here</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

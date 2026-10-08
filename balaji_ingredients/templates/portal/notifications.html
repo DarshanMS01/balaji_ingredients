@@ -1,0 +1,125 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .notif-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+  }
+
+  .notif-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+  }
+
+  .notif-item.unread {
+    background: rgba(245, 158, 11, 0.06);
+    border-color: rgba(245, 158, 11, 0.25);
+  }
+
+  .notif-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .notif-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--gold-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; flex-wrap:wrap; gap:16px;">
+  <div>
+    <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; letter-spacing:-0.03em;">
+      System Notifications & Order Alerts
+    </h1>
+    <p style="font-size:13.5px; color:var(--text-body); margin-top:2px;">
+      Live alerts for RFQ status changes, dispatch LR tracking numbers, and COA quality publications.
+    </p>
+  </div>
+
+  <button type="button" class="btn-secondary-outline" onclick="markAllNotificationsRead()">
+    Mark All as Read
+  </button>
+</div>
+
+<div class="notif-card">
+  {% for n in notifications %}
+    <div class="notif-item {% if not n.is_read %}unread{% endif %}" id="notif-item-{{ n.id }}">
+      <div class="notif-icon-box">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg>
+      </div>
+      <div style="flex:1;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <h4 style="font-size:15px; font-weight:700; color:#FFFFFF;">{{ n.title }}</h4>
+          <span style="font-size:11.5px; color:var(--text-muted);">{{ n.created_at|date:"d M Y, h:i A" }}</span>
+        </div>
+        <p style="font-size:13px; color:var(--text-body); margin-top:4px; line-height:1.45;">
+          {{ n.message }}
+        </p>
+        <div style="margin-top:10px; display:flex; gap:12px;">
+          {% if n.link %}
+            <a href="{{ n.link }}" class="btn-sm-view" style="font-size:12px; padding:4px 12px;">Go to details</a>
+          {% endif %}
+          {% if not n.is_read %}
+            <button type="button" class="btn-sm-view" style="font-size:12px; padding:4px 12px; background:transparent; border:none; color:var(--text-muted);" onclick="markOneRead('{{ n.id }}')">
+              Mark as read
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div style="text-align:center; padding:48px; color:var(--text-muted);">
+      No system notifications found.
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  async function markAllNotificationsRead() {
+    const formData = new FormData();
+    formData.append('action', 'mark_all_read');
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    await fetch('/notifications/', {
+      method: 'POST',
+      body: formData
+    });
+    window.location.reload();
+  }
+
+  async function markOneRead(id) {
+    const formData = new FormData();
+    formData.append('action', 'mark_read');
+    formData.append('notification_id', id);
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+    await fetch('/notifications/', {
+      method: 'POST',
+      body: formData
+    });
+    const el = document.getElementById('notif-item-' + id);
+    if (el) el.classList.remove('unread');
+  }
+</script>
+
+{% endblock %}

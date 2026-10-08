@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Learn about Balaji Ingredients — a B2B food and agricultural ingredient supplier focused on quality, consistency and dependable supply.{% endblock %}
+
+{% block content %}
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-eyebrow light">ABOUT US</div>
+    <h1 class="page-hero-heading">Who We Are</h1>
+  </div>
+</section>
+
+<!-- About Main -->
+<section class="about-page">
+  <div class="page-container">
+
+    <div class="about-intro reveal-up">
+      <div class="section-eyebrow">BALAJI INGREDIENTS</div>
+      <h2 class="section-heading">
+        Ingredients that connect quality,<br>consistency and supply.
+      </h2>
+      <p class="lead-text">
+        Balaji Ingredients is a B2B food and agricultural ingredient supplier
+        focused on providing businesses with carefully selected ingredients,
+        consistent supply and a dependable business relationship.
+      </p>
+    </div>
+
+    <div class="about-body">
+      <div class="about-body-text reveal-left">
+        <h3>Our Focus</h3>
+        <p>
+          We supply food and agricultural ingredients to manufacturers, distributors,
+          processors and food businesses that need a reliable ingredient source.
+          Our current ingredient range covers Dal &amp; Pulses, Cereals, Ragi and Chilli Powder.
+        </p>
+        <p>
+          Every business requirement is handled with attention to the specific ingredient
+          needed, the quantity, the packaging requirement and the delivery location.
+          We do not operate as a retail supplier — our focus is entirely on business requirements.
+        </p>
+        <h3>Our Approach</h3>
+        <p>
+          We believe that a good ingredient supply relationship is built on clear
+          communication, consistent quality and dependable delivery. These are the
+          principles that guide how we work with every business we supply.
+        </p>
+        <a href="{% url 'core:contact' %}" class="btn btn-primary">Start a Conversation</a>
+      </div>
+      <div class="about-body-sidebar reveal-right">
+        <div class="sidebar-card">
+          <div class="sidebar-icon">◈</div>
+          <h4>B2B Focus</h4>
+          <p>We work exclusively with businesses. Our process is designed for commercial ingredient requirements.</p>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-icon">◈</div>
+          <h4>Quality Selection</h4>
+          <p>Every ingredient is selected with attention to quality, consistency and suitability for food and processing use.</p>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-icon">◈</div>
+          <h4>Ongoing Supply</h4>
+          <p>We prioritise long-term supply relationships, not one-off transactions.</p>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-icon">◈</div>
+          <h4>Expandable Range</h4>
+          <p>Our ingredient range is designed to grow as our business and our customers' requirements grow.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="b2b-cta">
+  <div class="b2b-container">
+    <div class="b2b-content reveal-up">
+      <h2 class="b2b-heading">Ready to discuss your ingredient requirement?</h2>
+      <div class="b2b-actions">
+        <a href="{% url 'core:contact' %}" class="btn btn-primary btn-large">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

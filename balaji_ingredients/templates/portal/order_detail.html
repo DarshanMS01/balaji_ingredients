@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order {{ order.order_number }} — Tracking &amp; Proforma Invoice{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-strip">
+  <div class="breadcrumb-container">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="bc-sep">/</span>
+    <a href="{% url 'portal:dashboard' %}">Dashboard</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current">Order {{ order.order_number }}</span>
+  </div>
+</div>
+
+<section class="order-detail-section">
+  <div class="order-detail-container">
+
+    <!-- Header Card -->
+    <div class="order-header-card">
+      <div class="oh-left">
+        <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+        <h1 class="order-title">Commercial Order {{ order.order_number }}</h1>
+        <p class="order-meta">Placed on {{ order.created_at|date:"d F Y, H:i" }} IST</p>
+      </div>
+      <div class="oh-right">
+        <a href="{% url 'portal:invoice' order.order_number %}" target="_blank" class="btn-pill btn-pill-outline-dark">
+          📄 View &amp; Print Proforma Invoice
+        </a>
+        {% if order.payment_status == 'unpaid' %}
+          <form method="POST" action="{% url 'portal:pay_token' order.order_number %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-pill btn-pill-gold">
+              Pay 10% Token Advance
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Visual Tracking Stepper -->
+    <div class="stepper-card">
+      <h3 class="stepper-heading">Consignment Milestone Tracking</h3>
+      <div class="stepper-track">
+        <div class="step-node {% if order.status in 'pending,quote_confirmed,processing,dispatched,delivered' %}active{% endif %}">
+          <div class="step-circle">1</div>
+          <div class="step-name">Quote Confirmed</div>
+          <div class="step-time">{{ order.created_at|date:"d M" }}</div>
+        </div>
+        <div class="step-line {% if order.status in 'quote_confirmed,processing,dispatched,delivered' %}active{% endif %}"></div>
+
+        <div class="step-node {% if order.status in 'quote_confirmed,processing,dispatched,delivered' %}active{% endif %}">
+          <div class="step-circle">2</div>
+          <div class="step-name">Proforma Issued</div>
+          <div class="step-time">Verified</div>
+        </div>
+        <div class="step-line {% if order.status in 'processing,dispatched,delivered' %}active{% endif %}"></div>
+
+        <div class="step-node {% if order.status in 'processing,dispatched,delivered' %}active{% endif %}">
+          <div class="step-circle">3</div>
+          <div class="step-name">Sortex Processing</div>
+          <div class="step-time">Clean &amp; Bagged</div>
+        </div>
+        <div class="step-line {% if order.status in 'dispatched,delivered' %}active{% endif %}"></div>
+
+        <div class="step-node {% if order.status in 'dispatched,delivered' %}active{% endif %}">
+          <div class="step-circle">4</div>
+          <div class="step-name">Dispatched in Transit</div>
+          <div class="step-time">{% if order.dispatch_date %}{{ order.dispatch_date|date:"d M" }}{% else %}Scheduled{% endif %}</div>
+        </div>
+        <div class="step-line {% if order.status == 'delivered' %}active{% endif %}"></div>
+
+        <div class="step-node {% if order.status == 'delivered' %}active{% endif %}">
+          <div class="step-circle">5</div>
+          <div class="step-name">Delivered &amp; Verified</div>
+          <div class="step-time">{% if order.status == 'delivered' %}Completed{% else %}Pending{% endif %}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-Column Details Layout -->
+    <div class="order-content-grid">
+      <!-- Left: Line Items -->
+      <div class="order-items-card">
+        <h3 class="card-subtitle-bold">Consignment Line Items</h3>
+        <div class="table-responsive">
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th>Ingredient</th>
+                <th>Quantity</th>
+                <th>Packaging</th>
+                <th>Rate per Unit</th>
+                <th>Amount (INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                <tr>
+                  <td>
+                    <strong>{{ item.product_name }}</strong>
+                    {% if item.product %}
+                      <div><small class="text-muted">{{ item.product.grade }}</small></div>
+                    {% endif %}
+                  </td>
+                  <td>{{ item.quantity }} {{ item.unit }}</td>
+                  <td>{{ item.packaging }}</td>
+                  <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                  <td><strong>₹{{ item.total_price|floatformat:2 }}</strong></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Totals Summary -->
+        <div class="order-summary-box">
+          <div class="summary-row">
+            <span>Commodity Subtotal:</span>
+            <span>₹{{ order.subtotal|floatformat:2 }}</span>
+          </div>
+          <div class="summary-row">
+            <span>GST (5% Food Grains):</span>
+            <span>₹{{ order.tax_amount|floatformat:2 }}</span>
+          </div>
+          <div class="summary-row grand-total">
+            <span>Grand Total (CIF Destination):</span>
+            <span>₹{{ order.total_amount|floatformat:2 }}</span>
+          </div>
+          {% if order.advance_amount > 0 %}
+            <div class="summary-row advance-paid">
+              <span>Advance Token Paid:</span>
+              <span class="text-success">₹{{ order.advance_amount|floatformat:2 }} ({{ order.get_payment_status_display }})</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right: Logistics & Shipping Info -->
+      <div class="order-logistics-card">
+        <h3 class="card-subtitle-bold">Logistics &amp; Dispatch Intelligence</h3>
+        <div class="logistics-info-list">
+          <div class="logistics-item">
+            <span class="l-lbl">Freight Carrier:</span>
+            <span class="l-val">{{ order.carrier_name|default:"Designated Freight Fleet" }}</span>
+          </div>
+          <div class="logistics-item">
+            <span class="l-lbl">LR / Consignment No:</span>
+            <span class="l-val"><code>{{ order.tracking_consignment_no|default:"Will update upon gate dispatch" }}</code></span>
+          </div>
+          <div class="logistics-item">
+            <span class="l-lbl">Vehicle Number:</span>
+            <span class="l-val">{{ order.vehicle_number|default:"Dedicated Commercial Truck" }}</span>
+          </div>
+          <div class="logistics-item">
+            <span class="l-lbl">Dispatch Date:</span>
+            <span class="l-val">{{ order.dispatch_date|date:"d F Y"|default:"Within SLA window" }}</span>
+          </div>
+          <div class="logistics-item">
+            <span class="l-lbl">Estimated Arrival:</span>
+            <span class="l-val">{{ order.expected_delivery_date|date:"d F Y"|default:"24-48 hours from dispatch" }}</span>
+          </div>
+          <div class="logistics-item">
+            <span class="l-lbl">Destination Facility:</span>
+            <span class="l-val">{{ order.shipping_address|default:"Factory address on record" }}</span>
+          </div>
+          <div class="logistics-item">
+            <span class="l-lbl">Mandatory Enclosures:</span>
+            <span class="l-val">e-Way Bill, Delivery Challan, Batch CoA, Weighbridge Slip</span>
+          </div>
+        </div>
+
+        {% if order.customer_notes %}
+          <div class="order-notes-box">
+            <div class="notes-lbl">Buyer Unloading Instructions:</div>
+            <p>{{ order.customer_notes }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

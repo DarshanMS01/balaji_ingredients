@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quality — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}How Balaji Ingredients approaches quality in ingredient selection, handling, packaging and supply coordination.{% endblock %}
+
+{% block content %}
+
+<!-- Page Hero -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-eyebrow light">QUALITY</div>
+    <h1 class="page-hero-heading">Quality is part of<br>every requirement.</h1>
+  </div>
+</section>
+
+<!-- Quality Intro -->
+<section class="quality-page">
+  <div class="page-container">
+
+    <div class="quality-intro reveal-up">
+      <p class="lead-text">
+        At Balaji Ingredients, quality is not a certificate on the wall.
+        It is built into every decision — from which ingredients we source,
+        to how we handle, package and dispatch them.
+      </p>
+    </div>
+
+    <div class="quality-areas">
+
+      <div class="quality-area-card reveal-up">
+        <div class="qa-number">01</div>
+        <div class="qa-content">
+          <h3>Ingredient Selection</h3>
+          <p>
+            We select ingredients based on suitability for food and processing requirements.
+            Our selection process focuses on consistency, cleanliness and fitness for
+            the specific business application each customer requires.
+          </p>
+        </div>
+      </div>
+
+      <div class="quality-area-card reveal-up delay-1">
+        <div class="qa-number">02</div>
+        <div class="qa-content">
+          <h3>Product Consistency</h3>
+          <p>
+            Consistency in ingredient quality is a core requirement for any food business.
+            We work to ensure that repeat orders meet the same standard as the first supply.
+            Variations are communicated clearly and early.
+          </p>
+        </div>
+      </div>
+
+      <div class="quality-area-card reveal-up delay-2">
+        <div class="qa-number">03</div>
+        <div class="qa-content">
+          <h3>Handling</h3>
+          <p>
+            Ingredients are handled with care throughout the supply process.
+            Proper handling reduces contamination risk, preserves ingredient quality,
+            and ensures what is delivered matches what was ordered.
+          </p>
+        </div>
+      </div>
+
+      <div class="quality-area-card reveal-up delay-3">
+        <div class="qa-number">04</div>
+        <div class="qa-content">
+          <h3>Packaging</h3>
+          <p>
+            Packaging is matched to the ingredient and the customer's requirements.
+            We support different packaging formats depending on the volume,
+            transport method and end use of each ingredient.
+          </p>
+        </div>
+      </div>
+
+      <div class="quality-area-card reveal-up">
+        <div class="qa-number">05</div>
+        <div class="qa-content">
+          <h3>Supply Coordination</h3>
+          <p>
+            Quality supply means the right ingredient arrives at the right place at the right time.
+            We coordinate supply carefully and keep customers informed throughout the process.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Quality Standards Matrix -->
+    <div class="quality-standards-table-wrap reveal-up">
+      <h3 class="standards-heading">Standard Industrial Testing Benchmarks</h3>
+      <p class="standards-sub">Every batch dispatched from our facilities is tested against stringent physical and chemical tolerances:</p>
+      <div class="table-responsive">
+        <table class="quality-table">
+          <thead>
+            <tr>
+              <th>Quality Parameter</th>
+              <th>Test Methodology</th>
+              <th>Standard Specification</th>
+              <th>Frequency</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Purity Level (Sortex)</strong></td>
+              <td>Optical Image & Sieve Analysis</td>
+              <td>99.50% to 99.80% Min</td>
+              <td>Every Batch</td>
+            </tr>
+            <tr>
+              <td><strong>Moisture Content</strong></td>
+              <td>Moisture Analyzer (Halogen)</td>
+              <td>9.5% – 11.5% Max</td>
+              <td>Pre-cleaning & Pre-pack</td>
+            </tr>
+            <tr>
+              <td><strong>Foreign Organic Matter</strong></td>
+              <td>IS:4333 Manual Separation</td>
+              <td>< 0.15% w/w</td>
+              <td>Every Lot</td>
+            </tr>
+            <tr>
+              <td><strong>Aflatoxin (B1, B2, G1, G2)</strong></td>
+              <td>HPLC / ELISA Screening</td>
+              <td>< 10 ppb (Export standard)</td>
+              <td>Periodic Third-Party Lab</td>
+            </tr>
+            <tr>
+              <td><strong>Heavy Metals & Pesticides</strong></td>
+              <td>ICP-MS / GC-MS</td>
+              <td>FSSAI compliant limits</td>
+              <td>Certified NABL lab quarterly</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Certification Note -->
+    <div class="certification-note reveal-up">
+      <div class="cert-icon">ℹ</div>
+      <div class="cert-text">
+        <h4>Certifications & Compliance</h4>
+        <p>
+          Balaji Ingredients operates in alignment with FSSAI regulations, APEDA export guidelines, and AGMARK standards. Batch-specific Certificates of Analysis (CoA) and test reports are provided with all bulk commercial dispatches. Contact us if you have custom testing requirements for your supply chain.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="b2b-cta">
+  <div class="b2b-container">
+    <div class="b2b-content reveal-up">
+      <h2 class="b2b-heading">Questions about our quality standards?</h2>
+      <div class="b2b-actions">
+        <a href="{% url 'core:contact' %}" class="btn btn-primary btn-large">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

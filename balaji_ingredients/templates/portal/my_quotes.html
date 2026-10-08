@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Quotations &amp; Enquiries — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-strip">
+  <div class="breadcrumb-container">
+    <a href="{% url 'core:home' %}">Home</a>
+    <span class="bc-sep">/</span>
+    <a href="{% url 'portal:dashboard' %}">Dashboard</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current">My Quotations</span>
+  </div>
+</div>
+
+<section class="dashboard-section">
+  <div class="dashboard-container">
+    <div class="dashboard-card">
+      <div class="card-section-header">
+        <div>
+          <h1 class="section-card-title">Commercial Quotation Requests (RFQs)</h1>
+          <p class="section-card-sub">History of RFQs submitted for spot rates and contracts.</p>
+        </div>
+        <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-gold">Submit New RFQ</a>
+      </div>
+
+      {% if quotes %}
+        <div class="table-responsive">
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th>RFQ Reference</th>
+                <th>Commodity / Ingredient</th>
+                <th>Volume</th>
+                <th>Packaging</th>
+                <th>Destination</th>
+                <th>Status</th>
+                <th>Official Quote</th>
+                <th>Submission Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for q in quotes %}
+                <tr>
+                  <td><strong>#{{ q.id|stringformat:"04d" }}</strong></td>
+                  <td>
+                    <strong>{{ q.product_name|default:"General Requirement" }}</strong>
+                    {% if q.category_name %}<div><small class="text-muted">{{ q.category_name }}</small></div>{% endif %}
+                  </td>
+                  <td>{{ q.quantity_volume }}</td>
+                  <td>{{ q.packaging_preference }}</td>
+                  <td>{{ q.destination_city|default:"To be confirmed" }}</td>
+                  <td>
+                    <span class="status-badge status-{{ q.status }}">
+                      {{ q.get_status_display }}
+                    </span>
+                  </td>
+                  <td>
+                    {% if q.quoted_price_per_unit %}
+                      <strong class="text-gold">₹{{ q.quoted_price_per_unit }}/MT</strong>
+                    {% else %}
+                      <span class="text-muted">In Calculation</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ q.created_at|date:"d M Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="portal-empty-state">
+          <p>No quotation requests on record for your account.</p>
+          <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-gold">Request First Quotation</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

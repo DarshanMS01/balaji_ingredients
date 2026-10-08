@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if category %}{{ category.name }} — {% endif %}Ingredient Catalog — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Industrial agricultural ingredient catalog. Sortex cleaned Toor Dal, Chana Dal, Moong Mogar, Lokwan Wheat, Organic Whole Ragi, and Pure Chilli Powders.{% endblock %}
+
+{% block content %}
+<section class="page-hero-clean">
+  <div class="page-hero-clean-container">
+    <div class="section-tag">COMMERCIAL COMMODITY PORTFOLIO</div>
+    <h1 class="page-hero-clean-title">
+      {% if category %}{{ category.name }}{% else %}Industrial Ingredient Catalog{% endif %}
+    </h1>
+    <p class="page-hero-clean-sub">
+      {% if category %}{{ category.tagline }}{% else %}Verified optical Sortex cleaned pulses, high-protein food grains, and pure spice powders for commercial food manufacturers.{% endif %}
+    </p>
+  </div>
+</section>
+
+<!-- Filter & Search Bar -->
+<section class="catalog-section">
+  <div class="catalog-container">
+    
+    <div class="catalog-toolbar">
+      <!-- Category Pills -->
+      <div class="category-pills">
+        <a href="{% url 'products:catalog' %}" class="cat-pill {% if not selected_category and not category %}active{% endif %}">
+          All Products
+        </a>
+        {% for cat in categories %}
+          <a href="{% url 'products:catalog' %}?category={{ cat.slug }}" class="cat-pill {% if selected_category == cat.slug or category.slug == cat.slug %}active{% endif %}">
+            {{ cat.name }}
+          </a>
+        {% endfor %}
+      </div>
+
+      <!-- Search Input -->
+      <form method="GET" action="{% url 'products:catalog' %}" class="catalog-search-form">
+        {% if selected_category %}
+          <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Search by ingredient, grade, or origin..." class="search-input" />
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+    </div>
+
+    <!-- Product Grid -->
+    {% if products %}
+      <div class="catalog-grid">
+        {% for prod in products %}
+          <div class="catalog-card reveal-up" style="position: relative; display: flex; flex-direction: column;">
+            <div class="catalog-card-image" style="background-image: url('{% static prod.category.image_filename %}'); background-size: cover; background-position: center;">
+              <span class="card-category-badge">{{ prod.category.name }}</span>
+              <div class="card-grade-tag">{{ prod.grade }}</div>
+            </div>
+            <div class="catalog-card-body" style="display: flex; flex-direction: column; flex-grow: 1;">
+              <h3 class="card-title"><a href="{{ prod.get_absolute_url }}" style="color: inherit; text-decoration: none;">{{ prod.name }}</a></h3>
+              <p class="card-subtitle">{{ prod.subtitle }}</p>
+
+              <!-- Price Box -->
+              <div style="background: rgba(200, 169, 110, 0.12); border: 1px solid rgba(200, 169, 110, 0.3); border-radius: 8px; padding: 0.6rem 0.85rem; margin: 0.5rem 0 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <span style="font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700; display: block; line-height: 1;">Commercial Price</span>
+                  <span style="font-size: 1.2rem; font-weight: 800; color: #1b381e;">{{ prod.formatted_price }}</span>
+                  <span style="font-size: 0.75rem; color: #475569;">/ {{ prod.unit_name }}</span>
+                </div>
+                <span style="font-size: 0.72rem; font-weight: 700; color: #166534; background: #dcfce7; padding: 0.2rem 0.5rem; border-radius: 4px;">In Stock</span>
+              </div>
+              
+              <div class="card-specs-row">
+                <div class="card-spec-item">
+                  <span class="spec-lbl">Purity</span>
+                  <span class="spec-val">{{ prod.purity_percentage }}</span>
+                </div>
+                <div class="card-spec-item">
+                  <span class="spec-lbl">Moisture</span>
+                  <span class="spec-val">{{ prod.moisture_content }}</span>
+                </div>
+                <div class="card-spec-item">
+                  <span class="spec-lbl">Min Order</span>
+                  <span class="spec-val">{{ prod.min_order_qty }}</span>
+                </div>
+              </div>
+
+              <div class="card-action-row" style="margin-top: auto; padding-top: 1rem; display: flex; gap: 0.5rem; align-items: center;">
+                <button type="button" class="btn-pill btn-pill-gold" style="flex: 1; padding: 0.6rem 0.8rem; font-size: 0.88rem; font-weight: 800; text-align: center; border: none; cursor: pointer;" onclick="openBuyModal('{{ prod.id }}', '{{ prod.name|escapejs }}', '{{ prod.category.name|escapejs }}', '{{ prod.unit_price }}', '{{ prod.formatted_price|escapejs }}', '{{ prod.unit_name|escapejs }}', '{{ prod.min_order_qty|escapejs }}')">
+                  ⚡ Buy Now
+                </button>
+                <a href="{{ prod.get_absolute_url }}" class="btn-pill btn-pill-outline-dark" style="padding: 0.6rem 0.8rem; font-size: 0.82rem; font-weight: 600; white-space: nowrap;">
+                  Specs &amp; Quote
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="catalog-empty-state">
+        <h3>No matching ingredients found</h3>
+        <p>Try clearing your search query or select another category filter.</p>
+        <a href="{% url 'products:catalog' %}" class="btn-pill btn-pill-outline-dark">Reset Filters</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- Bottom CTA Strip -->
+<section class="catalog-cta-strip">
+  <div class="catalog-cta-container">
+    <div>
+      <h3 class="catalog-cta-heading">Need a custom specification or non-standard mesh size?</h3>
+      <p class="catalog-cta-desc">Our processing facility custom-calibrates sorting thresholds, moisture targets, and bespoke bag private-labeling for contract orders.</p>
+    </div>
+    <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-gold">Request Custom Specification</a>
+  </div>
+</section>
+{% endblock %}

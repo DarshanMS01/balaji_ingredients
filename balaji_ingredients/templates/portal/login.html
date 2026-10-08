@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Client Portal Login — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <span class="auth-badge">ENTERPRISE CLIENT ACCESS</span>
+        <h1 class="auth-title">B2B Client Portal</h1>
+        <p class="auth-sub">Access order tracking, proforma invoices, batch test CoAs, and active quote requests.</p>
+      </div>
+
+      <form method="POST" action="{% url 'portal:login' %}" class="auth-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" name="username" class="form-input" placeholder="Enter corporate username" required autofocus />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-input" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn-pill btn-pill-gold btn-pill-full">
+          Sign In to Portal
+        </button>
+      </form>
+
+      <div class="auth-footer-links">
+        <p>New enterprise client? <a href="{% url 'portal:register' %}" class="link-gold">Register Company Profile</a></p>
+      </div>
+
+      <!-- Demo Account Helper Box -->
+      <div class="auth-demo-box">
+        <div class="demo-box-label">DEMO BUYER CREDENTIALS</div>
+        <p><strong>Username:</strong> <code>demo_buyer</code></p>
+        <p><strong>Password:</strong> <code>Balaji@2026!</code></p>
+        <p class="demo-box-sub">Company: Apex Agro Processors Pvt Ltd (Includes preloaded active orders and quotes)</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

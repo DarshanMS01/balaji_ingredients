@@ -1,0 +1,253 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .quotes-2col-layout {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr;
+    gap: 28px;
+  }
+
+  .quotes-table-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+  }
+
+  .quote-form-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    height: fit-content;
+  }
+
+  .quotes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .quotes-table th {
+    padding: 12px 14px;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .quotes-table td {
+    padding: 14px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: #E5E7EB;
+    vertical-align: middle;
+  }
+
+  .rfq-status-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  .rfq-status-badge.new {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--gold-light);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .rfq-status-badge.quoted, .rfq-status-badge.confirmed {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6EE7B7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  @media (max-width: 1024px) {
+    .quotes-2col-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:28px;">
+  <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; letter-spacing:-0.03em;">
+    Quotations & Official Price Enquiries (RFQs)
+  </h1>
+  <p style="font-size:13.5px; color:var(--text-body); margin-top:2px;">
+    Generate certified volume pricing, review commercial quotes, and transition RFQs into purchase orders.
+  </p>
+</div>
+
+<div class="quotes-2col-layout">
+  
+  <!-- Left: Submitted Quotations Table -->
+  <div class="quotes-table-card">
+    <div style="font-size:17px; font-weight:700; color:#FFFFFF; margin-bottom:18px;">
+      Submitted Quotations ({{ quotes.count }})
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="quotes-table">
+        <thead>
+          <tr>
+            <th>Quote ID</th>
+            <th>Product & Volume</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Quoted Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for q in quotes %}
+            <tr>
+              <td>
+                <span style="font-family:var(--font-mono); font-weight:700; color:var(--gold-light);">#BI-RFQ-{{ q.id }}</span>
+              </td>
+              <td>
+                <div style="font-weight:700; color:#FFFFFF;">{{ q.product_name|default:q.product.name }}</div>
+                <div style="font-size:11.5px; color:var(--text-muted);">{{ q.quantity_volume }} • {{ q.packaging_preference }}</div>
+              </td>
+              <td style="color:var(--text-body); font-size:12.5px;">{{ q.created_at|date:"d M Y" }}</td>
+              <td>
+                <span class="rfq-status-badge {{ q.status }}">{{ q.get_status_display }}</span>
+              </td>
+              <td style="font-weight:700; color:#FFFFFF;">
+                {% if q.quoted_price_per_unit %}
+                  ₹{{ q.quoted_price_per_unit|floatformat:2 }}/MT
+                {% else %}
+                  <span style="color:var(--text-muted); font-size:12px;">Under Review</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="display:flex; gap:6px;">
+                  <button type="button" class="btn-sm-view" onclick="alert('Quotation #BI-RFQ-{{ q.id }} is active. Official proforma copy sent to {{ q.email }}.')">
+                    View
+                  </button>
+                  <a href="/documents/" class="btn-sm-view" title="Download Spec">
+                    PDF
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" style="text-align:center; padding:36px; color:var(--text-muted);">
+                No quotations submitted yet. Use the form on the right to request pricing.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Right: Direct Request a Quote Form -->
+  <div class="quote-form-card">
+    <div style="font-size:17px; font-weight:700; color:#FFFFFF; margin-bottom:4px;">
+      Request a New Quotation
+    </div>
+    <p style="font-size:12.5px; color:var(--text-body); margin-bottom:20px;">
+      Fill required specifications to receive an instant commercial proposal.
+    </p>
+
+    <form id="inlineQuoteForm" onsubmit="handleInlineQuote(event)">
+      {% csrf_token %}
+
+      <div class="portal-form-group">
+        <label class="portal-label">Select Product</label>
+        <select name="product_id" class="portal-select" required>
+          <option value="">-- Choose Food Ingredient --</option>
+          {% for p in products %}
+            <option value="{{ p.id }}">{{ p.name }} ({{ p.category.name }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Required Quantity (e.g. 10 MT / 500 Bags)</label>
+        <input type="text" name="quantity" class="portal-input" placeholder="e.g. 15 Metric Tons" required>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Packaging Requirement</label>
+        <select name="packaging" class="portal-select">
+          <option value="50kg PP Bags with Liner">50kg PP Bags with LDPE Liner</option>
+          <option value="25kg Multiwall Kraft Sacks">25kg Multiwall Kraft Sacks</option>
+          <option value="1000kg FIBC Jumbo Bags">1000kg FIBC Jumbo Bags</option>
+          <option value="Nitrogen Flushed Foil Bags">Nitrogen Flushed Foil Bags</option>
+        </select>
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Delivery Location</label>
+        <input type="text" name="location" class="portal-input" placeholder="City & Pincode" required value="{{ profile.city|default:'Bengaluru' }}, {{ profile.state|default:'Karnataka' }}">
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Mobile Number</label>
+        <input type="tel" name="mobile" class="portal-input" placeholder="+91 98450 11223" required value="{{ profile.phone|default:'' }}">
+      </div>
+
+      <div class="portal-form-group">
+        <label class="portal-label">Additional Quality Requirements</label>
+        <textarea name="requirements" rows="2" class="portal-textarea" placeholder="Moisture limits, purity percentage, target price..."></textarea>
+      </div>
+
+      <div id="inlineQuoteNotice" style="display:none; padding:10px; border-radius:8px; font-size:13px; margin-bottom:12px;"></div>
+
+      <button type="submit" class="btn-primary-gold" style="width:100%; justify-content:center; padding:12px;" id="inlineSubmitBtn">
+        Submit Quote Request
+      </button>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  async function handleInlineQuote(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('inlineSubmitBtn');
+    const notice = document.getElementById('inlineQuoteNotice');
+
+    btn.disabled = true;
+    btn.innerText = 'Submitting...';
+
+    const formData = new FormData(form);
+
+    try {
+      const res = await fetch('/quotes/submit/', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: formData
+      });
+      const data = await res.json();
+      if (data.success) {
+        notice.style.display = 'block';
+        notice.style.background = 'rgba(16, 185, 129, 0.2)';
+        notice.style.color = '#A7F3D0';
+        notice.innerText = data.message;
+        setTimeout(() => { window.location.reload(); }, 1200);
+      } else {
+        notice.style.display = 'block';
+        notice.style.background = 'rgba(239, 68, 68, 0.2)';
+        notice.style.color = '#FECACA';
+        notice.innerText = data.message || 'Error creating quote.';
+        btn.disabled = false;
+        btn.innerText = 'Submit Quote Request';
+      }
+    } catch(err) {
+      form.submit();
+    }
+  }
+</script>
+
+{% endblock %}

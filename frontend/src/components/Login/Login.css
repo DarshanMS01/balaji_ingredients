@@ -1,0 +1,535 @@
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--white);
+  color: var(--dark);
+}
+
+/* LEFT SIDE - 55% */
+.login-left {
+  width: 55%;
+  position: relative;
+  background-image: url('/images/market_spices.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4rem;
+  color: var(--white);
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(27, 23, 20, 0.8) 0%, rgba(102, 87, 76, 0.5) 100%);
+  z-index: 1;
+}
+
+.login-left-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.login-logo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-decoration: none;
+  color: var(--white);
+}
+
+.login-logo-icon {
+  width: 48px;
+  height: 48px;
+  background-color: var(--red);
+  color: var(--white);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.login-logo h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.login-logo p {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin: 0;
+}
+
+.login-hero-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+  color: var(--white);
+}
+
+.login-badges {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge svg {
+  color: var(--gold);
+}
+
+/* RIGHT SIDE - 45% */
+.login-right {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  overflow-y: auto;
+  background-color: var(--white);
+}
+
+.login-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--muted-brown);
+  font-size: 0.875rem;
+  margin-bottom: 2rem;
+  transition: color 0.2s;
+  align-self: flex-start;
+}
+
+.login-back:hover {
+  color: var(--red);
+}
+
+.login-form-container {
+  max-width: 440px;
+  width: 100%;
+  margin: auto;
+}
+
+/* Tabs */
+.login-tabs {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.login-tab {
+  background: none;
+  border: none;
+  padding: 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--muted-brown);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.login-tab.active {
+  color: var(--dark);
+}
+
+.login-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--red);
+}
+
+/* Forms */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--muted-brown);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--muted-brown);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: var(--white);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.form-input.no-icon {
+  padding-left: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(224, 176, 78, 0.2);
+}
+
+/* Form Extras (Remember me, Forgot Password) */
+.form-extras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--muted-brown);
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--red);
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Buttons */
+.submit-btn {
+  background-color: var(--red);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: var(--dark-red);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--muted-brown);
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.divider:not(:empty)::before {
+  margin-right: 1rem;
+}
+
+.divider:not(:empty)::after {
+  margin-left: 1rem;
+}
+
+/* Google Auth */
+.google-auth-container {
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+}
+
+/* Password Strength */
+.password-strength {
+  margin-top: -0.5rem;
+}
+
+.strength-bars {
+  display: flex;
+  gap: 4px;
+  height: 4px;
+  margin-bottom: 0.25rem;
+}
+
+.strength-bar {
+  flex: 1;
+  background-color: var(--border);
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+
+.strength-text {
+  font-size: 0.75rem;
+  color: var(--muted-brown);
+  text-align: right;
+}
+
+.strength-weak .strength-bar:nth-child(1) { background-color: var(--red); }
+.strength-medium .strength-bar:nth-child(1),
+.strength-medium .strength-bar:nth-child(2) { background-color: var(--gold); }
+.strength-strong .strength-bar { background-color: #10B981; }
+
+/* Forgot Password Flow */
+.forgot-password-flow {
+  animation: fadeIn 0.3s ease;
+}
+
+.forgot-password-flow h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.forgot-password-flow p {
+  color: var(--muted-brown);
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+.otp-container {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.otp-input {
+  width: 50px;
+  height: 56px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  background-color: var(--white);
+  transition: all 0.2s;
+}
+
+.otp-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(224, 176, 78, 0.2);
+  transform: translateY(-2px);
+}
+
+.resend-container {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.timer {
+  color: var(--muted-brown);
+}
+
+.resend-link {
+  background: none;
+  border: none;
+  color: var(--red);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.resend-link:disabled {
+  color: var(--muted-brown);
+  cursor: not-allowed;
+}
+
+/* Success Step */
+.success-step {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--white);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toast */
+.toast-message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toast-error {
+  background-color: rgba(198, 44, 32, 0.1);
+  color: var(--red);
+  border: 1px solid rgba(198, 44, 32, 0.2);
+}
+
+.toast-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .login-left {
+    display: none;
+  }
+  
+  .login-right {
+    width: 100%;
+    padding: 2rem 1.5rem;
+    position: relative;
+    background: transparent;
+  }
+  
+  .login-page {
+    background-image: url('/images/market_spices.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(27, 23, 20, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 0;
+  }
+  
+  .login-right {
+    z-index: 1;
+  }
+  
+  .login-form-container {
+    background: rgba(255, 253, 249, 0.95);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+}

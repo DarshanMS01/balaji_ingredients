@@ -1,0 +1,128 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  .customers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .partner-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .partner-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-light);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+  }
+
+  .partner-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #A7F3D0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div style="margin-bottom:28px;">
+  <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; letter-spacing:-0.03em;">
+    Enterprise Sourcing Network & Supply Hubs
+  </h1>
+  <p style="font-size:13.5px; color:var(--text-body); margin-top:2px;">
+    Balaji Ingredients connects over 500+ food manufacturers, commercial mills, FMCG brands, and regional processing hubs.
+  </p>
+</div>
+
+<!-- Stats Row -->
+<div class="stats-grid-5" style="margin-bottom:32px;">
+  <div class="stat-dash-card">
+    <div class="stat-number-val">120+</div>
+    <div class="stat-label-text">FMCG & Food Brands</div>
+  </div>
+  <div class="stat-dash-card">
+    <div class="stat-number-val">85+</div>
+    <div class="stat-label-text">Commercial Dal Mills</div>
+  </div>
+  <div class="stat-dash-card">
+    <div class="stat-number-val">60+</div>
+    <div class="stat-label-text">Spice Extract Units</div>
+  </div>
+  <div class="stat-dash-card">
+    <div class="stat-number-val">18</div>
+    <div class="stat-label-text">State APMC Aggregators</div>
+  </div>
+  <div class="stat-dash-card">
+    <div class="stat-number-val">99.8%</div>
+    <div class="stat-label-text">Contract Compliance</div>
+  </div>
+</div>
+
+<!-- Partner Directory -->
+<div class="customers-grid">
+  <div class="partner-card">
+    <span class="partner-type-badge">Primary Processing Facility</span>
+    <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin:10px 0 4px;">Kalaburagi Optical Dal Complex</h3>
+    <p style="font-size:12.5px; color:var(--text-body); line-height:1.45;">
+      APMC Yard & Processing Hub, Kalaburagi, Karnataka. 50,000 MT Annual sortexed pulses dehusking and grading capacity.
+    </p>
+  </div>
+
+  <div class="partner-card">
+    <span class="partner-type-badge">Cryogenic Spice Mill</span>
+    <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin:10px 0 4px;">Guntur & Byadgi Spice Aggregation Hub</h3>
+    <p style="font-size:12.5px; color:var(--text-body); line-height:1.45;">
+      Guntur APMC Yard & Byadgi Market. Direct procurement of stemless S4 chillies and high-ASTA crimson pepper stocks.
+    </p>
+  </div>
+
+  <div class="partner-card">
+    <span class="partner-type-badge">Millet Milling & Extrusion Center</span>
+    <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin:10px 0 4px;">Bengaluru Rural Clean-Tech Mill</h3>
+    <p style="font-size:12.5px; color:var(--text-body); line-height:1.45;">
+      Specialized in cold-milled 80-mesh Ragi flour, destoned finger millet, and puffed grain matrices for institutional bakeries.
+    </p>
+  </div>
+
+  <div class="partner-card">
+    <span class="partner-type-badge">FMCG Enterprise Partner</span>
+    <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin:10px 0 4px;">Apex Agro Processors Pvt Ltd</h3>
+    <p style="font-size:12.5px; color:var(--text-body); line-height:1.45;">
+      Peenya Industrial Area, Bengaluru. Verified procurement client for 10 MT Toor Dal and high-calcium millet consignments.
+    </p>
+  </div>
+
+  <div class="partner-card">
+    <span class="partner-type-badge">Export Trading Partner</span>
+    <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin:10px 0 4px;">Deccan Global Agritech</h3>
+    <p style="font-size:12.5px; color:var(--text-body); line-height:1.45;">
+      JNPT & Chennai Port export aggregator for high-curcumin Salem turmeric and Singapore-quality cumin seeds.
+    </p>
+  </div>
+
+  <div class="partner-card">
+    <span class="partner-type-badge">Logistics Partner</span>
+    <h3 style="font-size:17px; font-weight:700; color:#FFFFFF; margin:10px 0 4px;">VRL Logistics & Safechem Commercial</h3>
+    <p style="font-size:12.5px; color:var(--text-body); line-height:1.45;">
+      Dedicated 24-48 hr dispatch SLA fleet across Southern & Western Indian industrial belts.
+    </p>
+  </div>
+</div>
+
+{% endblock %}
