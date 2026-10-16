@@ -2,300 +2,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Balaji Ingredients — Sign Up &amp; Login</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{ --gold:#e0b04e; }
-  *{box-sizing:border-box;}
-  html,body{height:100%;margin:0;}
-  body{
-    font-family:'Poppins','Segoe UI',Arial,sans-serif;
-    min-height:100vh;
-    background:#0f0a06;
-    display:flex;
-    color:#fff;
-    -webkit-font-smoothing:antialiased;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Portal Sign In | Balaji Ingredients — The Spice of South India</title>
+  <meta name="description" content="Secure B2B Portal Authentication for Balaji Ingredients enterprise buyers, food manufacturers, and wholesale partners." />
 
-  .page{
-    display:flex;
-    width:100%;
-    min-height:100vh;
-    position:relative;
-  }
+  <!-- External Stylesheet (Scoped to Login Viewport) -->
+  <link rel="stylesheet" href="{% static 'css/balaji-login.css' %}">
 
-  .photo{
-    flex:1 1 63%;
-    min-width:0;
-    background-image:url('{% static "images/login_bg.jpg" %}'), url('/images/login_bg.jpg');
-    background-size:cover;
-    background-position:center;
-    position:relative;
-  }
-
-  /* Back to Home navigation button */
-  .back-home-pill{
-    position:absolute;
-    top:24px;
-    left:28px;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:rgba(255,255,255,0.95);
-    text-decoration:none;
-    font-size:13.5px;
-    font-weight:600;
-    background:rgba(15,20,30,0.65);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-    padding:9px 18px;
-    border-radius:9999px;
-    border:1px solid rgba(255,255,255,0.25);
-    z-index:50;
-    box-shadow:0 4px 16px rgba(0,0,0,0.4);
-    transition:all 0.2s ease;
-  }
-  .back-home-pill:hover{
-    background:rgba(224,176,78,0.25);
-    border-color:var(--gold);
-    color:#fff;
-    transform:translateX(-3px);
-  }
-
-  .card-wrap{
-    flex:0 0 37%;
-    max-width:480px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:28px 24px;
-    background:linear-gradient(160deg,#3a2c1c,#0f0a06);
-  }
-
-  .card{
-    width:100%;
-    max-width:390px;
-    background:linear-gradient(160deg, rgba(90,80,60,0.55), rgba(20,15,10,0.75));
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    border:1px solid rgba(255,255,255,0.25);
-    border-radius:22px;
-    padding:32px 30px 28px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.45);
-    color:#fff;
-  }
-
-  .brand{ text-align:center; margin-bottom:20px; }
-  .leaf{ width:34px; height:34px; margin:0 auto 6px; display:block; }
-  .brand-name{ font-size:22px; font-weight:700; letter-spacing:0.3px; }
-  .brand-name span{ font-weight:400; }
-  .tagline{ font-size:10px; letter-spacing:2px; margin-top:4px; color:#d8cdbb; }
-
-  .card h2{ font-size:30px; font-weight:700; margin:6px 0 20px; text-transform:capitalize; }
-
-  label{ display:block; font-size:13.5px; font-weight:600; margin-bottom:6px; color:#f0e9dc; }
-  .field-group{ margin-bottom:16px; }
-  input{
-    width:100%; padding:13px 18px; border-radius:24px; border:1px solid rgba(255,255,255,0.35);
-    background:rgba(255,255,255,0.18); color:#fff; font-size:16px; outline:none;
-    font-family:inherit; font-weight:500; transition:all .2s ease;
-  }
-  input::placeholder{ color:rgba(255,255,255,0.75); font-size:15px; }
-  input:focus{ border-color:var(--gold); background:rgba(255,255,255,0.25); box-shadow:0 0 0 3px rgba(224,176,78,0.3); }
-
-  /* Chrome/Edge autofill styling */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-text-fill-color: #FFFFFF !important;
-    -webkit-box-shadow: 0 0 0px 1000px rgba(45, 32, 22, 0.95) inset !important;
-    box-shadow: 0 0 0px 1000px rgba(45, 32, 22, 0.95) inset !important;
-    font-size: 16px !important;
-    font-weight: 500 !important;
-    caret-color: #FFFFFF !important;
-    border-radius: 24px !important;
-  }
-
-  .create-btn{
-    width:100%; padding:14px; border:none; border-radius:24px; margin-top:10px;
-    background:#fff; color:#2c2016; font-size:16px; font-weight:700; cursor:pointer;
-    transition:transform .15s ease, box-shadow .15s ease, background-color .15s ease;
-    font-family:inherit;
-  }
-  .create-btn:hover{ transform:translateY(-1px); box-shadow:0 8px 18px rgba(0,0,0,0.3); background:#fffbeb; }
-
-  .or{ text-align:center; color:#e9e0d0; font-size:13.5px; margin:18px 0 14px; }
-  .socials{ display:flex; justify-content:center; gap:14px; }
-  .social{
-    width:40px; height:40px; border-radius:50%; background:#fff;
-    display:flex; align-items:center; justify-content:center;
-    text-decoration:none; font-weight:700; font-size:17px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.25);
-    transition:transform .15s ease;
-  }
-  .social:hover{ transform:translateY(-2px) scale(1.05); }
-  .social.tw{ color:#1DA1F2; }
-  .social.fb{ color:#1877F2; background:transparent; border:2px solid #1877F2; color:#1877F2; }
-  .social.gg{ color:#EA4335; }
-
-  /* Toast feedback */
-  .toast-box{
-    position:fixed;
-    bottom:24px;
-    right:24px;
-    background:#1a140e;
-    color:#fff;
-    border:1px solid var(--gold);
-    padding:12px 22px;
-    border-radius:12px;
-    font-size:14px;
-    font-weight:600;
-    display:none;
-    z-index:1000;
-    box-shadow:0 10px 30px rgba(0,0,0,0.8);
-  }
-
-  @media (max-width:800px){
-    .page{ flex-direction:column; }
-    .photo{ flex:0 0 280px; min-height:280px; }
-    .card-wrap{ flex:1; max-width:100%; padding:20px; }
-  }
-</style>
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="page">
+
+<!-- Master Full-Screen Viewport Scoped Container -->
+<div class="balaji-auth-wrapper">
+
+  <!-- LEFT SECTION: BRAND STORYTELLING & QUALITY HERITAGE -->
+  <section class="bi-story-pane" aria-label="Balaji Ingredients Quality Heritage">
     
-    <!-- Top Back to Home Button -->
-    <a href="/" class="back-home-pill">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
-      </svg>
-      Back to Home
-    </a>
-
-    <div class="photo"></div>
-    <div class="card-wrap">
-      <form class="card" action="/login/" method="POST" onsubmit="handleAuthSubmit(event)">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.GET.next|default:'/' }}">
-
-        <div class="brand">
-          <svg class="leaf" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C7 2 3 6 3 12c0 5 4 9 9 9 1-6 1-13 0-19z" fill="#e0b04e"/>
+    <!-- Top Header Navigation -->
+    <header class="bi-header-bar">
+      <a href="/" class="bi-logo-anchor" title="Balaji Ingredients Home">
+        <!-- Flame Icon matching website branding -->
+        <div class="bi-flame-seal" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2c-.8 2.5-3 4.8-3 7.5 0 3 2.2 5.5 5 5.5s5-2.5 5-5.5c0-1.2-.5-2.3-1.2-3.2-.2 1.5-1.3 2.7-2.8 2.7-1.7 0-3-1.3-3-3 0-1.5.8-2.8 2-3.5-.7-.3-1.4-.5-2-.5z"/>
           </svg>
-          <div class="brand-name">BALAJI <span>INGREDIENTS</span></div>
-          <div class="tagline">NATURAL INGREDIENTS &nbsp;•&nbsp; BETTER TOMORROW</div>
         </div>
+        <div class="bi-logo-text">
+          <span class="bi-logo-name">Balaji</span>
+          <span class="bi-logo-sub">Ingredients</span>
+        </div>
+      </a>
 
-        <h2>sign up</h2>
+      <a href="/" class="bi-btn-return" title="Return to Homepage">
+        <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+        </svg>
+        <span>Back to Website</span>
+      </a>
+    </header>
 
-        <div class="field-group">
-          <label for="name">Full Name</label>
-          <input id="name" name="full_name" type="text" placeholder="Your Name Here" value="Ramesh Shetty" required>
-        </div>
-        <div class="field-group">
-          <label for="email">E-mail</label>
-          <input id="email" name="identifier" type="email" placeholder="E-mail Address" value="procurement@apexagri.in" required>
-        </div>
-        <div class="field-group">
-          <label for="pw">Password</label>
-          <input id="pw" name="password" type="password" placeholder="••••••••••" value="Balaji@2026!" required>
-        </div>
+    <!-- Main Narrative Content -->
+    <div class="bi-story-content">
+      <div class="bi-kicker-tag">
+        <span class="bi-kicker-dot"></span>
+        B2B Ingredients Portal
+      </div>
 
-        <div class="field-group">
-          <label for="phone">Mobile Phone (For OTP Verification)</label>
-          <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" value="+91 98765 43210" required>
-        </div>
+      <h1 class="bi-headline">
+        The Authentic Aroma of<br>
+        <em>Pure Indian Spices.</em>
+      </h1>
 
-        <!-- OTP Channel Choice -->
-        <div style="margin-bottom: 16px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15);">
-          <div style="font-size: 11.5px; font-weight: 700; color: #f6d57e; text-transform: uppercase; margin-bottom: 8px;">
-            Send Verification OTP To:
+      <p class="bi-description">
+        Hand-picking red chilli, black pepper, cardamom, and ragi at their peak — milled slowly so the authentic aroma, nutrition, and natural color stay intact for commercial enterprises.
+      </p>
+
+      <!-- Three Understated Brand Highlights -->
+      <div class="bi-pillars-row">
+        <div class="bi-pillar-card">
+          <div class="bi-pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18M12 3c-4.5 4-7 8.5-7 13 0 2.5 1.5 5 7 5s7-2.5 7-5c0-4.5-2.5-9-7-13z"/>
+            </svg>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; background: rgba(37,211,102,0.15); border: 1px solid rgba(37,211,102,0.4); padding: 8px 10px; border-radius: 10px; cursor: pointer; color: #fff;">
-              <input type="radio" name="otp_method" value="whatsapp" checked style="width: auto; margin: 0;">
-              <span>💬 WhatsApp</span>
-            </label>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; background: rgba(212,163,67,0.15); border: 1px solid rgba(212,163,67,0.4); padding: 8px 10px; border-radius: 10px; cursor: pointer; color: #fff;">
-              <input type="radio" name="otp_method" value="google" style="width: auto; margin: 0;">
-              <span>📧 Google / Email</span>
-            </label>
+          <div class="bi-pillar-text">
+            <h3>Peak Harvest</h3>
+            <p>Direct grower sourcing</p>
           </div>
         </div>
 
-        <button class="create-btn" type="submit" id="submitBtn">Send OTP &amp; Create Account</button>
+        <div class="bi-pillar-card">
+          <div class="bi-pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <div class="bi-pillar-text">
+            <h3>Slow-Milled Purity</h3>
+            <p>Zero artificial additives</p>
+          </div>
+        </div>
 
-        <div style="margin-top: 14px; text-align: center;">
-          <a href="https://wa.me/919480123456" target="_blank" style="font-size: 12.5px; color: #25D366; text-decoration: none; font-weight: 600;">
-            💬 Need help? Contact WhatsApp Trade Desk
+        <div class="bi-pillar-card">
+          <div class="bi-pillar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="bi-pillar-text">
+            <h3>Bulk Commercial</h3>
+            <p>Pan-India freight logistics</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heritage Footer -->
+    <footer class="bi-story-footer">
+      <span>ESTD. 1982 · CHITRADURGA & BENGALURU, KARNATAKA</span>
+      <span class="bi-footer-badge">FSSAI & EXPORT CERTIFIED</span>
+    </footer>
+
+  </section>
+
+
+  <!-- RIGHT SECTION: LUXURY PORCELAIN LOGIN CARD -->
+  <main class="bi-card-pane" aria-label="Sign In Panel">
+    
+    <div class="bi-login-card">
+
+      <!-- Card Header -->
+      <header class="bi-card-header">
+        <div class="bi-card-badge-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2c-.8 2.5-3 4.8-3 7.5 0 3 2.2 5.5 5 5.5s5-2.5 5-5.5c0-1.2-.5-2.3-1.2-3.2-.2 1.5-1.3 2.7-2.8 2.7-1.7 0-3-1.3-3-3 0-1.5.8-2.8 2-3.5-.7-.3-1.4-.5-2-.5z"/>
+          </svg>
+        </div>
+        <h1 class="bi-card-title">Sign In to Portal</h1>
+        <p class="bi-card-subtitle">Access order tracking, wholesale pricing, and active quote requests.</p>
+      </header>
+
+      <!-- Django Messages / Flash Alerts -->
+      {% if messages %}
+        <div class="bi-alerts-box" role="alert">
+          {% for message in messages %}
+            <div class="bi-alert {{ message.tags }}">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if form.errors %}
+        <div class="bi-alerts-box" role="alert">
+          <div class="bi-alert error">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>Invalid email or password. Please try again.</span>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Django POST Authentication Form -->
+      <form id="biAuthForm" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <!-- Email or Username Field -->
+        <div class="bi-form-group">
+          <label class="bi-label" for="userIdentifier">Email or Username</label>
+          <div class="bi-input-container">
+            <span class="bi-input-lead" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <path d="M3 7l9 6 9-6"/>
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="userIdentifier"
+              name="identifier"
+              placeholder="Enter your email or username"
+              autocomplete="username"
+              value="{{ form.username.value|default:'trade@balajiingredients.com' }}"
+              required>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="bi-form-group">
+          <label class="bi-label" for="userPassword">Password</label>
+          <div class="bi-input-container">
+            <span class="bi-input-lead" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="5" y="11" width="14" height="10" rx="2"/>
+                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+              </svg>
+            </span>
+            <input
+              type="password"
+              id="userPassword"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              value="Balaji@2026!"
+              required>
+            <button
+              type="button"
+              class="bi-toggle-eye"
+              id="btnToggleEye"
+              aria-label="Show password"
+              aria-pressed="false"
+              title="Show or hide password">
+              <svg id="eyeSvgGlyph" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password Row -->
+        <div class="bi-aux-row">
+          <label class="bi-remember-label" for="chkRememberMe">
+            <input type="checkbox" name="remember_me" id="chkRememberMe" checked>
+            <span>Remember me</span>
+          </label>
+
+          <a href="{% url 'portal:register' %}" class="bi-forgot-link" title="Reset your account password">
+            Forgot password?
           </a>
         </div>
+
+        <!-- Sign In Master Button -->
+        <button type="submit" class="bi-submit-btn" id="btnSignInSubmit">
+          <span id="btnSubmitText">Sign In to Portal</span>
+          <svg id="btnSubmitArrow" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+          <span class="bi-spinner" id="btnSubmitSpinner" style="display: none;"></span>
+        </button>
+
+        <!-- Understated Demo Quick-Fill Pill -->
+        <div class="bi-demo-pill">
+          <div>
+            <span>Demo: </span><code>trade@balajiingredients.com</code>
+          </div>
+          <button type="button" class="bi-demo-btn" id="btnQuickDemoFill" title="Auto-fill verified demo credentials">Fill</button>
+        </div>
+
       </form>
+
+      <!-- Card Separator -->
+      <div class="bi-separator" aria-hidden="true">
+        <span class="bi-sep-line"></span>
+        <span class="bi-sep-text">or</span>
+        <span class="bi-sep-line"></span>
+      </div>
+
+      <!-- Registration Link -->
+      <p class="bi-create-prompt">
+        New enterprise client? 
+        <a href="{% url 'portal:register' %}">Create B2B Account</a>
+      </p>
+
+      <!-- Security Badge -->
+      <div class="bi-security-footer">
+        <svg viewBox="0 0 24 24">
+          <rect x="5" y="11" width="14" height="10" rx="2"/>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+        </svg>
+        <span>256-Bit SSL Encrypted Enterprise Gateway</span>
+      </div>
+
     </div>
-  </div>
 
-  <div class="toast-box" id="toastBox"></div>
+  </main>
 
-  <script>
-    function showToast(msg) {
-      const box = document.getElementById('toastBox');
-      box.innerText = msg;
-      box.style.display = 'block';
-      setTimeout(() => {
-        box.style.display = 'none';
-      }, 3500);
-    }
+</div>
 
-    function handleSocial(provider) {
-      showToast('Authenticating with ' + provider + '...');
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 1000);
-    }
+<!-- Client-side Interactions -->
+<script>
+  (function() {
+    const passwordInput = document.getElementById("userPassword");
+    const toggleButton = document.getElementById("btnToggleEye");
+    const eyeSvg = document.getElementById("eyeSvgGlyph");
+    const emailInput = document.getElementById("userIdentifier");
+    const quickFillBtn = document.getElementById("btnQuickDemoFill");
+    const form = document.getElementById("biAuthForm");
+    const submitBtn = document.getElementById("btnSignInSubmit");
+    const submitText = document.getElementById("btnSubmitText");
+    const submitArrow = document.getElementById("btnSubmitArrow");
+    const submitSpinner = document.getElementById("btnSubmitSpinner");
 
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('submitBtn');
-      btn.innerText = 'Processing...';
-      btn.disabled = true;
-      showToast('Creating account...');
+    // Toggle Password Visibility
+    if (toggleButton && passwordInput && eyeSvg) {
+      toggleButton.addEventListener("click", function() {
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
+        toggleButton.setAttribute("aria-pressed", String(isPassword));
+        toggleButton.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
 
-      const formData = new FormData(e.target);
-
-      try {
-        const res = await fetch('/login/', {
-          method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
-          },
-          body: formData
-        });
-        const data = await res.json();
-        if (data.success) {
-          showToast('Account verified! Redirecting to home...');
-          setTimeout(() => {
-            window.location.href = data.redirect_url || '/';
-          }, 600);
+        if (isPassword) {
+          eyeSvg.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+            <line x1="1" y1="1" x2="23" y2="23" stroke-linecap="round" stroke-linejoin="round"/>
+          `;
         } else {
-          showToast(data.message || 'Authenticated! Redirecting...');
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 600);
+          eyeSvg.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          `;
         }
-      } catch (err) {
-        showToast('Success! Returning to homepage...');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 600);
-      }
+      });
     }
-  </script>
+
+    // Quick Fill Demo Credentials
+    if (quickFillBtn && emailInput && passwordInput) {
+      quickFillBtn.addEventListener("click", function() {
+        emailInput.value = "trade@balajiingredients.com";
+        passwordInput.value = "Balaji@2026!";
+        emailInput.focus();
+      });
+    }
+
+    // Form Submission State
+    if (form && submitBtn) {
+      form.addEventListener("submit", function() {
+        if (submitSpinner && submitArrow && submitText) {
+          submitSpinner.style.display = "inline-block";
+          submitArrow.style.display = "none";
+          submitText.textContent = "Authenticating...";
+          submitBtn.disabled = true;
+        }
+      });
+    }
+  })();
+</script>
+
 </body>
 </html>

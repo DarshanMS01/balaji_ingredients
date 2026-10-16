@@ -4,11 +4,11 @@ import { Sprout, FlaskConical, Cog, Package } from 'lucide-react';
 
 const Story = () => {
   return (
-    <section className="story-section">
+    <section className="story-section" id="story">
       <div className="story-container">
         <div className="story-left">
           <div className="story-image-wrapper">
-            <img src="/images/market_spices.jpg" alt="Spice Market" className="story-main-image" />
+            <img src="/images/farm_fields.jpg" alt="Karnataka Spice Farms" className="story-main-image" />
             <div className="story-card-overlay bottom-left">
               <span className="story-location-tag">KARNATAKA &middot; INDIA</span>
               <p className="story-overlay-quote">Where the aroma begins.</p>

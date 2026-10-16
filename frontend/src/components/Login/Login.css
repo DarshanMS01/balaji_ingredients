@@ -1,535 +1,305 @@
-.login-page {
-  display: flex;
+/* frontend/src/components/Login/Login.css */
+.react-login-container {
+  width: 100vw;
   min-height: 100vh;
-  width: 100%;
-  font-family: 'DM Sans', sans-serif;
-  background-color: var(--white);
-  color: var(--dark);
-}
-
-/* LEFT SIDE - 55% */
-.login-left {
-  width: 55%;
-  position: relative;
-  background-image: url('/images/market_spices.jpg');
+  display: flex;
+  background-image: 
+    linear-gradient(112deg, 
+      rgba(18, 14, 12, 0.95) 0%, 
+      rgba(26, 20, 16, 0.88) 42%, 
+      rgba(21, 16, 14, 0.72) 75%, 
+      rgba(15, 12, 10, 0.92) 100%
+    ),
+    url('/images/balaji_spices_hd.webp');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  color: #1C1917;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.react-login-container .story-side {
+  flex: 1 1 56%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 4rem;
-  color: var(--white);
-  overflow: hidden;
+  padding: clamp(28px, 4.2vh, 56px) clamp(32px, 5vw, 76px);
+  color: #FFFFFF;
 }
 
-.login-left::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(27, 23, 20, 0.8) 0%, rgba(102, 87, 76, 0.5) 100%);
-  z-index: 1;
-}
-
-.login-left-content {
-  position: relative;
-  z-index: 2;
-  height: 100%;
+.react-login-container .story-header {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
 }
 
-.login-logo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  text-decoration: none;
-  color: var(--white);
-}
-
-.login-logo-icon {
-  width: 48px;
-  height: 48px;
-  background-color: var(--red);
-  color: var(--white);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.login-logo h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-.login-logo p {
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--cream);
-  margin: 0;
-}
-
-.login-hero-text h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 3.5rem;
-  line-height: 1.2;
-  margin: 0 0 1rem 0;
-  color: var(--white);
-}
-
-.login-badges {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.badge {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  font-size: 0.875rem;
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.badge svg {
-  color: var(--gold);
-}
-
-/* RIGHT SIDE - 45% */
-.login-right {
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  padding: 4rem;
-  overflow-y: auto;
-  background-color: var(--white);
-}
-
-.login-back {
+.react-login-container .brand-logo-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
+  color: #FFFFFF;
   text-decoration: none;
-  color: var(--muted-brown);
-  font-size: 0.875rem;
-  margin-bottom: 2rem;
-  transition: color 0.2s;
-  align-self: flex-start;
 }
 
-.login-back:hover {
-  color: var(--red);
-}
-
-.login-form-container {
-  max-width: 440px;
-  width: 100%;
-  margin: auto;
-}
-
-/* Tabs */
-.login-tabs {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.login-tab {
-  background: none;
-  border: none;
-  padding: 0.5rem 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--muted-brown);
-  cursor: pointer;
-  position: relative;
-  transition: color 0.2s;
-}
-
-.login-tab.active {
-  color: var(--dark);
-}
-
-.login-tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: var(--red);
-}
-
-/* Forms */
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--dark);
-}
-
-.input-wrapper {
-  position: relative;
+.react-login-container .flame-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #A82B1D;
   display: flex;
   align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  color: var(--muted-brown);
-}
-
-.password-toggle {
-  position: absolute;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: var(--muted-brown);
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.875rem 1rem 0.875rem 2.75rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: inherit;
-  background-color: var(--white);
-  transition: all 0.2s;
-  box-sizing: border-box;
-}
-
-.form-input.no-icon {
-  padding-left: 1rem;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(224, 176, 78, 0.2);
-}
-
-/* Form Extras (Remember me, Forgot Password) */
-.form-extras {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.875rem;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  color: var(--muted-brown);
-}
-
-.checkbox-label input[type="checkbox"] {
-  accent-color: var(--red);
-  width: 1rem;
-  height: 1rem;
-  cursor: pointer;
-}
-
-.forgot-link {
-  color: var(--red);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.forgot-link:hover {
-  text-decoration: underline;
-}
-
-/* Buttons */
-.submit-btn {
-  background-color: var(--red);
-  color: var(--white);
-  border: none;
-  border-radius: 8px;
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(168, 43, 29, 0.45);
 }
 
-.submit-btn:hover:not(:disabled) {
-  background-color: var(--dark-red);
+.react-login-container .brand-name {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* Divider */
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: var(--muted-brown);
-  font-size: 0.875rem;
-  margin: 1.5rem 0;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--border);
-}
-
-.divider:not(:empty)::before {
-  margin-right: 1rem;
-}
-
-.divider:not(:empty)::after {
-  margin-left: 1rem;
-}
-
-/* Google Auth */
-.google-auth-container {
-  display: flex;
-  justify-content: center;
-  min-height: 40px;
-}
-
-/* Password Strength */
-.password-strength {
-  margin-top: -0.5rem;
-}
-
-.strength-bars {
-  display: flex;
-  gap: 4px;
-  height: 4px;
-  margin-bottom: 0.25rem;
-}
-
-.strength-bar {
-  flex: 1;
-  background-color: var(--border);
-  border-radius: 2px;
-  transition: background-color 0.3s;
-}
-
-.strength-text {
-  font-size: 0.75rem;
-  color: var(--muted-brown);
-  text-align: right;
-}
-
-.strength-weak .strength-bar:nth-child(1) { background-color: var(--red); }
-.strength-medium .strength-bar:nth-child(1),
-.strength-medium .strength-bar:nth-child(2) { background-color: var(--gold); }
-.strength-strong .strength-bar { background-color: #10B981; }
-
-/* Forgot Password Flow */
-.forgot-password-flow {
-  animation: fadeIn 0.3s ease;
-}
-
-.forgot-password-flow h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
-}
-
-.forgot-password-flow p {
-  color: var(--muted-brown);
-  margin: 0 0 2rem 0;
-  line-height: 1.5;
-}
-
-.otp-container {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.otp-input {
-  width: 50px;
-  height: 56px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 1.5rem;
+.react-login-container .brand-sub {
+  font-size: 10px;
   font-weight: 700;
-  text-align: center;
-  background-color: var(--white);
-  transition: all 0.2s;
+  letter-spacing: 0.14em;
+  color: #F5E2B8;
+  text-transform: uppercase;
 }
 
-.otp-input:focus {
-  outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(224, 176, 78, 0.2);
-  transform: translateY(-2px);
+.react-login-container .btn-back {
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #FBF8F3;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.resend-container {
+.react-login-container .btn-back:hover {
+  background: #A82B1D;
+  border-color: #A82B1D;
+  color: #FFFFFF;
+}
+
+.react-login-container .story-content {
+  max-width: 600px;
+  margin: auto 0;
+}
+
+.react-login-container .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(212, 163, 67, 0.16);
+  border: 1px solid rgba(212, 163, 67, 0.35);
+  color: #F5E2B8;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.react-login-container .headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 3.4vw, 50px);
+  line-height: 1.15;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.react-login-container .headline em {
+  color: #F5E2B8;
+  font-style: italic;
+}
+
+.react-login-container .desc {
+  font-size: clamp(14px, 1.1vw, 15.5px);
+  line-height: 1.6;
+  color: #E6E1DC;
+  margin-bottom: 30px;
+}
+
+.react-login-container .pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.react-login-container .pillar-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.react-login-container .pillar-card h3 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.react-login-container .pillar-card p {
+  font-size: 11px;
+  color: #F5E2B8;
+}
+
+.react-login-container .story-footer {
   display: flex;
   justify-content: space-between;
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
+  font-size: 11px;
+  color: #A99F98;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
 }
 
-.timer {
-  color: var(--muted-brown);
-}
-
-.resend-link {
-  background: none;
-  border: none;
-  color: var(--red);
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-}
-
-.resend-link:disabled {
-  color: var(--muted-brown);
-  cursor: not-allowed;
-}
-
-/* Success Step */
-.success-step {
-  text-align: center;
-  padding: 2rem 0;
-}
-
-.success-icon {
-  width: 64px;
-  height: 64px;
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10B981;
-  border-radius: 50%;
+/* Card Side */
+.react-login-container .card-side {
+  flex: 0 0 clamp(420px, 34vw, 470px);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem;
+  padding: clamp(18px, 3vh, 36px) clamp(24px, 2.5vw, 46px);
 }
 
-/* Spinner */
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: var(--white);
-  animation: spin 1s ease-in-out infinite;
+.react-login-container .login-card {
+  width: 100%;
+  max-width: 440px;
+  background: #FFFFFF;
+  border: 1px solid rgba(28, 25, 23, 0.1);
+  border-radius: 24px;
+  padding: clamp(26px, 3.4vh, 36px) clamp(24px, 2.5vw, 36px);
+  box-shadow: 0 24px 60px rgba(15, 12, 10, 0.45);
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.react-login-container .card-header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.react-login-container .card-header h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1C1917;
 }
 
-/* Toast */
-.toast-message {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
+.react-login-container .card-header p {
+  font-size: 13px;
+  color: #6B635B;
+  margin-top: 4px;
+}
+
+.react-login-container .form-group {
+  margin-bottom: 16px;
+}
+
+.react-login-container .form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.react-login-container .input-box {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid rgba(28, 25, 23, 0.1);
+  border-radius: 12px;
+  background: #FBF8F3;
 }
 
-.toast-error {
-  background-color: rgba(198, 44, 32, 0.1);
-  color: var(--red);
-  border: 1px solid rgba(198, 44, 32, 0.2);
+.react-login-container .input-box:focus-within {
+  background: #FFFFFF;
+  border-color: #A82B1D;
+  box-shadow: 0 0 0 3.5px rgba(168, 43, 29, 0.16);
 }
 
-.toast-success {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10B981;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+.react-login-container .input-box input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .login-left {
-    display: none;
+.react-login-container .aux-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 12px 0 18px;
+}
+
+.react-login-container .aux-row a {
+  color: #A82B1D;
+  font-weight: 600;
+}
+
+.react-login-container .btn-submit {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 9999px;
+  background: #A82B1D;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(168, 43, 29, 0.35);
+  transition: all 0.2s ease;
+}
+
+.react-login-container .btn-submit:hover {
+  background: #8F2216;
+  transform: translateY(-1.5px);
+}
+
+.react-login-container .demo-chip {
+  margin-top: 13px;
+  padding: 7px 12px;
+  background: #F4EFE6;
+  border: 1px dashed rgba(168, 43, 29, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.react-login-container .demo-btn {
+  padding: 4px 10px;
+  background: #A82B1D;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .react-login-container {
+    flex-direction: column;
+    height: auto;
   }
-  
-  .login-right {
-    width: 100%;
-    padding: 2rem 1.5rem;
-    position: relative;
-    background: transparent;
-  }
-  
-  .login-page {
-    background-image: url('/images/market_spices.jpg');
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .login-page::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(27, 23, 20, 0.7);
-    backdrop-filter: blur(8px);
-    z-index: 0;
-  }
-  
-  .login-right {
-    z-index: 1;
-  }
-  
-  .login-form-container {
-    background: rgba(255, 253, 249, 0.95);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  .react-login-container .pillars-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -5,7 +5,7 @@ import products from '../../data/products.js';
 
 const Products = () => {
   return (
-    <section className="products-section">
+    <section className="products-section" id="products">
       <div className="products-header">
         <div className="products-header-left">
           <span className="products-label">CATALOGUE · 04</span>
@@ -40,7 +40,7 @@ const Products = () => {
                   <p className="product-desc">{product.description}</p>
                 </div>
                 <div className="product-price">
-                  <span>FROM ₹{product.price} / kg</span>
+                  <span>FROM {product.price.startsWith('₹') ? product.price : `₹${product.price}`} / {product.unit || 'kg'}</span>
                 </div>
               </div>
             </div>

@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ragi Flour (Finger Millet Flour) – Calcium Rich Millet | Balaji Ingredients</title>
+
+  <!-- Auth Gate Check: Require Login/Registration before accessing website -->
+  <script>
+    if (!localStorage.getItem('balaji_logged_in')) {
+      window.location.replace('login.html');
+    }
+  </script>
+
   <meta name="description" content="Ulamart's Ragi Flour (Finger Millet Flour) - Calcium Rich Millet. Traditional low GI grain for everyday nourishment. 100% natural, stone-ground South Indian staple.">
   
   <!-- Fonts -->
@@ -1642,6 +1650,9 @@
           <button type="button" class="btn-nav-orders" onclick="window.location.href='index.html#products'">
             📦 All Products
           </button>
+          <button type="button" class="btn-nav-orders" style="background: transparent; border-color: rgba(28,25,23,0.25);" onclick="handleLogout()" title="Sign Out">
+            🚪 Sign Out
+          </button>
         </div>
       </div>
     </div>
@@ -1671,10 +1682,7 @@
         <div class="product-gallery-col">
           <div class="thumbnail-column">
             <div class="thumb-item active" onclick="switchMainImage('images/ragi_product.jpg', this)">
-              <img src="images/ragi_product.jpg" alt="Ragi Flour Bowl View">
-            </div>
-            <div class="thumb-item" onclick="switchMainImage('images/ragi_flour.jpg', this)">
-              <img src="images/ragi_flour.jpg" alt="Ragi Flour Pure Milling">
+              <img src="images/ragi_product.jpg" alt="Ragi Flour (Finger Millet Flour)">
             </div>
           </div>
 
@@ -3224,6 +3232,12 @@
       `;
       container.prepend(newCard);
       showToast('✓ Thank you! Your review has been published.');
+    // Logout Handler
+    function handleLogout() {
+      if (confirm('Are you sure you want to sign out from Balaji Ingredients?')) {
+        localStorage.removeItem('balaji_logged_in');
+        window.location.replace('login.html');
+      }
     }
   </script>
 

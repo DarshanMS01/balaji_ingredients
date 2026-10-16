@@ -24,10 +24,10 @@ const Footer = () => {
           <div className="footer-col">
             <h3 className="footer-col-title">Products</h3>
             <ul className="footer-links">
-              <li><a href="#chilli">Red Chilli Powder</a></li>
-              <li><a href="#pepper">Malabar Black Pepper</a></li>
-              <li><a href="#cardamom">Green Cardamom</a></li>
-              <li><a href="#ragi">Ragi Flour</a></li>
+              <li><a href="#products">Red Chilli Powder</a></li>
+              <li><a href="#products">Malabar Black Pepper</a></li>
+              <li><a href="#products">Green Cardamom</a></li>
+              <li><a href="#products">Ragi Flour</a></li>
             </ul>
           </div>
           

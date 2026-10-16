@@ -50,17 +50,20 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: var(--cream, #F7F1E7);
+  box-shadow: 0 8px 24px rgba(27, 23, 20, 0.06);
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(27, 23, 20, 0.12);
 }
 
 .product-image-container {
   position: relative;
   width: 100%;
+  overflow: hidden;
 }
 
 .product-card.overlaid .product-image-container {
@@ -76,6 +79,11 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
 }
 
 .product-badge {

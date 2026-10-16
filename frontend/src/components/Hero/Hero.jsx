@@ -5,7 +5,7 @@ import './Hero.css';
 
 const Hero = () => {
   return (
-    <section className="hero-section">
+    <section className="hero-section" id="home">
       <div className="hero-container">
         
         {/* Left Content */}
@@ -26,10 +26,10 @@ const Hero = () => {
           </p>
           
           <div className="hero-actions">
-            <button className="btn-explore">
+            <button className="btn-explore" onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}>
               Explore Catalogue <ArrowRight size={18} />
             </button>
-            <button className="btn-wholesale">
+            <button className="btn-wholesale" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
               Request Wholesale Pricing
             </button>
           </div>

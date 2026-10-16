@@ -1,0 +1,875 @@
+/* ==========================================================================
+   BALAJI INGREDIENTS — BRAND-NEW HD PREMIUM B2B LOGIN STYLES
+   Exact Brand Alignment: The Spice of South India (Red, Gold, Warm Ivory)
+   ========================================================================== */
+
+:root {
+  /* Official Balaji Brand Color Palette */
+  --bi-red: #A82B1D;
+  --bi-red-hover: #8F2216;
+  --bi-red-soft: #FBF0EE;
+  --bi-red-glow: rgba(168, 43, 29, 0.16);
+  
+  --bi-gold: #D4A343;
+  --bi-gold-dark: #A67C1E;
+  --bi-gold-light: #F5E2B8;
+  
+  --bi-ivory: #FBF8F3;
+  --bi-ivory-alt: #F4EFE6;
+  --bi-card: #FFFFFF;
+  
+  --bi-dark-banner: #151210;
+  --bi-dark-surface: #1E1A17;
+  
+  --bi-text: #1C1917;
+  --bi-text-muted: #6B635B;
+  --bi-text-light: #9C9389;
+  
+  --bi-border: rgba(28, 25, 23, 0.1);
+  --bi-border-dark: rgba(255, 255, 255, 0.14);
+  
+  /* Official Typography */
+  --bi-font-serif: 'Playfair Display', Georgia, serif;
+  --bi-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Shadows & Radius */
+  --bi-shadow-lg: 0 24px 60px rgba(15, 12, 10, 0.45), 0 4px 16px rgba(0, 0, 0, 0.12);
+  --bi-shadow-sm: 0 4px 16px rgba(168, 43, 29, 0.25);
+  --bi-radius: 24px;
+  --bi-radius-sm: 12px;
+}
+
+/* Scoped Reset */
+.balaji-auth-wrapper,
+.balaji-auth-wrapper * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  font-family: var(--bi-font-sans);
+  color: var(--bi-text);
+  background-color: var(--bi-dark-banner);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   MASTER FULL-VIEWPORT SPLIT-SCREEN CONTAINER
+   ========================================================================== */
+.balaji-auth-wrapper {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  background-image: 
+    linear-gradient(112deg, 
+      rgba(18, 14, 12, 0.95) 0%, 
+      rgba(26, 20, 16, 0.88) 42%, 
+      rgba(21, 16, 14, 0.72) 75%, 
+      rgba(15, 12, 10, 0.92) 100%
+    ),
+    url('../images/balaji_spices_hd.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+/* Warm Golden Glow Overlay */
+.balaji-auth-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 18% 25%, rgba(212, 163, 67, 0.14) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   LEFT SECTION — BRAND STORYTELLING & QUALITY HERITAGE
+   ========================================================================== */
+.balaji-auth-wrapper .bi-story-pane {
+  flex: 1 1 56%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(28px, 4.2vh, 56px) clamp(32px, 5vw, 76px);
+  position: relative;
+  z-index: 2;
+  color: #FFFFFF;
+}
+
+/* Header Bar */
+.balaji-auth-wrapper .bi-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.balaji-auth-wrapper .bi-logo-anchor {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.balaji-auth-wrapper .bi-logo-anchor:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+/* Flame Icon matching website navbar */
+.balaji-auth-wrapper .bi-flame-seal {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bi-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(168, 43, 29, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.balaji-auth-wrapper .bi-flame-seal svg {
+  width: 22px;
+  height: 22px;
+  fill: #FFFFFF;
+}
+
+.balaji-auth-wrapper .bi-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.balaji-auth-wrapper .bi-logo-name {
+  font-family: var(--bi-font-sans);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #FFFFFF;
+  line-height: 1.1;
+}
+
+.balaji-auth-wrapper .bi-logo-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--bi-gold-light);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Return to Website Pill */
+.balaji-auth-wrapper .bi-btn-return {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--bi-ivory);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+
+.balaji-auth-wrapper .bi-btn-return:hover {
+  background: var(--bi-red);
+  border-color: var(--bi-red);
+  color: #FFFFFF;
+  transform: translateX(-3px);
+  box-shadow: 0 4px 14px rgba(168, 43, 29, 0.35);
+}
+
+.balaji-auth-wrapper .bi-btn-return svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+}
+
+.balaji-auth-wrapper .bi-btn-return:hover svg {
+  transform: translateX(-2px);
+}
+
+/* Main Narrative */
+.balaji-auth-wrapper .bi-story-content {
+  max-width: 600px;
+  margin: auto 0;
+  padding: 16px 0;
+}
+
+.balaji-auth-wrapper .bi-kicker-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(212, 163, 67, 0.16);
+  border: 1px solid rgba(212, 163, 67, 0.35);
+  color: var(--bi-gold-light);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.balaji-auth-wrapper .bi-kicker-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bi-gold);
+  box-shadow: 0 0 10px var(--bi-gold);
+  animation: biDotPulse 2s infinite ease-in-out;
+}
+
+@keyframes biDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+.balaji-auth-wrapper .bi-headline {
+  font-family: var(--bi-font-serif);
+  font-size: clamp(34px, 3.4vw, 50px);
+  line-height: 1.15;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 18px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+}
+
+.balaji-auth-wrapper .bi-headline em {
+  color: var(--bi-gold-light);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.balaji-auth-wrapper .bi-description {
+  font-size: clamp(14px, 1.1vw, 15.5px);
+  line-height: 1.6;
+  color: #E6E1DC;
+  font-weight: 400;
+  margin-bottom: 30px;
+  max-width: 520px;
+}
+
+/* Three Brand Pillars */
+.balaji-auth-wrapper .bi-pillars-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  max-width: 580px;
+}
+
+.balaji-auth-wrapper .bi-pillar-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--bi-radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+
+.balaji-auth-wrapper .bi-pillar-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(212, 163, 67, 0.4);
+  transform: translateY(-2px);
+}
+
+.balaji-auth-wrapper .bi-pillar-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(168, 43, 29, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.balaji-auth-wrapper .bi-pillar-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke: var(--bi-gold-light);
+  stroke-width: 2;
+  fill: none;
+}
+
+.balaji-auth-wrapper .bi-pillar-text h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.25;
+}
+
+.balaji-auth-wrapper .bi-pillar-text p {
+  font-size: 11px;
+  color: var(--bi-gold-light);
+  margin-top: 2px;
+}
+
+/* Footer Tag */
+.balaji-auth-wrapper .bi-story-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #A99F98;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+}
+
+.balaji-auth-wrapper .bi-footer-badge {
+  color: var(--bi-gold-light);
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+/* ==========================================================================
+   RIGHT SECTION — LUXURY PORCELAIN LOGIN CARD
+   ========================================================================== */
+.balaji-auth-wrapper .bi-card-pane {
+  flex: 0 0 clamp(420px, 34vw, 470px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(18px, 3vh, 36px) clamp(24px, 2.5vw, 46px);
+  position: relative;
+  z-index: 2;
+}
+
+.balaji-auth-wrapper .bi-login-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bi-card);
+  border: 1px solid var(--bi-border);
+  border-radius: var(--bi-radius);
+  padding: clamp(26px, 3.4vh, 36px) clamp(24px, 2.5vw, 36px);
+  box-shadow: var(--bi-shadow-lg);
+  position: relative;
+  animation: biCardSlideIn 0.45s ease-out;
+}
+
+@keyframes biCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Card Header */
+.balaji-auth-wrapper .bi-card-header {
+  text-align: center;
+  margin-bottom: clamp(12px, 1.8vh, 18px);
+}
+
+.balaji-auth-wrapper .bi-card-badge-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--bi-red-soft);
+  color: var(--bi-red);
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px var(--bi-red-glow);
+}
+
+.balaji-auth-wrapper .bi-card-badge-logo svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--bi-red);
+}
+
+.balaji-auth-wrapper .bi-card-title {
+  font-family: var(--bi-font-serif);
+  font-size: clamp(23px, 2.1vw, 27px);
+  font-weight: 700;
+  color: var(--bi-text);
+  line-height: 1.2;
+}
+
+.balaji-auth-wrapper .bi-card-subtitle {
+  font-size: 13px;
+  color: var(--bi-text-muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* Django Message & Error Banners */
+.balaji-auth-wrapper .bi-alerts-box {
+  margin-bottom: 14px;
+}
+
+.balaji-auth-wrapper .bi-alert {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.balaji-auth-wrapper .bi-alert.error {
+  background: #FDF2F2;
+  border: 1px solid #F5C6CB;
+  color: #9B2128;
+}
+
+.balaji-auth-wrapper .bi-alert.success {
+  background: #EFF8F2;
+  border: 1px solid #C3E6CB;
+  color: #176536;
+}
+
+/* Form Groups & Inputs */
+.balaji-auth-wrapper .bi-form-group {
+  margin-bottom: clamp(12px, 1.8vh, 16px);
+  text-align: left;
+}
+
+.balaji-auth-wrapper .bi-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bi-text);
+  margin-bottom: clamp(4px, 0.6vh, 6px);
+  letter-spacing: 0.1px;
+}
+
+.balaji-auth-wrapper .bi-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid var(--bi-border);
+  border-radius: var(--bi-radius-sm);
+  background: var(--bi-ivory);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.balaji-auth-wrapper .bi-input-container:focus-within {
+  background: #FFFFFF;
+  border-color: var(--bi-border-focus);
+  box-shadow: 0 0 0 3.5px var(--bi-red-glow);
+}
+
+.balaji-auth-wrapper .bi-input-lead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--bi-text-light);
+  transition: color 0.2s ease;
+}
+
+.balaji-auth-wrapper .bi-input-container:focus-within .bi-input-lead {
+  color: var(--bi-red);
+}
+
+.balaji-auth-wrapper .bi-input-lead svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+}
+
+.balaji-auth-wrapper .bi-input-container input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--bi-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bi-text);
+}
+
+.balaji-auth-wrapper .bi-input-container input::placeholder {
+  color: var(--bi-text-light);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* Eye Toggle Password Button */
+.balaji-auth-wrapper .bi-toggle-eye {
+  border: none;
+  background: transparent;
+  color: var(--bi-text-light);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.balaji-auth-wrapper .bi-toggle-eye:hover {
+  color: var(--bi-red);
+  transform: scale(1.08);
+}
+
+.balaji-auth-wrapper .bi-toggle-eye svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* Auxiliary Row: Remember Me & Forgot Password */
+.balaji-auth-wrapper .bi-aux-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: clamp(6px, 1vh, 10px) 0 clamp(14px, 2vh, 18px);
+  font-size: 13px;
+}
+
+.balaji-auth-wrapper .bi-remember-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--bi-text);
+  font-weight: 500;
+  user-select: none;
+}
+
+.balaji-auth-wrapper .bi-remember-label input[type="checkbox"] {
+  accent-color: var(--bi-red);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.balaji-auth-wrapper .bi-forgot-link {
+  color: var(--bi-red);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.balaji-auth-wrapper .bi-forgot-link:hover {
+  color: var(--bi-red-hover);
+  text-decoration: underline;
+}
+
+/* Sign In Master Button */
+.balaji-auth-wrapper .bi-submit-btn {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 9999px;
+  padding: 0 24px;
+  background: var(--bi-red);
+  color: #FFFFFF;
+  font-family: var(--bi-font-sans);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(168, 43, 29, 0.35);
+  transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+}
+
+.balaji-auth-wrapper .bi-submit-btn:hover {
+  background: var(--bi-red-hover);
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px rgba(168, 43, 29, 0.45);
+}
+
+.balaji-auth-wrapper .bi-submit-btn:active {
+  transform: translateY(0);
+}
+
+.balaji-auth-wrapper .bi-submit-btn:focus-visible {
+  outline: 2px solid var(--bi-gold);
+  outline-offset: 2px;
+}
+
+.balaji-auth-wrapper .bi-submit-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+  transition: transform 0.2s ease;
+}
+
+.balaji-auth-wrapper .bi-submit-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* Spinner for Loading State */
+.balaji-auth-wrapper .bi-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: biSpin 0.7s linear infinite;
+}
+
+@keyframes biSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Demo Credentials Quick-Fill Pill */
+.balaji-auth-wrapper .bi-demo-pill {
+  margin-top: 13px;
+  padding: 7px 12px;
+  background: var(--bi-ivory-alt);
+  border: 1px dashed rgba(168, 43, 29, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--bi-text);
+}
+
+.balaji-auth-wrapper .bi-demo-pill span {
+  color: var(--bi-text-muted);
+}
+
+.balaji-auth-wrapper .bi-demo-pill code {
+  font-weight: 700;
+  color: var(--bi-red);
+  font-family: monospace;
+}
+
+.balaji-auth-wrapper .bi-demo-btn {
+  padding: 4px 10px;
+  background: var(--bi-red);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.balaji-auth-wrapper .bi-demo-btn:hover {
+  background: var(--bi-red-hover);
+}
+
+/* Separator Line */
+.balaji-auth-wrapper .bi-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: clamp(12px, 1.8vh, 18px) 0;
+}
+
+.balaji-auth-wrapper .bi-sep-line {
+  height: 1px;
+  flex: 1;
+  background: var(--bi-border);
+}
+
+.balaji-auth-wrapper .bi-sep-text {
+  font-size: 12px;
+  color: var(--bi-text-muted);
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+/* Create Account Prompt */
+.balaji-auth-wrapper .bi-create-prompt {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--bi-text-muted);
+}
+
+.balaji-auth-wrapper .bi-create-prompt a {
+  color: var(--bi-red);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.balaji-auth-wrapper .bi-create-prompt a:hover {
+  color: var(--bi-red-hover);
+  text-decoration: underline;
+}
+
+/* Security Badge */
+.balaji-auth-wrapper .bi-security-footer {
+  margin-top: clamp(12px, 1.6vh, 18px);
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--bi-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.balaji-auth-wrapper .bi-security-footer svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--bi-gold-dark);
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Feedback Toast Notification */
+.bi-toast-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bi-dark-banner);
+  color: #FFFFFF;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--bi-gold);
+  display: none;
+  z-index: 1000;
+  animation: biToastSlide 0.25s ease;
+}
+
+@keyframes biToastSlide {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLETS & MOBILE DEVICES)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .balaji-auth-wrapper {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .balaji-auth-wrapper .bi-story-pane {
+    flex: 0 0 auto;
+    padding: 32px 28px 24px;
+  }
+
+  .balaji-auth-wrapper .bi-story-content {
+    margin: 16px 0;
+    max-width: 100%;
+  }
+
+  .balaji-auth-wrapper .bi-pillars-row {
+    max-width: 100%;
+  }
+
+  .balaji-auth-wrapper .bi-card-pane {
+    flex: 1 0 auto;
+    padding: 18px 24px 40px;
+    align-items: flex-start;
+  }
+
+  .balaji-auth-wrapper .bi-login-card {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .balaji-auth-wrapper .bi-story-pane {
+    padding: 22px 20px 16px;
+  }
+
+  .balaji-auth-wrapper .bi-headline {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .balaji-auth-wrapper .bi-description {
+    font-size: 13.5px;
+    margin-bottom: 20px;
+  }
+
+  .balaji-auth-wrapper .bi-pillars-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .balaji-auth-wrapper .bi-story-footer {
+    display: none;
+  }
+
+  .balaji-auth-wrapper .bi-card-pane {
+    padding: 12px 16px 36px;
+  }
+
+  .balaji-auth-wrapper .bi-login-card {
+    padding: 24px 20px 22px;
+    border-radius: 20px;
+  }
+
+  .balaji-auth-wrapper .bi-card-title {
+    font-size: 23px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .balaji-auth-wrapper *,
+  .balaji-auth-wrapper *::before,
+  .balaji-auth-wrapper *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

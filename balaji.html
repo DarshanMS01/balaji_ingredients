@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Balaji Ingredients Private Limited — The Spice of South India</title>
+
+
   <meta name="description" content="Balaji Ingredients hand-picks red chilli, black pepper, cardamom and ragi at their peak — then mills them slowly, so the aroma never leaves the bag." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1759,6 +1761,9 @@
             </svg>
             Dashboard
           </a>
+          <button type="button" class="btn-nav-orders" style="background: transparent; border-color: rgba(28,25,23,0.25);" onclick="handleLogout()" title="Sign Out">
+            🚪 Sign Out
+          </button>
         </div>
 
       </div>
@@ -1842,8 +1847,8 @@
             </div>
           </div>
 
-          <!-- Card 2: Black Pepper -->
-          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="openBuyModal('pepper')" title="Buy Malabar Black Pepper">
+          <!-- Card 2: Malabar Black Pepper -->
+          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="window.location.href='pepper.html'" title="View Malabar Black Pepper">
             <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1858,7 +1863,7 @@
           </div>
 
           <!-- Card 3: Green Cardamom -->
-          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="openBuyModal('cardamom')" title="Buy Green Cardamom">
+          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="window.location.href='cardamom.html'" title="View Green Cardamom">
             <img src="images/cardamom_product.jpg" alt="Green Cardamom">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1970,12 +1975,12 @@
         </div>
 
         <!-- Product 2: Malabar Black Pepper -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='chilli.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='pepper.html'">
           <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">WHOLE &amp; COARSE GROUND</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='chilli.html'" title="Buy Malabar Black Pepper">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='pepper.html'" title="View Malabar Black Pepper">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -1987,7 +1992,7 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹720 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='chilli.html'">
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='pepper.html'">
                   VISIT ➔
                 </button>
               </div>
@@ -1996,12 +2001,12 @@
         </div>
 
         <!-- Product 3: Green Cardamom -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='ragi.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='cardamom.html'">
           <img src="images/cardamom_product.jpg" alt="Green Cardamom">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">IDUKKI ESTATE GRADE AAA</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='ragi.html'" title="Buy Green Cardamom">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='cardamom.html'" title="View Green Cardamom">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2014,7 +2019,7 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹1,850 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='ragi.html'">
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='cardamom.html'">
                   VISIT ➔
                 </button>
               </div>
@@ -2063,7 +2068,7 @@
         
         <!-- Left Side Photo + Floating Badge -->
         <div class="story-visual-wrap">
-          <img src="images/market_spices.jpg" alt="Spice Market" class="story-main-img">
+          <img src="images/farm_fields.jpg" alt="Karnataka Spice Farms" class="story-main-img">
           
           <div class="floating-badge-box">
             <div class="fb-tag">SINCE 2015</div>
@@ -3431,6 +3436,14 @@
     function closeMyOrdersModal() {
       document.getElementById('myOrdersModal').style.display = 'none';
       document.body.style.overflow = 'auto';
+    }
+
+    function handleLogout() {
+      if (confirm('Are you sure you want to sign out of Balaji Ingredients?')) {
+        localStorage.removeItem('balaji_logged_in');
+        localStorage.removeItem('balaji_user');
+        window.location.replace('login.html');
+      }
     }
 
     // Auto-open Buy Modal if redirected with ?buy= parameter

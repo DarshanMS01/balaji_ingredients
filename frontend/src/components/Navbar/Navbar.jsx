@@ -45,7 +45,7 @@ const Navbar = () => {
             <User size={18} />
             <span>Login</span>
           </a>
-          <button className="navbar-cta">
+          <button className="navbar-cta" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
             Request a Quote
           </button>
         </div>

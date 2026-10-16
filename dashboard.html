@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    // Authentication Gate Check
+    if (!localStorage.getItem('balaji_logged_in')) {
+      window.location.replace('login.html');
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Enterprise Portal Dashboard — Balaji Ingredients</title>
   <meta name="description" content="Balaji Ingredients B2B enterprise procurement portal, live mandi rates, consignment tracker, and quality CoAs." />

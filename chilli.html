@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Red Chilli Powder (Guntur & Byadgi Blend) – Cold Stone Ground | Balaji Ingredients</title>
+
+  <!-- Auth Gate Check: Require Login/Registration before accessing website -->
+  <script>
+    if (!localStorage.getItem('balaji_logged_in')) {
+      window.location.replace('login.html');
+    }
+  </script>
+
   <meta name="description" content="Balaji Ingredients Red Chilli Powder. Authentic Guntur and Byadgi blend, stemless, sun-dried, and cold stone-ground. 100% pure with natural vibrant color and smoky heat.">
   
   <!-- Fonts -->
@@ -1711,6 +1719,9 @@
         <button type="button" class="btn-nav-orders" onclick="window.location.href='index.html'">
           <span>← Back to Home</span>
         </button>
+        <button type="button" class="btn-nav-orders" style="background: transparent; border-color: rgba(28,25,23,0.25);" onclick="handleLogout()" title="Sign Out">
+          <span>🚪 Sign Out</span>
+        </button>
       </div>
     </div>
   </header>
@@ -3346,6 +3357,14 @@
       `;
       container.prepend(newCard);
       showToast('✓ Thank you! Your review has been published.');
+    }
+
+    function handleLogout() {
+      if (confirm('Are you sure you want to sign out of Balaji Ingredients?')) {
+        localStorage.removeItem('balaji_logged_in');
+        localStorage.removeItem('balaji_user');
+        window.location.replace('login.html');
+      }
     }
   </script>
 
