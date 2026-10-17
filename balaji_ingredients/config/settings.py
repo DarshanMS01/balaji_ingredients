@@ -175,7 +175,7 @@ if not DEBUG:
 # ---------------------------------------------------------------------------
 # Google OAuth 2.0 / Google Identity Services Settings
 # ---------------------------------------------------------------------------
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8001']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8001', 'http://127.0.0.1:8001']
 CORS_ALLOW_CREDENTIALS = True
 GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default='YOUR_GOOGLE_CLIENT_SECRET')

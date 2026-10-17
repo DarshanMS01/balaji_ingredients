@@ -8,30 +8,47 @@ from portal import views as portal_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # Direct Login page route (using exact image)
-    path('login/', portal_views.login_view, name='login'),
-    path('signup/', portal_views.login_view, name='signup'),
+    # Direct Login page routes (serving luxury split-card login)
+    path('login/', portal_views.login_page_view, name='login'),
+    path('login.html', portal_views.login_page_view, name='login_html'),
+    path('signup/', portal_views.login_page_view, name='signup'),
+    path('logout/', portal_views.logout_view, name='logout'),
     
+    # Direct Homepage routes
+    path('', portal_views.home_page_view, name='home'),
+    path('index.html', portal_views.home_page_view, name='index_html'),
+    
+    # Direct Dashboard routes
+    path('dashboard/', portal_views.dashboard_page_view, name='dashboard'),
+    path('dashboard.html', portal_views.dashboard_page_view, name='dashboard_html'),
+
     # Official Google OAuth 2.0 Flow
     path('auth/google/', portal_views.google_oauth_redirect, name='google_login'),
     path('auth/google/callback/', portal_views.google_oauth_callback, name='google_callback'),
 
-    # API endpoints
+    # API endpoints for authentication & user status
     path('api/auth/login/', portal_views.api_login, name='api_login'),
+    path('api/auth/logout/', portal_views.api_logout, name='api_logout'),
+    path('api/auth/me/', portal_views.api_me, name='api_me'),
     path('api/auth/register/', portal_views.api_register, name='api_register'),
     path('api/auth/google/', portal_views.api_google_login, name='api_google_login'),
     path('api/auth/forgot-password/', portal_views.api_forgot_password, name='api_forgot_password'),
     path('api/auth/verify-otp/', portal_views.api_verify_otp, name='api_verify_otp'),
     path('api/auth/reset-password/', portal_views.api_reset_password, name='api_reset_password'),
     
-    # Public Core Website (Homepage with all 11 sections)
-    path('', include('core.urls')),
+    # Product and Static HTML pages (e.g. ragi.html, chilli.html, pepper.html, cardamom.html, balaji.html)
+    path('<str:page_name>.html', portal_views.static_html_view, name='static_html'),
+
+    # Public Core Website sections
+    path('core/', include('core.urls')),
 ]
 
-# Serve media and images in development
+# Serve media, images, and static files in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [
         re_path(r'^images/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR.parent / 'images')}),
         re_path(r'^static/images/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'static' / 'images')}),
+        re_path(r'^static/css/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'static' / 'css')}),
+        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': str(settings.BASE_DIR / 'static')}),
     ]

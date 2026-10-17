@@ -1966,11 +1966,16 @@
       }
     });
 
-    function handleLogout() {
+    async function handleLogout() {
       showToast('Logging out from portal...');
+      try {
+        await fetch('/api/auth/logout/', { method: 'POST' });
+      } catch (e) {}
+      localStorage.removeItem('balaji_logged_in');
+      localStorage.removeItem('balaji_user');
       setTimeout(() => {
         window.location.href = 'login.html';
-      }, 700);
+      }, 600);
     }
 
     function showToast(text) {

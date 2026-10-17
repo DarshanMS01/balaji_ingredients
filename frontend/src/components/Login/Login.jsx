@@ -3,8 +3,8 @@ import { Eye, EyeOff, Lock, Mail, ArrowRight, ShieldCheck } from 'lucide-react';
 import './Login.css';
 
 const Login = () => {
-  const [identifier, setIdentifier] = useState('trade@balajiingredients.com');
-  const [password, setPassword] = useState('Balaji@2026!');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -38,11 +38,6 @@ const Login = () => {
         window.location.hash = '';
       }, 700);
     }, 600);
-  };
-
-  const handleQuickFill = () => {
-    setIdentifier('trade@balajiingredients.com');
-    setPassword('Balaji@2026!');
   };
 
   return (
@@ -188,11 +183,6 @@ const Login = () => {
                 </>
               )}
             </button>
-
-            <div className="demo-chip">
-              <div><span>Demo: </span><code>trade@balajiingredients.com</code></div>
-              <button type="button" className="demo-btn" onClick={handleQuickFill}>Fill</button>
-            </div>
           </form>
 
           <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '13px', color: '#6B635B' }}>

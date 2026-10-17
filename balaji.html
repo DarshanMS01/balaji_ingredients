@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    // Authentication Gate Check: show login first if not authenticated
+    if (localStorage.getItem('balaji_logged_in') !== 'true') {
+      window.location.replace('login.html');
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Balaji Ingredients Private Limited — The Spice of South India</title>
 
@@ -1752,18 +1758,33 @@
             </svg>
             <span>+91 63606 35801</span>
           </a>
-          <button type="button" class="btn-nav-orders" onclick="openMyOrdersModal()">
-            📦 My Orders
-          </button>
-          <a href="dashboard.html" class="btn-quote" style="background: #A82B1D; display: inline-flex; align-items: center; gap: 8px;">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-            </svg>
-            Dashboard
-          </a>
-          <button type="button" class="btn-nav-orders" style="background: transparent; border-color: rgba(28,25,23,0.25);" onclick="handleLogout()" title="Sign Out">
-            🚪 Sign Out
-          </button>
+
+          <!-- Logged Out State: Sign In & Request a Quote -->
+          <div id="navAuthLoggedOut" style="display: flex; align-items: center; gap: 10px;">
+            <a href="login.html" class="btn-login-nav" title="Sign In to B2B Portal">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+              </svg>
+              <span>Sign In</span>
+            </a>
+            <a href="#contact" class="btn-quote">Request a Quote</a>
+          </div>
+
+          <!-- Logged In State: Orders, Dashboard, Sign Out -->
+          <div id="navAuthLoggedIn" style="display: none; align-items: center; gap: 8px;">
+            <button type="button" class="btn-nav-orders" onclick="openMyOrdersModal()">
+              📦 My Orders
+            </button>
+            <a href="dashboard.html" class="btn-quote" style="background: #A82B1D; display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+              </svg>
+              <span id="navUserBadge">Dashboard</span>
+            </a>
+            <button type="button" class="btn-nav-orders" style="background: transparent; border-color: rgba(28,25,23,0.25);" onclick="handleLogout()" title="Sign Out">
+              🚪 Sign Out
+            </button>
+          </div>
         </div>
 
       </div>
@@ -3438,16 +3459,65 @@
       document.body.style.overflow = 'auto';
     }
 
-    function handleLogout() {
-      if (confirm('Are you sure you want to sign out of Balaji Ingredients?')) {
-        localStorage.removeItem('balaji_logged_in');
-        localStorage.removeItem('balaji_user');
-        window.location.replace('login.html');
+    async function updateNavAuthState() {
+      let isLoggedIn = localStorage.getItem('balaji_logged_in') === 'true';
+      const outBox = document.getElementById('navAuthLoggedOut');
+      const inBox = document.getElementById('navAuthLoggedIn');
+      const badge = document.getElementById('navUserBadge');
+
+      // Sync with backend session status if available
+      try {
+        const res = await fetch('/api/auth/me/');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated && data.user) {
+            isLoggedIn = true;
+            localStorage.setItem('balaji_logged_in', 'true');
+            if (!localStorage.getItem('balaji_user')) {
+              localStorage.setItem('balaji_user', JSON.stringify({
+                name: data.user.name,
+                email: data.user.email,
+                role: 'Wholesale Partner'
+              }));
+            }
+          }
+        }
+      } catch (e) {}
+
+      if (isLoggedIn) {
+        if (outBox) outBox.style.display = 'none';
+        if (inBox) inBox.style.display = 'flex';
+        try {
+          const u = JSON.parse(localStorage.getItem('balaji_user') || '{}');
+          if (badge && u.name) {
+            badge.textContent = u.name.split(' ')[0] || 'Dashboard';
+          }
+        } catch (e) {}
+      } else {
+        if (outBox) outBox.style.display = 'flex';
+        if (inBox) inBox.style.display = 'none';
       }
     }
 
-    // Auto-open Buy Modal if redirected with ?buy= parameter
+    async function handleLogout() {
+      if (confirm('Are you sure you want to sign out of Balaji Ingredients?')) {
+        try {
+          await fetch('/api/auth/logout/', { method: 'POST' });
+        } catch (e) {}
+        localStorage.removeItem('balaji_logged_in');
+        localStorage.removeItem('balaji_user');
+        updateNavAuthState();
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Window events for cross-tab and focus auth sync
+    window.addEventListener('storage', updateNavAuthState);
+    window.addEventListener('focus', updateNavAuthState);
+
+    // Auto-open Buy Modal if redirected with ?buy= parameter & sync auth
     window.addEventListener('DOMContentLoaded', () => {
+      updateNavAuthState();
       const urlParams = new URLSearchParams(window.location.search);
       const buyKey = urlParams.get('buy');
       if (buyKey && PRODUCTS[buyKey]) {

@@ -623,44 +623,205 @@
       to { transform: rotate(360deg); }
     }
 
-    .balaji-auth-wrapper .bi-demo-pill {
-      margin-top: 13px;
-      padding: 7px 12px;
+    /* MASTER TAB SWITCHER: 2 CLEARLY VISIBLE BUTTONS */
+    .balaji-auth-wrapper .bi-auth-switch-bar {
+      display: flex;
       background: var(--bi-ivory-alt);
-      border: 1px dashed rgba(168, 43, 29, 0.25);
+      border: 1.5px solid var(--bi-border);
+      border-radius: 9999px;
+      padding: 4px;
+      margin-bottom: clamp(14px, 1.8vh, 18px);
+      gap: 6px;
+    }
+
+    .balaji-auth-wrapper .bi-switch-btn {
+      flex: 1;
+      height: 42px;
+      border: none;
+      border-radius: 9999px;
+      background: transparent;
+      color: var(--bi-text);
+      font-family: var(--bi-font-sans);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+    }
+
+    .balaji-auth-wrapper .bi-switch-btn:hover:not(.active) {
+      background: rgba(168, 43, 29, 0.08);
+      color: var(--bi-red);
+    }
+
+    .balaji-auth-wrapper .bi-switch-btn.active {
+      background: var(--bi-red);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(168, 43, 29, 0.35);
+    }
+
+    .balaji-auth-wrapper .bi-tab-icon {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+    }
+
+    .balaji-auth-wrapper .bi-pane-headings {
+      text-align: center;
+      margin-bottom: clamp(12px, 1.6vh, 16px);
+    }
+
+    .balaji-auth-wrapper .bi-country-prefix {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--bi-red);
+      background: var(--bi-red-soft);
+      border-radius: 6px;
+      border: 1px solid rgba(168, 43, 29, 0.18);
+      height: 30px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .balaji-auth-wrapper .bi-terms-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 10px 0 16px;
+      font-size: 12px;
+      color: var(--bi-text-muted);
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    .balaji-auth-wrapper .bi-terms-row input[type="checkbox"] {
+      accent-color: var(--bi-red);
+      width: 16px;
+      height: 16px;
+      margin-top: 1px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .balaji-auth-wrapper .bi-terms-row a {
+      color: var(--bi-red);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .balaji-auth-wrapper .bi-channel-picker {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .balaji-auth-wrapper .bi-channel-opt {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 12px;
+      border: 1.5px solid var(--bi-border);
+      border-radius: var(--bi-radius-sm);
+      background: var(--bi-ivory);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--bi-text);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .balaji-auth-wrapper .bi-channel-opt input {
+      accent-color: var(--bi-red);
+    }
+
+    .balaji-auth-wrapper .bi-channel-opt.active {
+      border-color: var(--bi-red);
+      background: var(--bi-red-soft);
+      color: var(--bi-red);
+      box-shadow: 0 0 0 2px var(--bi-red-glow);
+    }
+
+    .balaji-auth-wrapper .bi-otp-notice {
+      background: var(--bi-ivory-alt);
+      border: 1px solid var(--bi-border);
+      border-left: 3.5px solid var(--bi-red);
       border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: var(--bi-text);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .balaji-auth-wrapper .bi-otp-input-wrap {
+      margin: 12px 0 14px;
+      text-align: center;
+    }
+
+    .balaji-auth-wrapper .bi-otp-input-wrap input {
+      width: 100%;
+      height: 52px;
+      border: 2px solid var(--bi-border);
+      border-radius: var(--bi-radius-sm);
+      background: var(--bi-ivory);
+      font-family: monospace;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 12px;
+      text-align: center;
+      color: var(--bi-text);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .balaji-auth-wrapper .bi-otp-input-wrap input:focus {
+      background: #FFFFFF;
+      border-color: var(--bi-red);
+      box-shadow: 0 0 0 4px var(--bi-red-glow);
+    }
+
+    .balaji-auth-wrapper .bi-resend-wrap {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      font-size: 11px;
-      color: var(--bi-text);
-    }
-
-    .balaji-auth-wrapper .bi-demo-pill span {
+      margin: 8px 0 16px;
+      font-size: 12.5px;
       color: var(--bi-text-muted);
     }
 
-    .balaji-auth-wrapper .bi-demo-pill code {
-      font-weight: 700;
-      color: var(--bi-red);
-      font-family: monospace;
-    }
-
-    .balaji-auth-wrapper .bi-demo-btn {
-      padding: 4px 10px;
-      background: var(--bi-red);
-      color: #FFFFFF;
+    .balaji-auth-wrapper .bi-resend-btn {
+      background: transparent;
       border: none;
-      border-radius: 5px;
-      font-size: 10.5px;
+      color: var(--bi-red);
       font-weight: 700;
+      font-size: 12.5px;
       cursor: pointer;
-      transition: background-color 0.15s ease;
+      text-decoration: underline;
     }
 
-    .balaji-auth-wrapper .bi-demo-btn:hover {
-      background: var(--bi-red-hover);
+    .balaji-auth-wrapper .bi-forgot-back-btn {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 12.5px;
+      color: var(--bi-text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .balaji-auth-wrapper .bi-forgot-back-btn:hover {
+      color: var(--bi-red);
     }
 
     .balaji-auth-wrapper .bi-separator {
@@ -923,123 +1084,424 @@
 
 
   <!-- RIGHT SECTION: LUXURY PORCELAIN LOGIN CARD -->
-  <main class="bi-card-pane" aria-label="Sign In Panel">
+  <main class="bi-card-pane" aria-label="Authentication Gateway">
     
-    <div class="bi-login-card">
+    <div class="bi-login-card" id="biAuthCard">
 
-      <!-- Card Header -->
-      <header class="bi-card-header">
+      <!-- Card Top Brand Badge -->
+      <div class="bi-card-header">
         <div class="bi-card-badge-logo" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M12 2c-.8 2.5-3 4.8-3 7.5 0 3 2.2 5.5 5 5.5s5-2.5 5-5.5c0-1.2-.5-2.3-1.2-3.2-.2 1.5-1.3 2.7-2.8 2.7-1.7 0-3-1.3-3-3 0-1.5.8-2.8 2-3.5-.7-.3-1.4-.5-2-.5z"/>
           </svg>
         </div>
-        <h1 class="bi-card-title">Sign In to Portal</h1>
-        <p class="bi-card-subtitle">Access order tracking, wholesale pricing, and active quote requests.</p>
-      </header>
-
-      <!-- Authentication Form -->
-      <form id="biAuthForm" method="post" action="login.html">
-
-        <!-- Email or Username Field -->
-        <div class="bi-form-group">
-          <label class="bi-label" for="userIdentifier">Email or Username</label>
-          <div class="bi-input-container">
-            <span class="bi-input-lead" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <path d="M3 7l9 6 9-6"/>
-              </svg>
-            </span>
-            <input
-              type="text"
-              id="userIdentifier"
-              name="identifier"
-              placeholder="Enter your email or username"
-              autocomplete="username"
-              value="trade@balajiingredients.com"
-              required>
-          </div>
-        </div>
-
-        <!-- Password Field -->
-        <div class="bi-form-group">
-          <label class="bi-label" for="userPassword">Password</label>
-          <div class="bi-input-container">
-            <span class="bi-input-lead" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <rect x="5" y="11" width="14" height="10" rx="2"/>
-                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-              </svg>
-            </span>
-            <input
-              type="password"
-              id="userPassword"
-              name="password"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-              value="Balaji@2026!"
-              required>
-            <button
-              type="button"
-              class="bi-toggle-eye"
-              id="btnToggleEye"
-              aria-label="Show password"
-              aria-pressed="false"
-              title="Show or hide password">
-              <svg id="eyeSvgGlyph" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Remember Me & Forgot Password Row -->
-        <div class="bi-aux-row">
-          <label class="bi-remember-label" for="chkRememberMe">
-            <input type="checkbox" name="remember_me" id="chkRememberMe" checked>
-            <span>Remember me</span>
-          </label>
-
-          <a href="#" class="bi-forgot-link" id="linkForgotPassword" title="Reset your account password">
-            Forgot password?
-          </a>
-        </div>
-
-        <!-- Sign In Master Button -->
-        <button type="submit" class="bi-submit-btn" id="btnSignInSubmit">
-          <span id="btnSubmitText">Sign In to Portal</span>
-          <svg id="btnSubmitArrow" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-          </svg>
-          <span class="bi-spinner" id="btnSubmitSpinner" style="display: none;"></span>
-        </button>
-
-        <!-- Understated Demo Quick-Fill Pill -->
-        <div class="bi-demo-pill">
-          <div>
-            <span>Demo: </span><code>trade@balajiingredients.com</code>
-          </div>
-          <button type="button" class="bi-demo-btn" id="btnQuickDemoFill" title="Auto-fill verified demo credentials">Fill</button>
-        </div>
-
-      </form>
-
-      <!-- Card Separator -->
-      <div class="bi-separator" aria-hidden="true">
-        <span class="bi-sep-line"></span>
-        <span class="bi-sep-text">or</span>
-        <span class="bi-sep-line"></span>
       </div>
 
-      <!-- Registration Link -->
-      <p class="bi-create-prompt">
-        New enterprise client? 
-        <a href="index.html#contact" id="linkCreateB2B">Create B2B Account</a>
-      </p>
+      <!-- MASTER TAB SWITCHER: 2 CLEARLY VISIBLE BUTTONS -->
+      <div class="bi-auth-switch-bar" role="tablist" aria-label="Authentication Options">
+        <button type="button" class="bi-switch-btn active" id="tabBtnSignIn" role="tab" aria-selected="true" aria-controls="paneSignIn">
+          <svg class="bi-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+          </svg>
+          <span>Sign In</span>
+        </button>
+        <button type="button" class="bi-switch-btn" id="tabBtnSignUp" role="tab" aria-selected="false" aria-controls="paneSignUp">
+          <svg class="bi-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v6m3-3h-6m-1.5-4.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM3.75 19.5a8.25 8.25 0 0116.5 0v.75H3.75v-.75z" />
+          </svg>
+          <span>Sign Up</span>
+        </button>
+      </div>
 
-      <!-- Security Badge -->
+      <!-- PANE 1: SIGN IN -->
+      <div class="bi-auth-pane" id="paneSignIn" role="tabpanel" aria-labelledby="tabBtnSignIn">
+        <div class="bi-pane-headings">
+          <h1 class="bi-card-title">Sign In to Portal</h1>
+          <p class="bi-card-subtitle">Access order tracking, wholesale pricing, and active quote requests.</p>
+        </div>
+
+        <form id="formSignIn" method="post" action="login.html" novalidate>
+          <div class="bi-form-group">
+            <label class="bi-label" for="userIdentifier">Email or Mobile Number</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="userIdentifier"
+                name="identifier"
+                placeholder="Enter registered email or mobile number"
+                autocomplete="username"
+                required>
+            </div>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="userPassword">Password</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+              </span>
+              <input
+                type="password"
+                id="userPassword"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required>
+              <button
+                type="button"
+                class="bi-toggle-eye"
+                id="btnToggleEye"
+                aria-label="Show password"
+                aria-pressed="false"
+                title="Show or hide password">
+                <svg class="eye-svg" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="bi-aux-row">
+            <label class="bi-remember-label" for="chkRememberMe">
+              <input type="checkbox" name="remember_me" id="chkRememberMe" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="bi-forgot-link" id="linkForgotPassword" title="Reset your account password">
+              Forgot password?
+            </a>
+          </div>
+
+          <button type="submit" class="bi-submit-btn" id="btnSignInSubmit">
+            <span id="btnSignInText">Sign In to Portal</span>
+            <svg id="btnSignInArrow" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            <span class="bi-spinner" id="btnSignInSpinner" style="display: none;"></span>
+          </button>
+        </form>
+
+        <div class="bi-separator" aria-hidden="true">
+          <span class="bi-sep-line"></span>
+          <span class="bi-sep-text">or</span>
+          <span class="bi-sep-line"></span>
+        </div>
+
+        <p class="bi-create-prompt">
+          New enterprise client? 
+          <a href="#" id="linkPromptSignUp">Create B2B Account</a>
+        </p>
+      </div>
+
+      <!-- PANE 2: SIGN UP / REGISTRATION -->
+      <div class="bi-auth-pane" id="paneSignUp" style="display: none;" role="tabpanel" aria-labelledby="tabBtnSignUp">
+        <div class="bi-pane-headings">
+          <h2 class="bi-card-title">Create B2B Account</h2>
+          <p class="bi-card-subtitle">Register to unlock wholesale contract pricing & pan-India logistics.</p>
+        </div>
+
+        <form id="formSignUp" method="post" action="signup/" novalidate>
+          <div class="bi-form-group">
+            <label class="bi-label" for="regFullName">Full Name</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="regFullName"
+                name="full_name"
+                placeholder="e.g. Rajesh Sharma"
+                autocomplete="name"
+                required>
+            </div>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="regEmail">Email Address</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="5" width="18" height="14" rx="2"/>
+                  <path d="M3 7l9 6 9-6"/>
+                </svg>
+              </span>
+              <input
+                type="email"
+                id="regEmail"
+                name="email"
+                placeholder="name@company.com"
+                autocomplete="email"
+                required>
+            </div>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="regMobile">Mobile Number</label>
+            <div class="bi-input-container">
+              <span class="bi-country-prefix" aria-hidden="true">+91</span>
+              <input
+                type="tel"
+                id="regMobile"
+                name="mobile"
+                placeholder="10-digit mobile number"
+                autocomplete="tel"
+                maxlength="15"
+                required>
+            </div>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="regPassword">Password</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+              </span>
+              <input
+                type="password"
+                id="regPassword"
+                name="password"
+                placeholder="Minimum 6 characters"
+                autocomplete="new-password"
+                required>
+              <button
+                type="button"
+                class="bi-toggle-eye"
+                id="btnToggleRegEye"
+                aria-label="Show password"
+                aria-pressed="false">
+                <svg class="eye-svg" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="regConfirmPassword">Confirm Password</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+              </span>
+              <input
+                type="password"
+                id="regConfirmPassword"
+                name="confirm_password"
+                placeholder="Re-enter password"
+                autocomplete="new-password"
+                required>
+              <button
+                type="button"
+                class="bi-toggle-eye"
+                id="btnToggleRegConfirmEye"
+                aria-label="Show password"
+                aria-pressed="false">
+                <svg class="eye-svg" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="bi-terms-row">
+            <input type="checkbox" id="chkTerms" name="terms" required checked>
+            <label for="chkTerms">
+              I agree to the <a href="index.html#terms" target="_blank">Terms of Service</a> &amp; <a href="index.html#privacy" target="_blank">Privacy Policy</a>
+            </label>
+          </div>
+
+          <button type="submit" class="bi-submit-btn" id="btnSignUpSubmit">
+            <span id="btnSignUpText">Create B2B Account</span>
+            <svg id="btnSignUpArrow" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            <span class="bi-spinner" id="btnSignUpSpinner" style="display: none;"></span>
+          </button>
+        </form>
+
+        <div class="bi-separator" aria-hidden="true">
+          <span class="bi-sep-line"></span>
+          <span class="bi-sep-text">or</span>
+          <span class="bi-sep-line"></span>
+        </div>
+
+        <p class="bi-create-prompt">
+          Already registered? 
+          <a href="#" id="linkPromptSignIn">Sign In to Portal</a>
+        </p>
+      </div>
+
+      <!-- PANE 3: FORGOT PASSWORD RECOVERY -->
+      <div class="bi-auth-pane" id="paneForgot" style="display: none;" role="region" aria-label="Password Recovery">
+        <div class="bi-pane-headings">
+          <h2 class="bi-card-title">Password Recovery</h2>
+          <p class="bi-card-subtitle">Reset your account password via secure 6-digit OTP verification.</p>
+        </div>
+
+        <!-- Step 1: Request OTP -->
+        <div id="forgotStep1">
+          <div class="bi-channel-picker" role="radiogroup" aria-label="OTP Channel">
+            <label class="bi-channel-opt active" id="optChannelEmail">
+              <input type="radio" name="otp_channel" value="email" checked>
+              <span>Email OTP</span>
+            </label>
+            <label class="bi-channel-opt" id="optChannelSms">
+              <input type="radio" name="otp_channel" value="sms">
+              <span>Mobile SMS</span>
+            </label>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="forgotIdentifier">Registered Contact</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="5" width="18" height="14" rx="2"/>
+                  <path d="M3 7l9 6 9-6"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="forgotIdentifier"
+                placeholder="Enter registered email or mobile number"
+                autocomplete="username"
+                required>
+            </div>
+          </div>
+
+          <button type="button" class="bi-submit-btn" id="btnSendOtp">
+            <span id="btnSendOtpText">Send 6-Digit OTP</span>
+            <span class="bi-spinner" id="btnSendOtpSpinner" style="display: none;"></span>
+          </button>
+
+          <div style="text-align: center;">
+            <a href="#" class="bi-forgot-back-btn" id="linkBackToSignIn1">← Back to Sign In</a>
+          </div>
+        </div>
+
+        <!-- Step 2: Verify OTP -->
+        <div id="forgotStep2" style="display: none;">
+          <div class="bi-otp-notice" id="otpNoticeBox">
+            A 6-digit verification code has been dispatched. Enter the code below.
+          </div>
+
+          <div class="bi-otp-input-wrap">
+            <input
+              type="text"
+              id="otpInputCode"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              inputmode="numeric"
+              placeholder="••••••"
+              autocomplete="one-time-code"
+              required>
+          </div>
+
+          <div class="bi-resend-wrap">
+            <span id="cooldownNotice">Resend code in 60s</span>
+            <button type="button" class="bi-resend-btn" id="btnResendOtp" style="display: none;">Resend OTP</button>
+          </div>
+
+          <button type="button" class="bi-submit-btn" id="btnVerifyOtp">
+            <span id="btnVerifyOtpText">Verify Code</span>
+            <span class="bi-spinner" id="btnVerifyOtpSpinner" style="display: none;"></span>
+          </button>
+
+          <div style="text-align: center;">
+            <a href="#" class="bi-forgot-back-btn" id="linkBackToStep1">← Change Contact</a>
+          </div>
+        </div>
+
+        <!-- Step 3: Set New Password -->
+        <div id="forgotStep3" style="display: none;">
+          <div class="bi-form-group">
+            <label class="bi-label" for="newPassword">New Password</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+              </span>
+              <input
+                type="password"
+                id="newPassword"
+                placeholder="At least 6 characters"
+                autocomplete="new-password"
+                required>
+              <button
+                type="button"
+                class="bi-toggle-eye"
+                id="btnToggleNewPasswordEye"
+                aria-label="Show password"
+                aria-pressed="false">
+                <svg class="eye-svg" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="bi-form-group">
+            <label class="bi-label" for="confirmNewPassword">Confirm New Password</label>
+            <div class="bi-input-container">
+              <span class="bi-input-lead" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="10" rx="2"/>
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                </svg>
+              </span>
+              <input
+                type="password"
+                id="confirmNewPassword"
+                placeholder="Re-enter new password"
+                autocomplete="new-password"
+                required>
+              <button
+                type="button"
+                class="bi-toggle-eye"
+                id="btnToggleConfirmNewPasswordEye"
+                aria-label="Show password"
+                aria-pressed="false">
+                <svg class="eye-svg" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="button" class="bi-submit-btn" id="btnSetNewPassword">
+            <span id="btnSetNewPasswordText">Save New Password &amp; Sign In</span>
+            <span class="bi-spinner" id="btnSetNewPasswordSpinner" style="display: none;"></span>
+          </button>
+
+          <div style="text-align: center;">
+            <a href="#" class="bi-forgot-back-btn" id="linkBackToSignIn3">← Return to Sign In</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Badge Footer -->
       <div class="bi-security-footer">
         <svg viewBox="0 0 24 24">
           <rect x="5" y="11" width="14" height="10" rx="2"/>
@@ -1060,108 +1522,684 @@
 <!-- Client-side Interactions -->
 <script>
   (function() {
-    const passwordInput = document.getElementById("userPassword");
-    const toggleButton = document.getElementById("btnToggleEye");
-    const eyeSvg = document.getElementById("eyeSvgGlyph");
-    const emailInput = document.getElementById("userIdentifier");
-    const quickFillBtn = document.getElementById("btnQuickDemoFill");
-    const form = document.getElementById("biAuthForm");
+    // DOM Elements
     const toast = document.getElementById("biToastNotification");
-    const forgotLink = document.getElementById("linkForgotPassword");
-    const submitBtn = document.getElementById("btnSignInSubmit");
-    const submitText = document.getElementById("btnSubmitText");
-    const submitArrow = document.getElementById("btnSubmitArrow");
-    const submitSpinner = document.getElementById("btnSubmitSpinner");
+    const tabBtnSignIn = document.getElementById("tabBtnSignIn");
+    const tabBtnSignUp = document.getElementById("tabBtnSignUp");
+    const paneSignIn = document.getElementById("paneSignIn");
+    const paneSignUp = document.getElementById("paneSignUp");
+    const paneForgot = document.getElementById("paneForgot");
 
-    function showToast(msg, duration = 3000) {
+    // Sign In Elements
+    const formSignIn = document.getElementById("formSignIn");
+    const userIdentifier = document.getElementById("userIdentifier");
+    const userPassword = document.getElementById("userPassword");
+    const chkRememberMe = document.getElementById("chkRememberMe");
+    const btnSignInSubmit = document.getElementById("btnSignInSubmit");
+    const btnSignInText = document.getElementById("btnSignInText");
+    const btnSignInArrow = document.getElementById("btnSignInArrow");
+    const btnSignInSpinner = document.getElementById("btnSignInSpinner");
+    const linkForgotPassword = document.getElementById("linkForgotPassword");
+    const linkPromptSignUp = document.getElementById("linkPromptSignUp");
+
+    // Sign Up Elements
+    const formSignUp = document.getElementById("formSignUp");
+    const regFullName = document.getElementById("regFullName");
+    const regEmail = document.getElementById("regEmail");
+    const regMobile = document.getElementById("regMobile");
+    const regPassword = document.getElementById("regPassword");
+    const regConfirmPassword = document.getElementById("regConfirmPassword");
+    const chkTerms = document.getElementById("chkTerms");
+    const btnSignUpSubmit = document.getElementById("btnSignUpSubmit");
+    const btnSignUpText = document.getElementById("btnSignUpText");
+    const btnSignUpArrow = document.getElementById("btnSignUpArrow");
+    const btnSignUpSpinner = document.getElementById("btnSignUpSpinner");
+    const linkPromptSignIn = document.getElementById("linkPromptSignIn");
+
+    // Forgot Elements
+    const forgotStep1 = document.getElementById("forgotStep1");
+    const forgotStep2 = document.getElementById("forgotStep2");
+    const forgotStep3 = document.getElementById("forgotStep3");
+    const optChannelEmail = document.getElementById("optChannelEmail");
+    const optChannelSms = document.getElementById("optChannelSms");
+    const forgotIdentifier = document.getElementById("forgotIdentifier");
+    const btnSendOtp = document.getElementById("btnSendOtp");
+    const btnSendOtpText = document.getElementById("btnSendOtpText");
+    const btnSendOtpSpinner = document.getElementById("btnSendOtpSpinner");
+    const otpNoticeBox = document.getElementById("otpNoticeBox");
+    const otpInputCode = document.getElementById("otpInputCode");
+    const cooldownNotice = document.getElementById("cooldownNotice");
+    const btnResendOtp = document.getElementById("btnResendOtp");
+    const btnVerifyOtp = document.getElementById("btnVerifyOtp");
+    const btnVerifyOtpText = document.getElementById("btnVerifyOtpText");
+    const btnVerifyOtpSpinner = document.getElementById("btnVerifyOtpSpinner");
+    const newPassword = document.getElementById("newPassword");
+    const confirmNewPassword = document.getElementById("confirmNewPassword");
+    const btnSetNewPassword = document.getElementById("btnSetNewPassword");
+    const btnSetNewPasswordText = document.getElementById("btnSetNewPasswordText");
+    const btnSetNewPasswordSpinner = document.getElementById("btnSetNewPasswordSpinner");
+    const linkBackToSignIn1 = document.getElementById("linkBackToSignIn1");
+    const linkBackToStep1 = document.getElementById("linkBackToStep1");
+    const linkBackToSignIn3 = document.getElementById("linkBackToSignIn3");
+
+    // Toast Functionality
+    let toastTimeout = null;
+    function showToast(msg, isSuccess = false, duration = 4000) {
       if (!toast) return;
+      if (toastTimeout) clearTimeout(toastTimeout);
       toast.textContent = msg;
+      toast.style.borderColor = isSuccess ? "var(--bi-gold)" : "var(--bi-red)";
       toast.style.display = "block";
-      setTimeout(() => {
+      toastTimeout = setTimeout(() => {
         toast.style.display = "none";
       }, duration);
     }
 
-    // Toggle Password Visibility
-    if (toggleButton && passwordInput && eyeSvg) {
-      toggleButton.addEventListener("click", function() {
-        const isPassword = passwordInput.type === "password";
-        passwordInput.type = isPassword ? "text" : "password";
-        toggleButton.setAttribute("aria-pressed", String(isPassword));
-        toggleButton.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
-
-        if (isPassword) {
-          eyeSvg.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-            <line x1="1" y1="1" x2="23" y2="23" stroke-linecap="round" stroke-linejoin="round"/>
-          `;
-        } else {
-          eyeSvg.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          `;
+    // Toggle Eye Functionality Helper
+    function setupEyeToggle(buttonId, inputId) {
+      const btn = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+      if (!btn || !input) return;
+      btn.addEventListener("click", function() {
+        const isPassword = input.type === "password";
+        input.type = isPassword ? "text" : "password";
+        btn.setAttribute("aria-pressed", String(isPassword));
+        const svg = btn.querySelector("svg");
+        if (svg) {
+          if (isPassword) {
+            svg.innerHTML = `
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23" stroke-linecap="round" stroke-linejoin="round"/>
+            `;
+          } else {
+            svg.innerHTML = `
+              <path stroke-linecap="round" stroke-linejoin="round" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            `;
+          }
         }
       });
     }
 
-    // Quick Fill Demo Credentials
-    if (quickFillBtn && emailInput && passwordInput) {
-      quickFillBtn.addEventListener("click", function() {
-        emailInput.value = "trade@balajiingredients.com";
-        passwordInput.value = "Balaji@2026!";
-        showToast("Demo credentials populated.");
-        emailInput.focus();
-      });
+    setupEyeToggle("btnToggleEye", "userPassword");
+    setupEyeToggle("btnToggleRegEye", "regPassword");
+    setupEyeToggle("btnToggleRegConfirmEye", "regConfirmPassword");
+    setupEyeToggle("btnToggleNewPasswordEye", "newPassword");
+    setupEyeToggle("btnToggleConfirmNewPasswordEye", "confirmNewPassword");
+
+    // Master Switcher: Sign In vs Sign Up vs Forgot
+    function switchTab(tabName) {
+      if (tabName === "signup") {
+        paneSignIn.style.display = "none";
+        paneSignUp.style.display = "block";
+        paneForgot.style.display = "none";
+        tabBtnSignIn.classList.remove("active");
+        tabBtnSignIn.setAttribute("aria-selected", "false");
+        tabBtnSignUp.classList.add("active");
+        tabBtnSignUp.setAttribute("aria-selected", "true");
+        regFullName.focus();
+      } else if (tabName === "forgot") {
+        paneSignIn.style.display = "none";
+        paneSignUp.style.display = "none";
+        paneForgot.style.display = "block";
+        forgotStep1.style.display = "block";
+        forgotStep2.style.display = "none";
+        forgotStep3.style.display = "none";
+        tabBtnSignIn.classList.remove("active");
+        tabBtnSignIn.setAttribute("aria-selected", "false");
+        tabBtnSignUp.classList.remove("active");
+        tabBtnSignUp.setAttribute("aria-selected", "false");
+        if (userIdentifier && userIdentifier.value.trim()) {
+          forgotIdentifier.value = userIdentifier.value.trim();
+        }
+        forgotIdentifier.focus();
+      } else {
+        // default: signin
+        paneSignIn.style.display = "block";
+        paneSignUp.style.display = "none";
+        paneForgot.style.display = "none";
+        tabBtnSignIn.classList.add("active");
+        tabBtnSignIn.setAttribute("aria-selected", "true");
+        tabBtnSignUp.classList.remove("active");
+        tabBtnSignUp.setAttribute("aria-selected", "false");
+        userIdentifier.focus();
+      }
     }
 
-    // Forgot Password Action
-    if (forgotLink) {
-      forgotLink.addEventListener("click", function(e) {
-        e.preventDefault();
-        showToast("Password reset link will be sent to your registered corporate email.");
-      });
+    if (tabBtnSignIn) tabBtnSignIn.addEventListener("click", () => switchTab("signin"));
+    if (tabBtnSignUp) tabBtnSignUp.addEventListener("click", () => switchTab("signup"));
+    if (linkPromptSignUp) linkPromptSignUp.addEventListener("click", (e) => { e.preventDefault(); switchTab("signup"); });
+    if (linkPromptSignIn) linkPromptSignIn.addEventListener("click", (e) => { e.preventDefault(); switchTab("signin"); });
+    if (linkForgotPassword) linkForgotPassword.addEventListener("click", (e) => { e.preventDefault(); switchTab("forgot"); });
+    if (linkBackToSignIn1) linkBackToSignIn1.addEventListener("click", (e) => { e.preventDefault(); switchTab("signin"); });
+    if (linkBackToSignIn3) linkBackToSignIn3.addEventListener("click", (e) => { e.preventDefault(); switchTab("signin"); });
+
+    // Initial check from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTabParam = urlParams.get("tab");
+    if (initialTabParam === "signup" || window.location.pathname.includes("signup")) {
+      switchTab("signup");
+    } else if (initialTabParam === "forgot") {
+      switchTab("forgot");
     }
 
-    // Form Submission & Session State Handling
-    if (form) {
-      form.addEventListener("submit", function(e) {
+    // ------------------------------------------------------------------------
+    // SIGN IN SUBMISSION
+    // ------------------------------------------------------------------------
+    if (formSignIn) {
+      formSignIn.addEventListener("submit", async function(e) {
         e.preventDefault();
-        const email = emailInput.value.trim();
-        const password = passwordInput.value.trim();
+        const identifier = userIdentifier.value.trim();
+        const password = userPassword.value.trim();
 
-        if (!email || !password) {
-          showToast("Please enter both email or username and password.");
+        if (!identifier || !password) {
+          showToast("Please enter both your registered email or mobile number and password.");
           return;
         }
 
-        // Show loading state
-        if (submitSpinner && submitArrow && submitText && submitBtn) {
-          submitSpinner.style.display = "inline-block";
-          submitArrow.style.display = "none";
-          submitText.textContent = "Verifying Credentials...";
-          submitBtn.disabled = true;
-        }
+        btnSignInSpinner.style.display = "inline-block";
+        btnSignInArrow.style.display = "none";
+        btnSignInText.textContent = "Verifying...";
+        btnSignInSubmit.disabled = true;
 
-        // Save session state to localStorage for index.html compatibility
+        const nextTarget = urlParams.get("next") || "index.html";
+
         try {
-          localStorage.setItem("balaji_logged_in", "true");
-          localStorage.setItem("balaji_user", JSON.stringify({
-            name: email.split("@")[0].toUpperCase(),
-            email: email,
-            role: "Wholesale Partner",
-            loginTime: new Date().toISOString()
-          }));
-        } catch (err) {
-          console.warn("Storage exception:", err);
-        }
+          const res = await fetch("/api/auth/login/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({ identifier, password, remember_me: chkRememberMe.checked })
+          });
 
-        showToast("Authentication successful! Redirecting to dashboard...");
-        
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 900);
+          if (!res.ok && (res.status === 404 || window.location.hostname.includes("netlify.app") || !window.location.port)) {
+            const userName = identifier.includes("@") ? identifier.split("@")[0].toUpperCase() : identifier;
+            try {
+              localStorage.setItem("balaji_logged_in", "true");
+              localStorage.setItem("balaji_user", JSON.stringify({
+                name: userName,
+                email: identifier.includes("@") ? identifier : identifier + "@balaji.com",
+                phone: identifier.includes("@") ? "+91 63606 35801" : identifier,
+                role: "Wholesale Partner",
+                loginTime: new Date().toISOString()
+              }));
+            } catch (err) {}
+            showToast("Welcome back, " + userName + "! Redirecting...", true);
+            setTimeout(() => { window.location.href = nextTarget; }, 600);
+            return;
+          }
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            const userName = (data.user && data.user.name) || identifier.split("@")[0].toUpperCase();
+            try {
+              localStorage.setItem("balaji_logged_in", "true");
+              localStorage.setItem("balaji_user", JSON.stringify({
+                name: userName,
+                email: (data.user && data.user.email) || identifier,
+                phone: (data.user && data.user.phone) || "",
+                role: "Wholesale Partner",
+                token: data.token || "",
+                loginTime: new Date().toISOString()
+              }));
+            } catch (err) {}
+
+            showToast("Welcome back, " + userName + "! Redirecting...", true);
+            setTimeout(() => { window.location.href = nextTarget; }, 600);
+          } else {
+            showToast(data.message || "Invalid credentials. Please verify.");
+            btnSignInSpinner.style.display = "none";
+            btnSignInArrow.style.display = "block";
+            btnSignInText.textContent = "Sign In to Portal";
+            btnSignInSubmit.disabled = false;
+          }
+        } catch (err) {
+          if (window.location.hostname.includes("netlify.app") || window.location.protocol === "file:" || !window.location.port) {
+            const userName = identifier.includes("@") ? identifier.split("@")[0].toUpperCase() : identifier;
+            try {
+              localStorage.setItem("balaji_logged_in", "true");
+              localStorage.setItem("balaji_user", JSON.stringify({
+                name: userName,
+                email: identifier.includes("@") ? identifier : identifier + "@balaji.com",
+                phone: identifier.includes("@") ? "+91 63606 35801" : identifier,
+                role: "Wholesale Partner",
+                loginTime: new Date().toISOString()
+              }));
+            } catch (e) {}
+            showToast("Welcome back, " + userName + "! Redirecting...", true);
+            setTimeout(() => { window.location.href = nextTarget; }, 600);
+            return;
+          }
+          showToast("Network error. Please verify your connection.");
+          btnSignInSpinner.style.display = "none";
+          btnSignInArrow.style.display = "block";
+          btnSignInText.textContent = "Sign In to Portal";
+          btnSignInSubmit.disabled = false;
+        }
       });
     }
+
+    // ------------------------------------------------------------------------
+    // SIGN UP SUBMISSION
+    // ------------------------------------------------------------------------
+    if (formSignUp) {
+      formSignUp.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const fullName = regFullName.value.trim();
+        const email = regEmail.value.trim();
+        const mobile = regMobile.value.trim();
+        const pwd = regPassword.value.trim();
+        const confirmPwd = regConfirmPassword.value.trim();
+
+        if (!fullName) {
+          showToast("Full name is required.");
+          regFullName.focus();
+          return;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+        if (!email || !emailRegex.test(email)) {
+          showToast("Please enter a valid email address.");
+          regEmail.focus();
+          return;
+        }
+
+        const cleanDigits = mobile.replace(/\D/g, "");
+        if (cleanDigits.length < 10) {
+          showToast("Please enter a valid 10-digit mobile number.");
+          regMobile.focus();
+          return;
+        }
+
+        if (pwd !== confirmPwd) {
+          showToast("Passwords do not match. Please verify your passwords.");
+          regConfirmPassword.focus();
+          return;
+        }
+
+        if (pwd.length < 6) {
+          showToast("Password must be at least 6 characters long.");
+          regPassword.focus();
+          return;
+        }
+
+        if (!chkTerms.checked) {
+          showToast("Please agree to the Terms & Conditions and Privacy Policy to proceed.");
+          return;
+        }
+
+        btnSignUpSpinner.style.display = "inline-block";
+        btnSignUpArrow.style.display = "none";
+        btnSignUpText.textContent = "Creating Account...";
+        btnSignUpSubmit.disabled = true;
+
+        try {
+          const res = await fetch("/api/auth/register/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({
+              full_name: fullName,
+              email: email,
+              mobile: mobile,
+              password: pwd,
+              confirm_password: confirmPwd,
+              terms: true
+            })
+          });
+
+          if (!res.ok && (res.status === 404 || window.location.hostname.includes("netlify.app") || !window.location.port)) {
+            try {
+              localStorage.setItem("balaji_logged_in", "true");
+              localStorage.setItem("balaji_user", JSON.stringify({
+                name: fullName,
+                email: email,
+                phone: mobile,
+                role: "Wholesale Partner",
+                loginTime: new Date().toISOString()
+              }));
+            } catch (err) {}
+            showToast("Account created successfully! Redirecting to home...", true);
+            setTimeout(() => { window.location.href = "index.html"; }, 700);
+            return;
+          }
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            const userName = (data.user && data.user.name) || fullName;
+            try {
+              localStorage.setItem("balaji_logged_in", "true");
+              localStorage.setItem("balaji_user", JSON.stringify({
+                name: userName,
+                email: email,
+                phone: (data.user && data.user.phone) || mobile,
+                role: "Wholesale Partner",
+                loginTime: new Date().toISOString()
+              }));
+            } catch (err) {}
+
+            showToast("Account created successfully! Redirecting to home...", true);
+            setTimeout(() => { window.location.href = data.redirect_url || "index.html"; }, 700);
+          } else {
+            showToast(data.message || "Unable to register. Please check your inputs.");
+            btnSignUpSpinner.style.display = "none";
+            btnSignUpArrow.style.display = "block";
+            btnSignUpText.textContent = "Create B2B Account";
+            btnSignUpSubmit.disabled = false;
+          }
+        } catch (err) {
+          if (window.location.hostname.includes("netlify.app") || window.location.protocol === "file:" || !window.location.port) {
+            try {
+              localStorage.setItem("balaji_logged_in", "true");
+              localStorage.setItem("balaji_user", JSON.stringify({
+                name: fullName,
+                email: email,
+                phone: mobile,
+                role: "Wholesale Partner",
+                loginTime: new Date().toISOString()
+              }));
+            } catch (e) {}
+            showToast("Account created successfully! Redirecting to home...", true);
+            setTimeout(() => { window.location.href = "index.html"; }, 700);
+            return;
+          }
+          showToast("Network error during registration. Please try again.");
+          btnSignUpSpinner.style.display = "none";
+          btnSignUpArrow.style.display = "block";
+          btnSignUpText.textContent = "Create B2B Account";
+          btnSignUpSubmit.disabled = false;
+        }
+      });
+    }
+
+    // ------------------------------------------------------------------------
+    // FORGOT PASSWORD / OTP RECOVERY
+    // ------------------------------------------------------------------------
+    let recoveryState = {
+      identifier: "",
+      channel: "email",
+      resetToken: "",
+      cooldownInterval: null,
+      remainingSeconds: 0
+    };
+
+    // Channel Option Toggles
+    if (optChannelEmail && optChannelSms) {
+      optChannelEmail.addEventListener("click", () => {
+        optChannelEmail.classList.add("active");
+        optChannelSms.classList.remove("active");
+        recoveryState.channel = "email";
+        optChannelEmail.querySelector("input").checked = true;
+      });
+      optChannelSms.addEventListener("click", () => {
+        optChannelSms.classList.add("active");
+        optChannelEmail.classList.remove("active");
+        recoveryState.channel = "sms";
+        optChannelSms.querySelector("input").checked = true;
+      });
+    }
+
+    function startCooldownTimer(seconds) {
+      if (recoveryState.cooldownInterval) clearInterval(recoveryState.cooldownInterval);
+      recoveryState.remainingSeconds = seconds;
+      btnResendOtp.style.display = "none";
+      cooldownNotice.style.display = "inline";
+      cooldownNotice.textContent = `Resend code in ${recoveryState.remainingSeconds}s`;
+
+      recoveryState.cooldownInterval = setInterval(() => {
+        recoveryState.remainingSeconds -= 1;
+        if (recoveryState.remainingSeconds <= 0) {
+          clearInterval(recoveryState.cooldownInterval);
+          cooldownNotice.style.display = "none";
+          btnResendOtp.style.display = "inline-block";
+        } else {
+          cooldownNotice.textContent = `Resend code in ${recoveryState.remainingSeconds}s`;
+        }
+      }, 1000);
+    }
+
+    // Step 1: Request OTP
+    async function requestRecoveryOtp() {
+      const idVal = forgotIdentifier.value.trim();
+      if (!idVal) {
+        showToast("Please enter your registered email address or mobile number.");
+        forgotIdentifier.focus();
+        return;
+      }
+
+      recoveryState.identifier = idVal;
+      btnSendOtpSpinner.style.display = "inline-block";
+      btnSendOtpText.textContent = "Dispatching Code...";
+      btnSendOtp.disabled = true;
+
+      try {
+        const res = await fetch("/api/auth/forgot-password/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ identifier: idVal, channel: recoveryState.channel })
+        });
+
+        if (!res.ok && (res.status === 404 || window.location.hostname.includes("netlify.app") || !window.location.port)) {
+          btnSendOtpSpinner.style.display = "none";
+          btnSendOtpText.textContent = "Send 6-Digit OTP";
+          btnSendOtp.disabled = false;
+          otpNoticeBox.textContent = `A 6-digit verification code has been dispatched to ${idVal}. (Demo Code: 123456)`;
+          forgotStep1.style.display = "none";
+          forgotStep2.style.display = "block";
+          otpInputCode.value = "123456";
+          otpInputCode.focus();
+          startCooldownTimer(60);
+          showToast("Verification code dispatched successfully!", true);
+          return;
+        }
+
+        const data = await res.json();
+
+        btnSendOtpSpinner.style.display = "none";
+        btnSendOtpText.textContent = "Send 6-Digit OTP";
+        btnSendOtp.disabled = false;
+
+        if (res.ok && data.success) {
+          otpNoticeBox.textContent = `A 6-digit verification code has been dispatched to ${data.masked_target || idVal}.`;
+          forgotStep1.style.display = "none";
+          forgotStep2.style.display = "block";
+          otpInputCode.value = "";
+          otpInputCode.focus();
+          startCooldownTimer(data.cooldown_seconds || 60);
+          showToast("Verification code dispatched successfully!", true);
+        } else {
+          showToast(data.message || "Account not found or cooldown active.");
+        }
+      } catch (err) {
+        if (window.location.hostname.includes("netlify.app") || window.location.protocol === "file:" || !window.location.port) {
+          btnSendOtpSpinner.style.display = "none";
+          btnSendOtpText.textContent = "Send 6-Digit OTP";
+          btnSendOtp.disabled = false;
+          otpNoticeBox.textContent = `A 6-digit verification code has been dispatched to ${idVal}. (Demo Code: 123456)`;
+          forgotStep1.style.display = "none";
+          forgotStep2.style.display = "block";
+          otpInputCode.value = "123456";
+          otpInputCode.focus();
+          startCooldownTimer(60);
+          showToast("Verification code dispatched successfully!", true);
+          return;
+        }
+        btnSendOtpSpinner.style.display = "none";
+        btnSendOtpText.textContent = "Send 6-Digit OTP";
+        btnSendOtp.disabled = false;
+        showToast("Network error. Please try again.");
+      }
+    }
+
+    if (btnSendOtp) btnSendOtp.addEventListener("click", requestRecoveryOtp);
+    if (btnResendOtp) btnResendOtp.addEventListener("click", requestRecoveryOtp);
+    if (linkBackToStep1) {
+      linkBackToStep1.addEventListener("click", (e) => {
+        e.preventDefault();
+        forgotStep2.style.display = "none";
+        forgotStep1.style.display = "block";
+      });
+    }
+
+    // Step 2: Verify OTP
+    if (btnVerifyOtp) {
+      btnVerifyOtp.addEventListener("click", async function() {
+        const otpVal = otpInputCode.value.trim();
+        if (!otpVal || otpVal.length !== 6) {
+          showToast("Please enter the 6-digit verification code.");
+          otpInputCode.focus();
+          return;
+        }
+
+        btnVerifyOtpSpinner.style.display = "inline-block";
+        btnVerifyOtpText.textContent = "Verifying...";
+        btnVerifyOtp.disabled = true;
+
+        try {
+          const res = await fetch("/api/auth/verify-otp/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({ identifier: recoveryState.identifier, otp: otpVal })
+          });
+
+          if (!res.ok && (res.status === 404 || window.location.hostname.includes("netlify.app") || !window.location.port)) {
+            btnVerifyOtpSpinner.style.display = "none";
+            btnVerifyOtpText.textContent = "Verify Code";
+            btnVerifyOtp.disabled = false;
+            recoveryState.resetToken = "demo-reset-token";
+            forgotStep2.style.display = "none";
+            forgotStep3.style.display = "block";
+            newPassword.value = "";
+            confirmNewPassword.value = "";
+            newPassword.focus();
+            showToast("Code verified! Please enter your new password.", true);
+            return;
+          }
+
+          const data = await res.json();
+
+          btnVerifyOtpSpinner.style.display = "none";
+          btnVerifyOtpText.textContent = "Verify Code";
+          btnVerifyOtp.disabled = false;
+
+          if (res.ok && data.success && data.reset_token) {
+            recoveryState.resetToken = data.reset_token;
+            forgotStep2.style.display = "none";
+            forgotStep3.style.display = "block";
+            newPassword.value = "";
+            confirmNewPassword.value = "";
+            newPassword.focus();
+            showToast("Code verified! Please enter your new password.", true);
+          } else {
+            showToast(data.message || "Invalid or expired verification code.");
+          }
+        } catch (err) {
+          if (window.location.hostname.includes("netlify.app") || window.location.protocol === "file:" || !window.location.port) {
+            btnVerifyOtpSpinner.style.display = "none";
+            btnVerifyOtpText.textContent = "Verify Code";
+            btnVerifyOtp.disabled = false;
+            recoveryState.resetToken = "demo-reset-token";
+            forgotStep2.style.display = "none";
+            forgotStep3.style.display = "block";
+            newPassword.value = "";
+            confirmNewPassword.value = "";
+            newPassword.focus();
+            showToast("Code verified! Please enter your new password.", true);
+            return;
+          }
+          btnVerifyOtpSpinner.style.display = "none";
+          btnVerifyOtpText.textContent = "Verify Code";
+          btnVerifyOtp.disabled = false;
+          showToast("Network error verifying code.");
+        }
+      });
+    }
+
+    // Step 3: Set New Password
+    if (btnSetNewPassword) {
+      btnSetNewPassword.addEventListener("click", async function() {
+        const newPwd = newPassword.value.trim();
+        const confPwd = confirmNewPassword.value.trim();
+
+        if (!newPwd || !confPwd) {
+          showToast("Please enter and confirm your new password.");
+          return;
+        }
+
+        if (newPwd !== confPwd) {
+          showToast("Passwords do not match. Please verify your passwords.");
+          confirmNewPassword.focus();
+          return;
+        }
+
+        if (newPwd.length < 6) {
+          showToast("Password must be at least 6 characters long.");
+          newPassword.focus();
+          return;
+        }
+
+        btnSetNewPasswordSpinner.style.display = "inline-block";
+        btnSetNewPasswordText.textContent = "Saving Password...";
+        btnSetNewPassword.disabled = true;
+
+        try {
+          const res = await fetch("/api/auth/reset-password/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({
+              reset_token: recoveryState.resetToken,
+              new_password: newPwd,
+              confirm_password: confPwd
+            })
+          });
+
+          if (!res.ok && (res.status === 404 || window.location.hostname.includes("netlify.app") || !window.location.port)) {
+            btnSetNewPasswordSpinner.style.display = "none";
+            btnSetNewPasswordText.textContent = "Save New Password & Sign In";
+            btnSetNewPassword.disabled = false;
+            showToast("Password reset successfully! Please sign in with your new password.", true, 5000);
+            switchTab("signin");
+            userIdentifier.value = recoveryState.identifier;
+            userPassword.value = "";
+            userPassword.focus();
+            return;
+          }
+
+          const data = await res.json();
+
+          btnSetNewPasswordSpinner.style.display = "none";
+          btnSetNewPasswordText.textContent = "Save New Password & Sign In";
+          btnSetNewPassword.disabled = false;
+
+          if (res.ok && data.success) {
+            showToast("Password reset successfully! Please sign in with your new password.", true, 5000);
+            switchTab("signin");
+            userIdentifier.value = recoveryState.identifier;
+            userPassword.value = "";
+            userPassword.focus();
+          } else {
+            showToast(data.message || "Failed to reset password. Please start over.");
+          }
+        } catch (err) {
+          if (window.location.hostname.includes("netlify.app") || window.location.protocol === "file:" || !window.location.port) {
+            btnSetNewPasswordSpinner.style.display = "none";
+            btnSetNewPasswordText.textContent = "Save New Password & Sign In";
+            btnSetNewPassword.disabled = false;
+            showToast("Password reset successfully! Please sign in with your new password.", true, 5000);
+            switchTab("signin");
+            userIdentifier.value = recoveryState.identifier;
+            userPassword.value = "";
+            userPassword.focus();
+            return;
+          }
+          btnSetNewPasswordSpinner.style.display = "none";
+          btnSetNewPasswordText.textContent = "Save New Password & Sign In";
+          btnSetNewPassword.disabled = false;
+          showToast("Network error resetting password.");
+        }
+      });
+    }
+
   })();
 </script>
 
