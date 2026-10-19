@@ -49,7 +49,7 @@
       <div class="catalog-grid">
         {% for prod in products %}
           <div class="catalog-card reveal-up" style="position: relative; display: flex; flex-direction: column;">
-            <div class="catalog-card-image" style="background-image: url('{% static prod.category.image_filename %}'); background-size: cover; background-position: center;">
+            <div class="catalog-card-image" {% if prod.card_image_url %}style="background-image: url('{{ prod.card_image_url }}'); background-size: cover; background-position: center;"{% endif %}>
               <span class="card-category-badge">{{ prod.category.name }}</span>
               <div class="card-grade-tag">{{ prod.grade }}</div>
             </div>

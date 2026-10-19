@@ -41,6 +41,12 @@ urlpatterns = [
 
     # Public Core Website sections
     path('core/', include('core.urls')),
+
+    # Public Product Catalog, Product Detail, Cart & Checkout (previously unmounted)
+    path('products/', include('products.urls')),
+
+    # B2B Client Portal (dashboard, orders, quotes, profile, support)
+    path('portal/', include('portal.urls')),
 ]
 
 # Serve media, images, and static files in development

@@ -21,11 +21,28 @@
 <!-- Product Detail Hero -->
 <section class="product-hero-section">
   <div class="product-hero-container">
+
+    <!-- LEFT: Product image + thumbnails + quick specs -->
     <div class="product-hero-visual">
-      <div class="product-visual-box" style="background-image: url('{% static product.category.image_filename %}'); background-size: cover; background-position: center;">
+      <div class="product-visual-box" {% if not gallery %}style="background-image: url('{% static product.category.image_filename %}'); background-size: cover; background-position: center;"{% endif %}>
+        {% if gallery %}
+          <img id="pd-main-image" src="{{ gallery.0.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+        {% endif %}
         <div class="product-badge-corner">{{ product.grade }}</div>
         <div class="product-visual-overlay"></div>
       </div>
+
+      {% if gallery|length > 1 %}
+      <!-- Thumbnail strip (only shown when multiple images are available) -->
+      <div style="display: flex; gap: 0.6rem; margin: -0.6rem 0 1.4rem 0; flex-wrap: wrap;">
+        {% for img in gallery %}
+          <button type="button" class="pd-thumb" onclick="pdSwapImage('{{ img.url }}', this)" title="View image {{ forloop.counter }}" style="width: 74px; height: 74px; padding: 0; border-radius: 10px; overflow: hidden; border: 2px solid {% if forloop.first %}#c8a96e{% else %}#e2e8f0{% endif %}; cursor: pointer; background: #fff;">
+            <img src="{{ img.url }}" alt="{{ product.name }} — view {{ forloop.counter }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+          </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       <div class="product-quick-specs">
         <div class="quick-spec-card">
           <span class="qs-label">Sortex Optical Purity</span>
@@ -46,23 +63,31 @@
       </div>
     </div>
 
+    <!-- RIGHT: Product information + purchase actions -->
     <div class="product-hero-info">
       <span class="product-cat-tag">{{ product.category.name }}</span>
       <h1 class="product-detail-title">{{ product.name }}</h1>
       <p class="product-detail-sub">{{ product.subtitle }}</p>
-      
+
       <!-- Price Display Box -->
-      <div style="background: linear-gradient(135deg, rgba(200, 169, 110, 0.15) 0%, rgba(46, 90, 46, 0.1) 100%); border: 1.5px solid rgba(200, 169, 110, 0.4); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+      {% if product.unit_price %}
+      <div style="background: linear-gradient(135deg, rgba(200, 169, 110, 0.15) 0%, rgba(46, 90, 46, 0.1) 100%); border: 1.5px solid rgba(200, 169, 110, 0.4); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
         <div>
           <span style="font-size: 0.8rem; text-transform: uppercase; color: #475569; font-weight: 700; letter-spacing: 0.5px; display: block;">Commercial Supply Price</span>
           <span style="font-size: 2rem; font-weight: 800; color: #1b381e; line-height: 1.1;">{{ product.formatted_price }}</span>
-          <span style="font-size: 0.9rem; color: #64748b; font-weight: 600;">per {{ product.unit_name }}</span>
+          <span style="font-size: 0.9rem; color: #64748b; font-weight: 600;">/ {{ product.unit_name }}</span>
         </div>
         <div style="text-align: right;">
-          <span style="display: inline-block; background: #dcfce7; color: #15803d; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.82rem; font-weight: 700;">✓ In Stock &amp; Ready for Loadout</span>
+          <span style="display: inline-block; background: #dcfce7; color: #15803d; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.82rem; font-weight: 700;">✓ Available for B2B Supply</span>
           <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.3rem;">Ex-Warehouse GST Rate 5%</div>
         </div>
       </div>
+      {% else %}
+      <div style="background: rgba(200, 169, 110, 0.12); border: 1.5px solid rgba(200, 169, 110, 0.4); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0;">
+        <span style="font-size: 1.15rem; font-weight: 800; color: #1b381e;">Request a Quote</span>
+        <div style="font-size: 0.82rem; color: #64748b; margin-top: 0.2rem;">Price is confirmed per requirement. Use the RFQ form below.</div>
+      </div>
+      {% endif %}
 
       <div class="product-desc-box">
         <p>{{ product.description }}</p>
@@ -70,28 +95,125 @@
 
       <div class="product-logistics-box">
         <div class="logistics-row">
+          <strong>Availability:</strong>
+          <span>Available for B2B bulk supply — <a href="#rfqSection" style="color: #2e5a2e; font-weight: 600;">contact us for the current stock position</a></span>
+        </div>
+        <div class="logistics-row">
+          <strong>Available Packaging Sizes:</strong>
+          <span>{{ product.packaging_options }}</span>
+        </div>
+        <div class="logistics-row">
           <strong>Minimum Order Quantity (MoQ):</strong>
           <span>{{ product.min_order_qty }}</span>
         </div>
         <div class="logistics-row">
-          <strong>Approved Packaging Formats:</strong>
-          <span>{{ product.packaging_options }}</span>
+          <strong>Origin / Sourcing:</strong>
+          <span>{{ product.origin|default:"Contact us for details" }}</span>
         </div>
         <div class="logistics-row">
-          <strong>Quality Certification:</strong>
-          <span>Batch Certificate of Analysis (CoA) &amp; Weighbridge Slips with every dispatch</span>
+          <strong>Quality Certifications:</strong>
+          <span>Contact us for details</span>
+        </div>
+        <div class="logistics-row">
+          <strong>Storage Instructions:</strong>
+          <span>Store in a cool, dry place in sealed packaging, away from direct sunlight.</span>
         </div>
       </div>
 
-      <div class="product-actions-row">
-        <button type="button" class="btn-pill btn-pill-gold btn-pill-lg" style="border: none; cursor: pointer;" onclick="openBuyModal('{{ product.id }}', '{{ product.name|escapejs }}', '{{ product.category.name|escapejs }}', '{{ product.unit_price }}', '{{ product.formatted_price|escapejs }}', '{{ product.unit_name|escapejs }}', '{{ product.min_order_qty|escapejs }}')">
-          ⚡ Buy Now (Instant Order)
-        </button>
-        <a href="#rfqSection" class="btn-pill btn-pill-outline-dark">Request Custom Quote</a>
+      <!-- Add to Cart / Buy Now -->
+      <div style="border: 1.5px solid rgba(200, 169, 110, 0.4); border-radius: 12px; padding: 1.25rem 1.35rem; background: #fffdf8;">
+        <form method="POST" action="{% url 'products:cart_add' %}" id="pdBuyForm">
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <input type="hidden" name="size" id="pdSizeInput" value="{{ packaging_sizes.0 }}">
+
+          <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; display: block; margin-bottom: 0.5rem;">1. Choose Packaging Size</span>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center;">
+            {% for size in packaging_sizes %}
+            <label class="pd-size-option">
+              <input type="radio" name="size_choice" value="{{ size }}" {% if forloop.first %}checked{% endif %} onchange="pdSelectSize('{{ size }}')">
+              <span class="pd-size-pill">{{ size }} kg Pack</span>
+            </label>
+            {% endfor %}
+          </div>
+
+          <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: #475569; display: block; margin-bottom: 0.5rem;">2. Quantity (number of packs)</span>
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <input type="number" name="qty" id="pdQtyInput" value="1" min="1" max="500" required onchange="pdUpdateEstimate()" oninput="pdUpdateEstimate()" style="width: 110px; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; font-weight: 700;">
+            <div style="font-size: 0.88rem; color: #334155;">
+              Approx. weight: <strong id="pdWeightOut">{{ packaging_sizes.0 }} kg</strong>
+              &nbsp;•&nbsp;
+              Estimated price: <strong id="pdTotalOut" style="color: #1b381e;">₹0.00</strong>
+            </div>
+          </div>
+
+          <div class="product-actions-row" style="margin-top: 1.15rem;">
+            <button type="submit" class="btn-pill btn-pill-outline-dark" style="padding: 0.85rem 1.6rem; font-weight: 800; cursor: pointer; border-width: 2px;">
+              🛒 Add to Cart
+            </button>
+            <button type="submit" name="checkout" value="1" class="btn-pill btn-pill-gold btn-pill-lg" style="border: none; cursor: pointer;">
+              ⚡ Buy Now — Checkout
+            </button>
+            <a href="#rfqSection" class="btn-pill btn-pill-ghost" style="padding: 0.85rem 1.2rem;">Request a Quote</a>
+          </div>
+          <p style="font-size: 0.76rem; color: #64748b; margin: 0.75rem 0 0 0;">
+            🔒 Prices are recalculated on our server. 5% GST is added at checkout. Bulk / contract pricing: request a quote.
+          </p>
+        </form>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .pd-size-option input { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
+  .pd-size-pill {
+    display: inline-block;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #334155;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .pd-size-option input:checked + .pd-size-pill {
+    border-color: #c8a96e;
+    background: rgba(200, 169, 110, 0.15);
+    color: #1b381e;
+    font-weight: 800;
+  }
+  .pd-size-pill:hover { border-color: #c8a96e; }
+</style>
+<script>
+  var PD_UNIT_PRICE = parseFloat('{{ product.unit_price|escapejs }}') || 0;
+
+  function pdSelectSize(size) {
+    document.getElementById('pdSizeInput').value = size;
+    pdUpdateEstimate();
+  }
+
+  function pdSwapImage(url, btn) {
+    var main = document.getElementById('pd-main-image');
+    if (main) { main.src = url; }
+    var thumbs = document.querySelectorAll('.pd-thumb');
+    for (var i = 0; i < thumbs.length; i++) { thumbs[i].style.borderColor = '#e2e8f0'; }
+    if (btn) { btn.style.borderColor = '#c8a96e'; }
+  }
+
+  function pdUpdateEstimate() {
+    var size = parseFloat(document.getElementById('pdSizeInput').value) || 0;
+    var qty = parseInt(document.getElementById('pdQtyInput').value, 10);
+    if (isNaN(qty) || qty < 0) { qty = 0; }
+    var weight = size * qty;
+    var total = weight * PD_UNIT_PRICE;
+    document.getElementById('pdWeightOut').innerText = weight.toLocaleString('en-IN') + ' kg';
+    document.getElementById('pdTotalOut').innerText = '₹' + total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  pdUpdateEstimate();
+</script>
 
 <!-- Technical Data Sheet (TDS) Table -->
 <section class="tds-section" id="specifications">
@@ -234,7 +356,7 @@
     <div class="related-grid">
       {% for rel in related_products %}
         <div class="catalog-card" style="display: flex; flex-direction: column;">
-          <div class="catalog-card-image" style="background-image: url('{% static rel.category.image_filename %}'); background-size: cover; background-position: center;">
+          <div class="catalog-card-image" {% if rel.card_image_url %}style="background-image: url('{{ rel.card_image_url }}'); background-size: cover; background-position: center;"{% endif %}>
             <span class="card-grade-tag">{{ rel.grade }}</span>
           </div>
           <div class="catalog-card-body" style="display: flex; flex-direction: column; flex-grow: 1;">

@@ -153,6 +153,7 @@
 
       <!-- Nav Actions: Pill Buttons -->
       <div class="nav-actions">
+        <a href="{% url 'products:cart' %}" class="btn-pill btn-pill-primary">🛒 Cart{% if CART_COUNT %} ({{ CART_COUNT }}){% endif %}</a>
         <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-primary">Request a Quote</a>
         {% if user.is_authenticated %}
           <a href="{% url 'portal:dashboard' %}" class="btn-pill btn-pill-ghost">Portal Dashboard</a>
@@ -170,6 +171,7 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
       <a href="{% url 'products:catalog' %}" class="mobile-link">All Products</a>
+      <a href="{% url 'products:cart' %}" class="mobile-link">🛒 Cart{% if CART_COUNT %} ({{ CART_COUNT }}){% endif %}</a>
       <a href="{% url 'products:catalog' %}?category=dal-pulses" class="mobile-link">› Dal &amp; Pulses</a>
       <a href="{% url 'products:catalog' %}?category=cereals" class="mobile-link">› Cereals &amp; Grains</a>
       <a href="{% url 'products:catalog' %}?category=ragi" class="mobile-link">› Ragi (Finger Millet)</a>

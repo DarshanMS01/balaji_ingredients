@@ -1523,13 +1523,30 @@ h1, h2, h3, h4, h5, h6 {
   max-width: var(--max-w);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 3.5rem;
   align-items: flex-start;
 }
 
+/* Product detail: information + booking column scrolls on its own (left),
+   the existing product photograph stays put (right). No zoom effects. */
+.product-hero-info {
+  order: 1;
+  max-height: calc(100vh - 6.5rem);
+  overflow-y: auto;
+  padding-right: 0.75rem;
+  scrollbar-width: thin;
+}
+.product-hero-visual {
+  order: 2;
+  position: sticky;
+  top: 5.75rem;
+  align-self: start;
+}
+
 .product-visual-box {
-  height: 320px;
+  height: 420px;
+  background: #ffffff;
   border-radius: 12px;
   position: relative;
   overflow: hidden;
@@ -2318,6 +2335,19 @@ h1, h2, h3, h4, h5, h6 {
   }
   .quote-layout, .product-hero-container, .order-content-grid {
     grid-template-columns: 1fr;
+  }
+  /* Product detail on tablet/mobile: normal vertical flow, photo first,
+     no sticky and no inner scrollbar (avoids horizontal scrolling). */
+  .product-hero-visual {
+    order: 1;
+    position: static;
+    top: auto;
+  }
+  .product-hero-info {
+    order: 2;
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
   .footer-top-row {
     grid-template-columns: 1fr;

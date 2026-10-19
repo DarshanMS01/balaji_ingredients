@@ -663,205 +663,45 @@ html, body {
   to { transform: rotate(360deg); }
 }
 
-/* MASTER TAB SWITCHER: 2 CLEARLY VISIBLE BUTTONS */
-.balaji-auth-wrapper .bi-auth-switch-bar {
-  display: flex;
+/* Demo Credentials Quick-Fill Pill */
+.balaji-auth-wrapper .bi-demo-pill {
+  margin-top: 13px;
+  padding: 7px 12px;
   background: var(--bi-ivory-alt);
-  border: 1.5px solid var(--bi-border);
-  border-radius: 9999px;
-  padding: 4px;
-  margin-bottom: clamp(14px, 1.8vh, 18px);
-  gap: 6px;
-}
-
-.balaji-auth-wrapper .bi-switch-btn {
-  flex: 1;
-  height: 42px;
-  border: none;
-  border-radius: 9999px;
-  background: transparent;
-  color: var(--bi-text);
-  font-family: var(--bi-font-sans);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
-}
-
-.balaji-auth-wrapper .bi-switch-btn:hover:not(.active) {
-  background: rgba(168, 43, 29, 0.08);
-  color: var(--bi-red);
-}
-
-.balaji-auth-wrapper .bi-switch-btn.active {
-  background: var(--bi-red);
-  color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(168, 43, 29, 0.35);
-}
-
-.balaji-auth-wrapper .bi-tab-icon {
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-}
-
-.balaji-auth-wrapper .bi-pane-headings {
-  text-align: center;
-  margin-bottom: clamp(12px, 1.6vh, 16px);
-}
-
-.balaji-auth-wrapper .bi-country-prefix {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 8px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--bi-red);
-  background: var(--bi-red-soft);
-  border-radius: 6px;
-  border: 1px solid rgba(168, 43, 29, 0.18);
-  height: 30px;
-  user-select: none;
-  flex-shrink: 0;
-}
-
-.balaji-auth-wrapper .bi-terms-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 10px 0 16px;
-  font-size: 12px;
-  color: var(--bi-text-muted);
-  line-height: 1.45;
-  text-align: left;
-}
-
-.balaji-auth-wrapper .bi-terms-row input[type="checkbox"] {
-  accent-color: var(--bi-red);
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.balaji-auth-wrapper .bi-terms-row a {
-  color: var(--bi-red);
-  text-decoration: underline;
-  font-weight: 600;
-}
-
-.balaji-auth-wrapper .bi-channel-picker {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.balaji-auth-wrapper .bi-channel-opt {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 9px 12px;
-  border: 1.5px solid var(--bi-border);
-  border-radius: var(--bi-radius-sm);
-  background: var(--bi-ivory);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--bi-text);
-  transition: all 0.2s ease;
-  user-select: none;
-}
-
-.balaji-auth-wrapper .bi-channel-opt input {
-  accent-color: var(--bi-red);
-}
-
-.balaji-auth-wrapper .bi-channel-opt.active {
-  border-color: var(--bi-red);
-  background: var(--bi-red-soft);
-  color: var(--bi-red);
-  box-shadow: 0 0 0 2px var(--bi-red-glow);
-}
-
-.balaji-auth-wrapper .bi-otp-notice {
-  background: var(--bi-ivory-alt);
-  border: 1px solid var(--bi-border);
-  border-left: 3.5px solid var(--bi-red);
+  border: 1px dashed rgba(168, 43, 29, 0.25);
   border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 12.5px;
-  color: var(--bi-text);
-  line-height: 1.45;
-  margin-bottom: 12px;
-}
-
-.balaji-auth-wrapper .bi-otp-input-wrap {
-  margin: 12px 0 14px;
-  text-align: center;
-}
-
-.balaji-auth-wrapper .bi-otp-input-wrap input {
-  width: 100%;
-  height: 52px;
-  border: 2px solid var(--bi-border);
-  border-radius: var(--bi-radius-sm);
-  background: var(--bi-ivory);
-  font-family: monospace;
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: 12px;
-  text-align: center;
-  color: var(--bi-text);
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.balaji-auth-wrapper .bi-otp-input-wrap input:focus {
-  background: #FFFFFF;
-  border-color: var(--bi-red);
-  box-shadow: 0 0 0 4px var(--bi-red-glow);
-}
-
-.balaji-auth-wrapper .bi-resend-wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 8px 0 16px;
-  font-size: 12.5px;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--bi-text);
+}
+
+.balaji-auth-wrapper .bi-demo-pill span {
   color: var(--bi-text-muted);
 }
 
-.balaji-auth-wrapper .bi-resend-btn {
-  background: transparent;
-  border: none;
-  color: var(--bi-red);
+.balaji-auth-wrapper .bi-demo-pill code {
   font-weight: 700;
-  font-size: 12.5px;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.balaji-auth-wrapper .bi-forgot-back-btn {
-  display: inline-block;
-  margin-top: 14px;
-  font-size: 12.5px;
-  color: var(--bi-text-muted);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.15s ease;
-}
-
-.balaji-auth-wrapper .bi-forgot-back-btn:hover {
   color: var(--bi-red);
+  font-family: monospace;
+}
+
+.balaji-auth-wrapper .bi-demo-btn {
+  padding: 4px 10px;
+  background: var(--bi-red);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.balaji-auth-wrapper .bi-demo-btn:hover {
+  background: var(--bi-red-hover);
 }
 
 /* Separator Line */

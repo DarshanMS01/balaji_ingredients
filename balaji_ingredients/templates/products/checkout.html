@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Secure B2B checkout for bulk ingredient orders.{% endblock %}
+
+{% block content %}
+<section class="page-hero-clean">
+  <div class="page-hero-clean-container">
+    <div class="section-tag">SECURE B2B CHECKOUT</div>
+    <h1 class="page-hero-clean-title">Checkout</h1>
+    <p class="page-hero-clean-sub">
+      Confirm your delivery details and payment method. Your order is saved to our system and reviewed by our team.
+    </p>
+  </div>
+</section>
+
+<section class="catalog-section">
+  <div class="catalog-container" style="max-width: 1040px;">
+
+    {% if lines %}
+    <form method="POST" action="{% url 'products:checkout' %}" style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.75rem; align-items: start;">
+      {% csrf_token %}
+
+      <!-- Left: Delivery & Payment form -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem;">
+        <h3 style="margin: 0 0 1.1rem 0; font-size: 1.05rem; color: #1b381e; text-transform: uppercase; letter-spacing: 0.05em;">Delivery Details</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            Full Name *
+            <input type="text" name="full_name" value="{{ initial.full_name }}" required style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            Company Name
+            <input type="text" name="company_name" value="{{ initial.company_name }}" style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            Email Address
+            <input type="email" name="email" value="{{ initial.email }}" style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            Phone Number *
+            <input type="text" name="phone" value="{{ initial.phone }}" required style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; grid-column: 1 / -1;">
+            Address Line 1 *
+            <input type="text" name="address_line1" value="{{ initial.address_line1 }}" required style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; grid-column: 1 / -1;">
+            Address Line 2
+            <input type="text" name="address_line2" value="{{ initial.address_line2 }}" style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            City *
+            <input type="text" name="city" value="{{ initial.city }}" required style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            State *
+            <input type="text" name="state" value="{{ initial.state }}" required style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            Pincode *
+            <input type="text" name="pincode" value="{{ initial.pincode }}" required style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569;">
+            GSTIN (optional)
+            <input type="text" name="gstin" value="{{ initial.gstin }}" style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+          </label>
+        </div>
+
+        <h3 style="margin: 1.6rem 0 0.9rem 0; font-size: 1.05rem; color: #1b381e; text-transform: uppercase; letter-spacing: 0.05em;">Payment Method</h3>
+        <div style="display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <label style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer;">
+            <input type="radio" name="payment_method" value="cod" {% if initial.payment_method != 'upi' %}checked{% endif %} onchange="pdToggleUtr()"> Cash on Delivery
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer;">
+            <input type="radio" name="payment_method" value="upi" {% if initial.payment_method == 'upi' %}checked{% endif %} onchange="pdToggleUtr()"> UPI Transfer
+          </label>
+        </div>
+
+        <label id="pdUtrField" style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; {% if initial.payment_method != 'upi' %}display: none;{% endif %}">
+          UPI Transaction Reference (UTR Number)
+          <input type="text" name="upi_utr" value="{{ initial.upi_utr }}" style="width: 100%; margin-top: 0.3rem; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+        </label>
+        <p style="font-size: 0.76rem; color: #64748b; margin: 0.5rem 0 0 0;">UPI orders are marked "Verification Pending" until our team confirms the transfer. COD orders are confirmed by phone.</p>
+
+        <h3 style="margin: 1.6rem 0 0.7rem 0; font-size: 1.05rem; color: #1b381e; text-transform: uppercase; letter-spacing: 0.05em;">Additional Requirements</h3>
+        <textarea name="notes" rows="3" placeholder="Grade requirements, delivery timing, unloading instructions..." style="width: 100%; padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 500; font-family: inherit;">{{ initial.notes }}</textarea>
+      </div>
+
+      <!-- Right: Order summary -->
+      <div style="background: #fffdf8; border: 1.5px solid rgba(200, 169, 110, 0.45); border-radius: 12px; padding: 1.35rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.05rem; color: #1b381e; text-transform: uppercase; letter-spacing: 0.05em;">Your Order</h3>
+
+        {% for line in lines %}
+        <div style="border-bottom: 1px dashed rgba(200, 169, 110, 0.35); padding: 0.6rem 0; font-size: 0.88rem;">
+          <div style="font-weight: 800; color: #1b381e;">{{ line.product.name }}</div>
+          <div style="color: #64748b; font-size: 0.8rem;">{{ line.qty }} × {{ line.size }} kg pack ({{ line.weight_kg|floatformat:0 }} kg) • ₹{{ line.unit_price }}/kg</div>
+          <div style="font-weight: 800; color: #1b381e; text-align: right;">₹{{ line.line_total|floatformat:2 }}</div>
+        </div>
+        {% endfor %}
+
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; margin-top: 0.8rem; margin-bottom: 0.4rem;">
+          <span>Subtotal</span><span>₹{{ subtotal|floatformat:2 }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; margin-bottom: 0.4rem;">
+          <span>GST (5%)</span><span>₹{{ tax_amount|floatformat:2 }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; margin-bottom: 0.8rem;">
+          <span>Delivery</span><span style="font-size: 0.78rem;">Confirmed by our team</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #1b381e; border-top: 1px solid rgba(200, 169, 110, 0.35); padding-top: 0.8rem;">
+          <span>Estimated Total</span><span>₹{{ total_amount|floatformat:2 }}</span>
+        </div>
+
+        <button type="submit" class="btn-pill btn-pill-gold" style="display: block; width: 100%; margin-top: 1.1rem; padding: 0.9rem 1rem; font-weight: 800; border: none; cursor: pointer;">
+          ✓ Place Order
+        </button>
+        <p style="font-size: 0.74rem; color: #64748b; margin: 0.75rem 0 0 0;">
+          Your order is recorded in our system with a reference number. Our team confirms pricing, GST, and dispatch schedule before loading.
+        </p>
+      </div>
+    </form>
+
+    {% else %}
+      <div class="catalog-empty-state">
+        <h3>Your cart is empty</h3>
+        <p>Add packaging sizes and quantities from the product pages before checking out.</p>
+        <a href="{% url 'products:catalog' %}" class="btn-pill btn-pill-gold">Explore Catalog</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+  function pdToggleUtr() {
+    var cod = document.querySelector('input[name="payment_method"][value="cod"]');
+    var field = document.getElementById('pdUtrField');
+    if (cod && field) {
+      field.style.display = cod.checked ? 'none' : 'block';
+    }
+  }
+  pdToggleUtr();
+</script>
+{% endblock %}

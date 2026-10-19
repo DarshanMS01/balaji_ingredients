@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Cart — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Review your bulk ingredient cart before checkout.{% endblock %}
+
+{% block content %}
+<section class="page-hero-clean">
+  <div class="page-hero-clean-container">
+    <div class="section-tag">BULK ORDER CART</div>
+    <h1 class="page-hero-clean-title">Your Cart</h1>
+    <p class="page-hero-clean-sub">
+      Review your selected packaging sizes and quantities. Prices are recalculated on our server at checkout.
+    </p>
+  </div>
+</section>
+
+<section class="catalog-section">
+  <div class="catalog-container" style="max-width: 960px;">
+
+    {% if lines %}
+      <div style="display: grid; grid-template-columns: 1.7fr 1fr; gap: 1.75rem; align-items: start;">
+
+        <!-- Cart Lines -->
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          {% for line in lines %}
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.1rem 1.25rem;">
+            <div style="display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+              <div>
+                <a href="{{ line.product.get_absolute_url }}" style="font-weight: 800; color: #1b381e; font-size: 1.05rem; text-decoration: none;">{{ line.product.name }}</a>
+                <div style="font-size: 0.8rem; color: #64748b; margin-top: 0.15rem;">{{ line.product.category.name }} • {{ line.size }} kg Pack • ₹{{ line.unit_price }} / kg</div>
+              </div>
+              <div style="text-align: right; font-weight: 800; color: #1b381e; white-space: nowrap;">
+                ₹{{ line.line_total|floatformat:2 }}
+                <div style="font-size: 0.78rem; color: #64748b; font-weight: 600;">{{ line.weight_kg|floatformat:0 }} kg total</div>
+              </div>
+            </div>
+
+            <form method="POST" action="{% url 'products:cart_update' %}" style="margin-top: 0.9rem; display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+              {% csrf_token %}
+              <input type="hidden" name="product_id" value="{{ line.product.id }}">
+              <input type="hidden" name="size" value="{{ line.size }}">
+              <label style="font-size: 0.8rem; font-weight: 700; color: #475569;">Quantity (packs):</label>
+              <input type="number" name="qty" value="{{ line.qty }}" min="1" max="500" style="width: 90px; padding: 0.45rem 0.6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700;">
+              <button type="submit" class="btn-pill btn-pill-outline-dark" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: 700; border-width: 1.5px;">Update</button>
+              <button type="submit" name="action" value="remove" class="btn-pill btn-pill-ghost" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; font-weight: 700; color: #b91c1c;">Remove</button>
+            </form>
+          </div>
+          {% endfor %}
+
+          <a href="{% url 'products:catalog' %}" style="font-size: 0.88rem; font-weight: 700; color: #2e5a2e; text-decoration: none;">← Continue shopping</a>
+        </div>
+
+        <!-- Order Summary -->
+        <div style="background: #fffdf8; border: 1.5px solid rgba(200, 169, 110, 0.45); border-radius: 12px; padding: 1.35rem;">
+          <h3 style="margin: 0 0 1rem 0; font-size: 1.05rem; color: #1b381e; text-transform: uppercase; letter-spacing: 0.05em;">Order Summary</h3>
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; margin-bottom: 0.5rem;">
+            <span>Subtotal</span><span>₹{{ subtotal|floatformat:2 }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; margin-bottom: 0.5rem;">
+            <span>GST (5%)</span><span>₹{{ tax_amount|floatformat:2 }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; margin-bottom: 0.9rem;">
+            <span>Delivery</span><span style="font-size: 0.8rem;">Confirmed by our team</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #1b381e; border-top: 1px solid rgba(200, 169, 110, 0.35); padding-top: 0.8rem;">
+            <span>Estimated Total</span><span>₹{{ total_amount|floatformat:2 }}</span>
+          </div>
+          <a href="{% url 'products:checkout' %}" class="btn-pill btn-pill-gold" style="display: block; text-align: center; margin-top: 1.1rem; padding: 0.85rem 1rem; font-weight: 800; text-decoration: none;">
+            Proceed to Checkout →
+          </a>
+          <p style="font-size: 0.74rem; color: #64748b; margin: 0.75rem 0 0 0;">Final prices, GST, and delivery are confirmed by our team when your order is reviewed.</p>
+        </div>
+      </div>
+
+    {% else %}
+      <div class="catalog-empty-state">
+        <h3>Your cart is empty</h3>
+        <p>Browse the ingredient catalog to add packaging sizes and quantities.</p>
+        <a href="{% url 'products:catalog' %}" class="btn-pill btn-pill-gold">Explore Catalog</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

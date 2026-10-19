@@ -2,12 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <script>
-    // Authentication Gate Check: show login first if not authenticated
-    if (localStorage.getItem('balaji_logged_in') !== 'true') {
-      window.location.replace('login.html');
-    }
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Balaji Ingredients Private Limited — The Spice of South India</title>
 
@@ -1854,7 +1848,7 @@
         <div class="hero-visual-grid">
           
           <!-- Card 1: Red Chilli -->
-          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='chilli.html'" title="View Red Chilli Powder">
+          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/red-chilli-powder/'" title="View Red Chilli Powder">
             <img src="images/chilli_product.jpg?v=20261008_ragi" alt="Red Chilli Powder">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1869,7 +1863,7 @@
           </div>
 
           <!-- Card 2: Malabar Black Pepper -->
-          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="window.location.href='pepper.html'" title="View Malabar Black Pepper">
+          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="window.location.href='/products/chilli-spices/malabar-black-pepper/'" title="View Malabar Black Pepper">
             <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1884,7 +1878,7 @@
           </div>
 
           <!-- Card 3: Green Cardamom -->
-          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="window.location.href='cardamom.html'" title="View Green Cardamom">
+          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="window.location.href='/products/chilli-spices/green-cardamom/'" title="View Green Cardamom">
             <img src="images/cardamom_product.jpg" alt="Green Cardamom">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1899,7 +1893,7 @@
           </div>
 
           <!-- Card 4: Ragi Flour -->
-          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='ragi.html'" title="View Ragi Flour Details">
+          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'" title="View Ragi Flour Details">
             <img src="images/ragi_product.jpg" alt="Stone-Ground Ragi Flour">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1970,12 +1964,12 @@
       <div class="products-2x2-grid">
         
         <!-- Product 1: Red Chilli Powder -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='chilli.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/red-chilli-powder/'">
           <img src="images/chilli_product.jpg?v=20261009_bowl" alt="Red Chilli Powder">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">BYADGI &amp; GUNTUR BLEND</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='chilli.html'" title="View Red Chilli Powder">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/red-chilli-powder/'" title="View Red Chilli Powder">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -1987,7 +1981,7 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹280 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='chilli.html'">
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/red-chilli-powder/'">
                   VISIT ➔
                 </button>
               </div>
@@ -1996,12 +1990,12 @@
         </div>
 
         <!-- Product 2: Malabar Black Pepper -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='pepper.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/malabar-black-pepper/'">
           <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">WHOLE &amp; COARSE GROUND</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='pepper.html'" title="View Malabar Black Pepper">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/malabar-black-pepper/'" title="View Malabar Black Pepper">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2013,7 +2007,7 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹720 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='pepper.html'">
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/malabar-black-pepper/'">
                   VISIT ➔
                 </button>
               </div>
@@ -2022,12 +2016,12 @@
         </div>
 
         <!-- Product 3: Green Cardamom -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='cardamom.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/green-cardamom/'">
           <img src="images/cardamom_product.jpg" alt="Green Cardamom">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">IDUKKI ESTATE GRADE AAA</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='cardamom.html'" title="View Green Cardamom">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/green-cardamom/'" title="View Green Cardamom">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2040,7 +2034,7 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹1,850 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='cardamom.html'">
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/green-cardamom/'">
                   VISIT ➔
                 </button>
               </div>
@@ -2049,12 +2043,12 @@
         </div>
 
         <!-- Product 4: Stone-Ground Ragi Flour -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='ragi.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'">
           <img src="images/ragi_product.jpg" alt="Stone-Ground Ragi Flour">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">FINGER MILLET • SPROUTED OPTION</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='ragi.html'" title="View Stone-Ground Ragi Flour">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'" title="View Stone-Ground Ragi Flour">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2067,7 +2061,7 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹120 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='ragi.html'">
+                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'">
                   VISIT ➔
                 </button>
               </div>
