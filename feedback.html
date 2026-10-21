@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Balaji Ingredients | Customer Feedback</title>
+    <style>
+      :root {
+        --bg: #fbf8f3;
+        --bg-alt: #f4efe6;
+        --card: #ffffff;
+        --text: #1c1917;
+        --muted: #6b635b;
+        --red: #a82b1d;
+        --red-dark: #8d1f15;
+        --gold: #d4a343;
+        --gold-soft: #fff2d6;
+        --border: rgba(28, 25, 23, 0.08);
+        --shadow: 0 14px 38px rgba(28, 25, 23, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #fbf8f3 0%, #f8f4ef 100%);
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px 20px 80px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0 26px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .brand-mark {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--red);
+        color: white;
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .brand small {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      .nav-link {
+        text-decoration: none;
+        color: var(--text);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 600;
+      }
+
+      .nav-link:hover {
+        background: #f3e6dc;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, rgba(168, 43, 29, 0.08), rgba(212, 163, 67, 0.08));
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 42px 34px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2.3rem, 4vw, 4rem);
+        line-height: 1.1;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 720px;
+        font-size: 1.04rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .feedback-wrap {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 28px;
+        margin-top: 32px;
+      }
+
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .form-panel {
+        padding: 28px;
+      }
+
+      .section-title {
+        margin: 0 0 18px;
+        font-size: 1.45rem;
+      }
+
+      form {
+        display: grid;
+        gap: 16px;
+      }
+
+      .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      input, select, textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 13px 14px;
+        font: inherit;
+        background: #fff;
+        color: var(--text);
+      }
+
+      textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .rating-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .star-group {
+        display: flex;
+        gap: 8px;
+        font-size: 1.7rem;
+        color: #d4d4d4;
+      }
+
+      .star-group span.active {
+        color: var(--gold);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: 0.2s ease;
+      }
+
+      .btn-primary {
+        background: var(--red);
+        color: white;
+        padding: 14px 24px;
+      }
+
+      .btn-primary:hover {
+        background: var(--red-dark);
+      }
+
+      .side-panel {
+        padding: 28px;
+        background: linear-gradient(180deg, #fffaf4 0%, #ffffff 100%);
+      }
+
+      .mini-card {
+        background: var(--bg-alt);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+
+      .mini-card h3 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+      }
+
+      .mini-card p, .mini-card li {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .mini-card ul {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      .testimonials {
+        margin-top: 34px;
+      }
+
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+        margin-top: 18px;
+      }
+
+      .quote-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 22px;
+      }
+
+      .quote-card .stars {
+        color: var(--gold);
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+      }
+
+      .quote-card p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .quote-card strong {
+        display: block;
+        margin-top: 8px;
+      }
+
+      footer {
+        margin-top: 42px;
+        border-top: 1px solid var(--border);
+        padding-top: 18px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 860px) {
+        .feedback-wrap,
+        .testimonials-grid,
+        .field-row {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">
+          <div class="brand-mark">B</div>
+          <div>
+            Balaji Ingredients
+            <small>Private Limited</small>
+          </div>
+        </div>
+        <a class="nav-link" href="index.html">Back to Home</a>
+      </div>
+
+      <section class="hero">
+        <h1>We value your feedback.</h1>
+        <p>
+          Your opinion helps us improve our quality, service, and consistency. Tell us about your
+          experience with our spices, packaging, delivery, or customer support.
+        </p>
+      </section>
+
+      <section class="feedback-wrap">
+        <div class="panel form-panel">
+          <h2 class="section-title">Share your experience</h2>
+          <form>
+            <div class="field-row">
+              <label>
+                Full name
+                <input type="text" placeholder="Your name" />
+              </label>
+              <label>
+                Email
+                <input type="email" placeholder="you@example.com" />
+              </label>
+            </div>
+
+            <div class="field-row">
+              <label>
+                Phone number
+                <input type="tel" placeholder="+91 98765 43210" />
+              </label>
+              <label>
+                Feedback category
+                <select>
+                  <option>Product quality</option>
+                  <option>Packaging</option>
+                  <option>Delivery</option>
+                  <option>Customer service</option>
+                  <option>Other</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Your rating
+              <div class="rating-box">
+                <div class="star-group" aria-label="Rating">
+                  <span class="active">★</span>
+                  <span class="active">★</span>
+                  <span class="active">★</span>
+                  <span class="active">★</span>
+                  <span>★</span>
+                </div>
+                <span>Excellent</span>
+              </div>
+            </label>
+
+            <label>
+              Message
+              <textarea placeholder="Tell us what you liked, what we can improve, or how we can serve you better..."></textarea>
+            </label>
+
+            <button type="submit" class="btn btn-primary">Send Feedback</button>
+          </form>
+        </div>
+
+        <aside class="panel side-panel">
+          <div class="mini-card">
+            <h3>Why feedback matters</h3>
+            <p>
+              We use customer experiences to improve product consistency, improve service quality,
+              and deliver a better buying experience for every order.
+            </p>
+          </div>
+
+          <div class="mini-card">
+            <h3>What we listen for</h3>
+            <ul>
+              <li>Product freshness and quality</li>
+              <li>On-time delivery and handling</li>
+              <li>Packaging and presentation</li>
+              <li>Support and communication</li>
+            </ul>
+          </div>
+
+          <div class="mini-card">
+            <h3>Contact</h3>
+            <p>support@balajiingredients.in</p>
+            <p>+91 98765 43210</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="testimonials">
+        <h2 class="section-title">What our customers say</h2>
+        <div class="testimonials-grid">
+          <article class="quote-card">
+            <div class="stars">★★★★★</div>
+            <p>
+              “The quality is consistently excellent. The chilli and pepper are fresh, fragrant, and
+              exactly what we need for our retail supply chain.”
+            </p>
+            <strong>Ramesh P.</strong>
+          </article>
+
+          <article class="quote-card">
+            <div class="stars">★★★★★</div>
+            <p>
+              “Very professional service and prompt delivery. Packaging is neat, secure, and easy to
+              store in our warehouse.”
+            </p>
+            <strong>Shalini K.</strong>
+          </article>
+
+          <article class="quote-card">
+            <div class="stars">★★★★★</div>
+            <p>
+              “We value the honest quality and dependable supply. Balaji Ingredients has become a
+              trusted partner for us.”
+            </p>
+            <strong>Mohammed A.</strong>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        © 2026 Balaji Ingredients Private Limited — Crafted for trusted quality and service.
+      </footer>
+    </div>
+  </body>
+</html>
