@@ -310,31 +310,35 @@
       <section class="feedback-wrap">
         <div class="panel form-panel">
           <h2 class="section-title">Share your experience</h2>
-          <form>
+          <form action="https://formsubmit.co/support@balajiingredients.in" method="POST">
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_subject" value="New Balaji Ingredients Customer Feedback" />
+            <input type="hidden" name="_template" value="table" />
+
             <div class="field-row">
               <label>
                 Full name
-                <input type="text" placeholder="Your name" />
+                <input type="text" name="name" placeholder="Your name" required />
               </label>
               <label>
                 Email
-                <input type="email" placeholder="you@example.com" />
+                <input type="email" name="email" placeholder="you@example.com" required />
               </label>
             </div>
 
             <div class="field-row">
               <label>
                 Phone number
-                <input type="tel" placeholder="+91 98765 43210" />
+                <input type="tel" name="phone" placeholder="+91 98765 43210" required />
               </label>
               <label>
                 Feedback category
-                <select>
-                  <option>Product quality</option>
-                  <option>Packaging</option>
-                  <option>Delivery</option>
-                  <option>Customer service</option>
-                  <option>Other</option>
+                <select name="category" required>
+                  <option value="Product quality">Product quality</option>
+                  <option value="Packaging">Packaging</option>
+                  <option value="Delivery">Delivery</option>
+                  <option value="Customer service">Customer service</option>
+                  <option value="Other">Other</option>
                 </select>
               </label>
             </div>
@@ -355,7 +359,7 @@
 
             <label>
               Message
-              <textarea placeholder="Tell us what you liked, what we can improve, or how we can serve you better..."></textarea>
+              <textarea name="message" placeholder="Tell us what you liked, what we can improve, or how we can serve you better..." required></textarea>
             </label>
 
             <button type="submit" class="btn btn-primary">Send Feedback</button>
