@@ -22,6 +22,11 @@ urlpatterns = [
     path('dashboard/', portal_views.dashboard_page_view, name='dashboard'),
     path('dashboard.html', portal_views.dashboard_page_view, name='dashboard_html'),
 
+    # Customer Feedback routes
+    path('feedback/', portal_views.feedback_page_view, name='feedback'),
+    path('feedback.html', portal_views.feedback_page_view, name='feedback_html'),
+    path('feedback', portal_views.feedback_page_view, name='feedback_no_slash'),
+
     # Official Google OAuth 2.0 Flow
     path('auth/google/', portal_views.google_oauth_redirect, name='google_login'),
     path('auth/google/callback/', portal_views.google_oauth_callback, name='google_callback'),
@@ -35,7 +40,15 @@ urlpatterns = [
     path('api/auth/forgot-password/', portal_views.api_forgot_password, name='api_forgot_password'),
     path('api/auth/verify-otp/', portal_views.api_verify_otp, name='api_verify_otp'),
     path('api/auth/reset-password/', portal_views.api_reset_password, name='api_reset_password'),
+
+    # Feedback & Wholesale Enquiry APIs
+    path('api/feedback/', portal_views.api_submit_feedback, name='api_feedback'),
+    path('api/wholesale-enquiry/', portal_views.api_submit_wholesale_enquiry, name='api_wholesale_enquiry'),
     
+    # Health check for platform monitoring
+    path('health', portal_views.health_check, name='health'),
+    path('health/', portal_views.health_check, name='health_slash'),
+
     # Product and Static HTML pages (e.g. ragi.html, chilli.html, pepper.html, cardamom.html, balaji.html)
     path('<str:page_name>.html', portal_views.static_html_view, name='static_html'),
 

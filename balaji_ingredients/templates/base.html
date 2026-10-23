@@ -21,6 +21,7 @@
 <body>
 
   <!-- ===================== 1. SLIM UTILITY BAR ===================== -->
+  {% block site_header %}
   <aside class="utility-bar" aria-label="Quick links">
     <div class="utility-container">
       <div class="utility-left">
@@ -189,6 +190,7 @@
       {% endif %}
     </div>
   </header>
+  {% endblock site_header %}
 
   <!-- ===================== NOTIFICATIONS / MESSAGES ===================== -->
   {% if messages %}

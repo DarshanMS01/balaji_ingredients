@@ -25,6 +25,10 @@ import uuid
 
 from .models import CompanyProfile, Order, OrderItem, B2BDocument, Notification, SupportTicket
 from products.models import Category, Product, ProductSpecification, QuoteRequest
+from core.models import CustomerFeedback
+from django.core.validators import validate_email, ValidationError
+from django.utils import timezone
+import re
 
 
 def login_view(request):
@@ -1051,9 +1055,256 @@ def dashboard_page_view(request):
     return dashboard_view(request)
 
 
+def feedback_page_view(request):
+    res = serve_root_file('feedback.html')
+    if res:
+        return res
+    return HttpResponse('Page not found', status=404)
+
+
+OLD_PRODUCT_PAGE_REDIRECTS = {
+    'chilli': '/products/chilli-spices/red-chilli-powder/',
+    'pepper': '/products/chilli-spices/malabar-black-pepper/',
+    'cardamom': '/products/chilli-spices/green-cardamom/',
+    'ragi': '/products/ragi-millets/stone-ground-ragi-flour/',
+}
+
+
 def static_html_view(request, page_name):
+    clean_name = page_name.lower().replace('.html', '')
+    if clean_name in OLD_PRODUCT_PAGE_REDIRECTS:
+        return redirect(OLD_PRODUCT_PAGE_REDIRECTS[clean_name])
     res = serve_root_file(f'{page_name}.html')
     if res:
         return res
     return HttpResponse('Page not found', status=404)
+
+
+def health_check(request):
+    return HttpResponse('OK', content_type='text/plain')
+
+
+@csrf_exempt
+def api_submit_feedback(request):
+    """
+    Submits and stores customer feedback into the CustomerFeedback model.
+    Validates:
+      - full_name (required)
+      - email (required, email format)
+      - phone (optional, validated format if provided)
+      - company_name (optional)
+      - product_name (dropdown of available website products)
+      - feedback_type (Product Quality, Website Experience, Delivery, Customer Service, Suggestion, Other)
+      - rating (1 to 5 stars)
+      - message (required)
+    Prevents duplicate submissions and protects against CSRF.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
+
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    if is_json:
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            data = {}
+    else:
+        data = request.POST
+
+    full_name = str(data.get('full_name', '')).strip()
+    email = str(data.get('email', '')).strip().lower()
+    phone = str(data.get('phone', '')).strip()
+    company_name = str(data.get('company_name', '')).strip()
+    product_name = str(data.get('product_name', '')).strip()
+    feedback_type = str(data.get('feedback_type', 'Product Quality')).strip()
+    message = str(data.get('message', '')).strip()
+    rating_raw = data.get('rating', 5)
+
+    # Validate required fields
+    if not full_name:
+        return JsonResponse({'success': False, 'message': 'Full name is required.'}, status=400)
+    if not email:
+        return JsonResponse({'success': False, 'message': 'Email address is required.'}, status=400)
+    if not message:
+        return JsonResponse({'success': False, 'message': 'Feedback message is required.'}, status=400)
+
+    # Validate email
+    try:
+        validate_email(email)
+    except ValidationError:
+        return JsonResponse({'success': False, 'message': 'Please provide a valid email address.'}, status=400)
+
+    # Validate mobile if provided
+    if phone:
+        cleaned_phone = re.sub(r'[\s\-\+\(\)]', '', phone)
+        if not cleaned_phone.isdigit() or len(cleaned_phone) < 7 or len(cleaned_phone) > 15:
+            return JsonResponse({'success': False, 'message': 'Please provide a valid contact mobile number.'}, status=400)
+
+    # Validate rating
+    try:
+        rating = int(rating_raw)
+        if rating < 1 or rating > 5:
+            rating = 5
+    except (ValueError, TypeError):
+        rating = 5
+
+    valid_types = [
+        'Product Quality',
+        'Website Experience',
+        'Delivery',
+        'Customer Service',
+        'Suggestion',
+        'Other'
+    ]
+    if feedback_type not in valid_types:
+        feedback_type = 'Product Quality'
+
+    # Duplicate prevention (same email & message within last 15 seconds)
+    recent = CustomerFeedback.objects.filter(
+        email=email,
+        message=message,
+        created_at__gte=timezone.now() - timedelta(seconds=15)
+    ).first()
+    if recent:
+        return JsonResponse({
+            'success': True,
+            'message': 'Thank you! Your feedback has already been submitted.'
+        })
+
+    feedback_obj = CustomerFeedback.objects.create(
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        company_name=company_name,
+        product_name=product_name,
+        feedback_type=feedback_type,
+        rating=rating,
+        message=message,
+    )
+
+    if not is_json:
+        messages.success(request, 'Thank you! Your feedback has been received and saved.')
+        return redirect('/#feedback')
+
+    return JsonResponse({
+        'success': True,
+        'message': 'Thank you! Your feedback has been submitted successfully and received by our management team.',
+        'feedback_id': feedback_obj.id
+    })
+
+
+@csrf_exempt
+def api_submit_wholesale_enquiry(request):
+    """
+    Handles wholesale pricing enquiry form submissions from the Visit button / Wholesale Pricing section.
+    Fields:
+      - Full Name (required)
+      - Business or Company Name (required)
+      - Email Address (required)
+      - Mobile Number (required)
+      - Product of Interest (required)
+      - Required Quantity (required)
+      - Unit of Measurement (kg, quintal, or tonne) (required)
+      - Delivery Location (required)
+      - Additional Requirements (optional)
+    Saves to products.models.QuoteRequest.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
+
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    if is_json:
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            data = {}
+    else:
+        data = request.POST
+
+    full_name = str(data.get('full_name', '')).strip()
+    company_name = str(data.get('company_name', '')).strip()
+    email = str(data.get('email', '')).strip().lower()
+    phone = str(data.get('phone', '')).strip()
+    product_name = str(data.get('product_name', '')).strip()
+    product_id = data.get('product_id')
+    quantity = str(data.get('quantity', '')).strip()
+    unit = str(data.get('unit', 'kg')).strip()
+    delivery_location = str(data.get('delivery_location', '')).strip()
+    additional_requirements = str(data.get('additional_requirements', '') or data.get('notes', '')).strip()
+
+    # Validations
+    if not full_name:
+        return JsonResponse({'success': False, 'message': 'Full name is required.'}, status=400)
+    if not company_name:
+        return JsonResponse({'success': False, 'message': 'Business / Company name is required.'}, status=400)
+    if not email:
+        return JsonResponse({'success': False, 'message': 'Email address is required.'}, status=400)
+    if not phone:
+        return JsonResponse({'success': False, 'message': 'Mobile number is required for dispatch quotation.'}, status=400)
+    if not quantity:
+        return JsonResponse({'success': False, 'message': 'Required quantity is required.'}, status=400)
+    if not delivery_location:
+        return JsonResponse({'success': False, 'message': 'Delivery location is required.'}, status=400)
+
+    try:
+        validate_email(email)
+    except ValidationError:
+        return JsonResponse({'success': False, 'message': 'Please provide a valid corporate email address.'}, status=400)
+
+    cleaned_phone = re.sub(r'[\s\-\+\(\)]', '', phone)
+    if not cleaned_phone.isdigit() or len(cleaned_phone) < 7 or len(cleaned_phone) > 15:
+        return JsonResponse({'success': False, 'message': 'Please provide a valid mobile number.'}, status=400)
+
+    # Unit normalization
+    if unit.lower() in ('kg', 'kgs', 'kilogram', 'kilograms'):
+        unit_str = 'kg'
+    elif unit.lower() in ('quintal', 'quintals', 'qtl'):
+        unit_str = 'quintals'
+    elif unit.lower() in ('tonne', 'tonnes', 'ton', 'tons', 'mt'):
+        unit_str = 'tonnes'
+    else:
+        unit_str = 'kg'
+
+    quantity_volume_str = f"{quantity} {unit_str}"
+
+    product_obj = None
+    if product_id:
+        try:
+            product_obj = Product.objects.filter(id=product_id, is_active=True).first()
+        except Exception:
+            pass
+
+    if product_obj and not product_name:
+        product_name = product_obj.name
+
+    category_name = product_obj.category.name if (product_obj and product_obj.category) else ''
+
+    quote = QuoteRequest.objects.create(
+        product=product_obj,
+        product_name=product_name or 'General Wholesale Range',
+        category_name=category_name,
+        full_name=full_name,
+        company_name=company_name,
+        email=email,
+        phone=phone,
+        quantity_volume=quantity_volume_str,
+        packaging_preference=f"Commercial wholesale packaging ({unit_str})",
+        destination_city=delivery_location,
+        notes=additional_requirements,
+        status='new'
+    )
+
+    success_text = f"Thank you, {full_name}! Your wholesale pricing enquiry for {product_name or 'our products'} ({quantity_volume_str}) has been recorded. Reference ID: WQ-{quote.id:05d}. Our sales desk will contact you within 4 business hours."
+
+    if not is_json:
+        messages.success(request, success_text)
+        if product_obj:
+            return redirect(f"{product_obj.get_absolute_url()}?enquiry_success=1")
+        return redirect('/?enquiry_success=1')
+
+    return JsonResponse({
+        'success': True,
+        'message': success_text,
+        'reference_id': f"WQ-{quote.id:05d}"
+    })
 

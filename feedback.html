@@ -173,6 +173,15 @@
         color: #d4d4d4;
       }
 
+      .star-group span {
+        cursor: pointer;
+        transition: transform 0.15s ease, color 0.15s ease;
+      }
+
+      .star-group span:hover {
+        transform: scale(1.2);
+      }
+
       .star-group span.active {
         color: var(--gold);
       }
@@ -309,11 +318,15 @@
 
       <section class="feedback-wrap">
         <div class="panel form-panel">
+          <div id="feedbackSuccessAlert" style="display: none; background: #ecfdf5; border: 1.5px solid #6ee7b7; color: #065f46; border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; font-weight: 600; font-size: 0.95rem;">
+            ✓ Thank you! Your feedback has been received and forwarded to our executive team.
+          </div>
           <h2 class="section-title">Share your experience</h2>
           <form action="https://formsubmit.co/support@balajiingredients.in" method="POST">
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_subject" value="New Balaji Ingredients Customer Feedback" />
             <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" id="nextUrlInput" value="" />
 
             <div class="field-row">
               <label>
@@ -346,14 +359,15 @@
             <label>
               Your rating
               <div class="rating-box">
-                <div class="star-group" aria-label="Rating">
-                  <span class="active">★</span>
-                  <span class="active">★</span>
-                  <span class="active">★</span>
-                  <span class="active">★</span>
-                  <span>★</span>
+                <div class="star-group" id="starGroup" aria-label="Rating">
+                  <span class="star active" data-val="1">★</span>
+                  <span class="star active" data-val="2">★</span>
+                  <span class="star active" data-val="3">★</span>
+                  <span class="star active" data-val="4">★</span>
+                  <span class="star active" data-val="5">★</span>
                 </div>
-                <span>Excellent</span>
+                <span id="ratingLabel">5 / 5 — Excellent</span>
+                <input type="hidden" name="rating" id="ratingInput" value="5 Stars (Excellent)" />
               </div>
             </label>
 
@@ -429,5 +443,70 @@
         © 2026 Balaji Ingredients Private Limited — Crafted for trusted quality and service.
       </footer>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // FormSubmit next return URL
+        const nextInput = document.getElementById('nextUrlInput');
+        if (nextInput) {
+          nextInput.value = window.location.origin + window.location.pathname + '?submitted=true';
+        }
+
+        // Show confirmation banner if redirected after submission
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('submitted') === 'true') {
+          const alertBox = document.getElementById('feedbackSuccessAlert');
+          if (alertBox) {
+            alertBox.style.display = 'block';
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+
+        // Interactive Star Rating
+        const stars = document.querySelectorAll('.star-group .star');
+        const ratingLabel = document.getElementById('ratingLabel');
+        const ratingInput = document.getElementById('ratingInput');
+        const labels = {
+          1: '1 / 5 — Poor',
+          2: '2 / 5 — Fair',
+          3: '3 / 5 — Good',
+          4: '4 / 5 — Very Good',
+          5: '5 / 5 — Excellent'
+        };
+        let currentRating = 5;
+
+        function renderStars(rating) {
+          stars.forEach(star => {
+            const val = parseInt(star.getAttribute('data-val'), 10);
+            if (val <= rating) {
+              star.classList.add('active');
+            } else {
+              star.classList.remove('active');
+            }
+          });
+          const text = labels[rating] || (rating + ' / 5');
+          if (ratingLabel) ratingLabel.textContent = text;
+          if (ratingInput) ratingInput.value = `${rating} Stars (${text.split('— ')[1] || ''})`;
+        }
+
+        stars.forEach(star => {
+          star.addEventListener('click', () => {
+            currentRating = parseInt(star.getAttribute('data-val'), 10);
+            renderStars(currentRating);
+          });
+          star.addEventListener('mouseenter', () => {
+            const hoverVal = parseInt(star.getAttribute('data-val'), 10);
+            renderStars(hoverVal);
+          });
+        });
+
+        const starGroup = document.getElementById('starGroup');
+        if (starGroup) {
+          starGroup.addEventListener('mouseleave', () => {
+            renderStars(currentRating);
+          });
+        }
+      });
+    </script>
   </body>
 </html>

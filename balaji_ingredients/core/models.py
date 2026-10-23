@@ -88,3 +88,38 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.email} ({self.created_at.strftime('%d %b %Y')})"
+
+
+class CustomerFeedback(models.Model):
+    """
+    Stores customer feedback submitted via the home page or dedicated feedback form.
+    Validates rating (1-5 stars), feedback type, customer details, and feedback message.
+    """
+    FEEDBACK_TYPE_CHOICES = [
+        ('Product Quality', 'Product Quality'),
+        ('Website Experience', 'Website Experience'),
+        ('Delivery', 'Delivery'),
+        ('Customer Service', 'Customer Service'),
+        ('Suggestion', 'Suggestion'),
+        ('Other', 'Other'),
+    ]
+
+    full_name = models.CharField(max_length=150)
+    email = models.EmailField()
+    phone = models.CharField(max_length=30, blank=True)
+    company_name = models.CharField(max_length=150, blank=True)
+    product_name = models.CharField(max_length=150, blank=True)
+    feedback_type = models.CharField(max_length=50, choices=FEEDBACK_TYPE_CHOICES, default='Product Quality')
+    rating = models.PositiveSmallIntegerField(default=5)  # 1 to 5 stars
+    message = models.TextField()
+    is_reviewed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Customer Feedback'
+        verbose_name_plural = 'Customer Feedbacks'
+
+    def __str__(self):
+        return f"{self.full_name} ({self.rating}★) - {self.feedback_type} [{self.created_at.strftime('%d %b %Y')}]"

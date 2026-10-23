@@ -18,7 +18,10 @@ urlpatterns = [
     path('cart/', views.cart_view, name='cart'),
     path('cart/add/', views.cart_add_view, name='cart_add'),
     path('cart/update/', views.cart_update_view, name='cart_update'),
+    path('api/booking/', views.booking_action_api, name='booking_action_api'),
+    path('api/cart-count/', views.cart_count_api, name='cart_count_api'),
     path('checkout/', views.checkout_view, name='checkout'),
+    path('order-confirmation/<str:order_number>/', views.order_confirmation_view, name='order_confirmation'),
 
     path('<slug:category_slug>/', views.category_detail, name='category_detail'),
     path('<slug:category_slug>/<slug:product_slug>/', views.product_detail, name='product_detail'),

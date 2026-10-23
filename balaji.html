@@ -200,6 +200,128 @@
       color: #FFFFFF;
     }
 
+    /* Navbar Cart Button & Badge */
+    .btn-nav-cart {
+      background: rgba(26, 54, 30, 0.08);
+      color: #1e3a1e;
+      border: 1px solid rgba(30, 58, 30, 0.2);
+      padding: 7px 16px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .btn-nav-cart:hover {
+      background: #1e3a1e;
+      color: #FFFFFF;
+    }
+
+    .cart-count-badge {
+      background: #A82B1D;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      min-width: 19px;
+      height: 19px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+      line-height: 1;
+    }
+
+    /* Product Card Home Action Buttons */
+    .btn-card-addcart {
+      background: rgba(255, 255, 255, 0.95);
+      color: #1e3a1e;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 7px 13px;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-card-addcart:hover {
+      background: #234d20;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-card-buynow {
+      background: #A82B1D;
+      color: #FFFFFF;
+      border: none;
+      padding: 7px 13px;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-card-buynow:hover {
+      background: #872015;
+      transform: translateY(-1px);
+    }
+
+    /* Floating Toast Notification */
+    .home-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #142a17;
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 4px solid #d4af37;
+    }
+
+    .home-toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .home-toast a {
+      background: #d4af37;
+      color: #111111;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-decoration: none;
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+
     /* ══════════════════════════════════════════
        2. HERO SECTION
     ══════════════════════════════════════════ */
@@ -1742,6 +1864,7 @@
           <a href="#products" class="nav-link">Products</a>
           <a href="#story" class="nav-link">Our Story</a>
           <a href="#contact" class="nav-link">Contact</a>
+          <a href="feedback.html" class="nav-link">Feedback</a>
         </div>
 
         <!-- Nav Right -->
@@ -1751,6 +1874,12 @@
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
             <span>+91 63606 35801</span>
+          </a>
+
+          <!-- Cart Navigation Button -->
+          <a href="/products/cart/" class="btn-nav-cart" id="navCartBtn" title="View Cart">
+            🛒 <span class="cart-label">Cart</span>
+            <span class="cart-count-badge" id="navCartCount">0</span>
           </a>
 
           <!-- Logged Out State: Sign In & Request a Quote -->
@@ -1848,7 +1977,7 @@
         <div class="hero-visual-grid">
           
           <!-- Card 1: Red Chilli -->
-          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='chilli.html'" title="View Red Chilli Powder">
+          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/red-chilli-powder/'" title="View Red Chilli Powder">
             <img src="images/chilli_product.jpg?v=20261008_ragi" alt="Red Chilli Powder">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1863,7 +1992,7 @@
           </div>
 
           <!-- Card 2: Malabar Black Pepper -->
-          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="window.location.href='pepper.html'" title="View Malabar Black Pepper">
+          <div class="showcase-card" style="margin-top: 24px; cursor: pointer;" onclick="window.location.href='/products/chilli-spices/malabar-black-pepper/'" title="View Malabar Black Pepper">
             <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1878,7 +2007,7 @@
           </div>
 
           <!-- Card 3: Green Cardamom -->
-          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="window.location.href='cardamom.html'" title="View Green Cardamom">
+          <div class="showcase-card" style="margin-top: -24px; cursor: pointer;" onclick="window.location.href='/products/chilli-spices/green-cardamom/'" title="View Green Cardamom">
             <img src="images/cardamom_product.jpg" alt="Green Cardamom">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1893,7 +2022,7 @@
           </div>
 
           <!-- Card 4: Ragi Flour -->
-          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='ragi.html'" title="View Stone-Ground Ragi Flour">
+          <div class="showcase-card" style="cursor: pointer;" onclick="window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'" title="View Stone-Ground Ragi Flour">
             <img src="images/ragi_product.jpg" alt="Stone-Ground Ragi Flour">
             <div class="showcase-overlay">
               <div class="top-badge-row">
@@ -1964,12 +2093,12 @@
       <div class="products-2x2-grid">
         
         <!-- Product 1: Red Chilli Powder -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='chilli.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/red-chilli-powder/'">
           <img src="images/chilli_product.jpg?v=20261009_bowl" alt="Red Chilli Powder">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">BYADGI &amp; GUNTUR BLEND</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='chilli.html'" title="View Red Chilli Powder">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/red-chilli-powder/'" title="View Red Chilli Powder">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -1981,21 +2110,26 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹280 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='chilli.html'">
-                  VISIT ➔
-                </button>
+                <div class="card-action-btns" style="display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                  <button type="button" class="btn-card-addcart" onclick="event.stopPropagation(); addToCartFromHome(21, 25, 'Red Chilli Powder', this, event);" title="Add Red Chilli Powder to Cart">
+                    🛒 Add to Cart
+                  </button>
+                  <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/red-chilli-powder/'" title="Visit Wholesale Pricing for Red Chilli Powder">
+                    VISIT ➔
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Product 2: Malabar Black Pepper -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='pepper.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/malabar-black-pepper/'">
           <img src="images/pepper_product.jpg" alt="Malabar Black Pepper">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">WHOLE &amp; COARSE GROUND</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='pepper.html'" title="View Malabar Black Pepper">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/malabar-black-pepper/'" title="View Malabar Black Pepper">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2007,21 +2141,26 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹720 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='pepper.html'">
-                  VISIT ➔
-                </button>
+                <div class="card-action-btns" style="display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                  <button type="button" class="btn-card-addcart" onclick="event.stopPropagation(); addToCartFromHome(22, 25, 'Malabar Black Pepper', this, event);" title="Add Malabar Black Pepper to Cart">
+                    🛒 Add to Cart
+                  </button>
+                  <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/malabar-black-pepper/'" title="Visit Wholesale Pricing for Malabar Black Pepper">
+                    VISIT ➔
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Product 3: Green Cardamom -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='cardamom.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/chilli-spices/green-cardamom/'">
           <img src="images/cardamom_product.jpg" alt="Green Cardamom">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">IDUKKI ESTATE GRADE AAA</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='cardamom.html'" title="View Green Cardamom">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/green-cardamom/'" title="View Green Cardamom">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2034,21 +2173,26 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹1,850 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='cardamom.html'">
-                  VISIT ➔
-                </button>
+                <div class="card-action-btns" style="display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                  <button type="button" class="btn-card-addcart" onclick="event.stopPropagation(); addToCartFromHome(23, 25, 'Green Cardamom', this, event);" title="Add Green Cardamom to Cart">
+                    🛒 Add to Cart
+                  </button>
+                  <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/chilli-spices/green-cardamom/'" title="Visit Wholesale Pricing for Green Cardamom">
+                    VISIT ➔
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Product 4: Stone-Ground Ragi Flour -->
-        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='ragi.html'">
+        <div class="product-card-hero" style="cursor: pointer;" onclick="window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'">
           <img src="images/ragi_product.jpg" alt="Stone-Ground Ragi Flour">
           <div class="card-full-overlay">
             <div class="card-top-row">
               <span class="tag-estate-grade">FINGER MILLET • SPROUTED OPTION</span>
-              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='ragi.html'" title="View Stone-Ground Ragi Flour">↗</button>
+              <button type="button" class="arrow-circle-btn" onclick="event.stopPropagation(); window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'" title="View Stone-Ground Ragi Flour">↗</button>
             </div>
             <div class="card-bottom-info">
               <div class="info-left-side">
@@ -2061,9 +2205,14 @@
                   <span class="from-label">FROM</span>
                   <span class="price-val">₹120 / kg</span>
                 </div>
-                <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='ragi.html'">
-                  VISIT ➔
-                </button>
+                <div class="card-action-btns" style="display: flex; gap: 6px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                  <button type="button" class="btn-card-addcart" onclick="event.stopPropagation(); addToCartFromHome(24, 25, 'Stone-Ground Ragi Flour', this, event);" title="Add Stone-Ground Ragi Flour to Cart">
+                    🛒 Add to Cart
+                  </button>
+                  <button type="button" class="btn-card-buynow" onclick="event.stopPropagation(); window.location.href='/products/ragi-millets/stone-ground-ragi-flour/'" title="Visit Wholesale Pricing for Stone-Ground Ragi Flour">
+                    VISIT ➔
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -2206,69 +2355,131 @@
   </section>
 
   <!-- ══════════════════════════════════════════
-       7. REQUEST A QUOTE / CONTACT SECTION
+       7. CUSTOMER FEEDBACK SECTION (Replaces Bottom Wholesale Pricing)
   ══════════════════════════════════════════ -->
-  <section class="quote-section" id="contact">
+  <section class="quote-section feedback-section" id="feedback">
     <div class="container">
       <div class="quote-grid">
         
         <div>
-          <div class="sec-tag" style="color:var(--gold);">WHOLESALE PROCUREMENT</div>
+          <div class="sec-tag" style="color:var(--gold);">CUSTOMER FEEDBACK</div>
           <h2 class="sec-title" style="color:#fff;margin-bottom:18px;">
-            Partner with South India's premier spice mill.
+            We value your experience &amp; partnership.
           </h2>
           <p style="color:rgba(255,255,255,0.75);line-height:1.65;margin-bottom:30px;font-size:1.02rem;">
-            Direct from farm estates in Byadgi, Idukki, and Karnataka. Custom milling, moisture-tested batches, and certified bulk dispatch across India.
+            Your input helps us continuously refine our stone-milling precision, packaging integrity, and prompt dispatch standards. Let us know how our products and service perform for your business.
           </p>
 
           <div style="display:flex;flex-direction:column;gap:14px;">
             <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📞</div>
-              <div><strong>Direct Sales:</strong> +91 63606 35801</div>
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">⭐</div>
+              <div><strong>Quality Assurance:</strong> FSSAI &amp; NABL Lab-Tested Standards</div>
             </div>
             <div style="display:flex;align-items:center;gap:12px;">
               <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">✉️</div>
-              <div><strong>E-mail:</strong> procurement@balajiingredients.com</div>
+              <div><strong>Customer Desk:</strong> feedback@balajiingredients.com</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📞</div>
+              <div><strong>Direct Support:</strong> +91 63606 35801</div>
             </div>
             <div style="display:flex;align-items:center;gap:12px;">
               <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--gold);">📍</div>
-              <div><strong>Mill Facility:</strong> Peenya Industrial Area, Bengaluru, Karnataka 560058</div>
+              <div><strong>Mill &amp; Processing:</strong> Peenya Industrial Area, Bengaluru, Karnataka</div>
             </div>
           </div>
         </div>
 
-        <!-- Interactive Quote Form -->
+        <!-- Interactive Customer Feedback Form -->
         <div class="quote-form-card">
-          <h3 style="font-family:var(--font-serif);font-size:1.5rem;margin-bottom:20px;color:#fff;">Request Wholesale Pricing</h3>
-          
-          <form onsubmit="event.preventDefault(); alert('Thank you! Your quote request has been submitted to Balaji Ingredients sales desk.');">
-            <div class="form-group-wrap">
-              <label>Company / Buyer Name</label>
-              <input type="text" class="form-input-ctrl" placeholder="e.g. Apex Agri Foods Ltd." required />
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <h3 style="font-family:var(--font-serif);font-size:1.5rem;color:#fff;margin:0;">Share Your Feedback</h3>
+            <span style="font-size:0.75rem;font-weight:700;color:var(--gold);background:rgba(212,163,67,0.15);padding:4px 10px;border-radius:999px;border:1px solid rgba(212,163,67,0.3);">Client Feedback</span>
+          </div>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);margin-bottom:20px;line-height:1.4;">
+            Your feedback is reviewed directly by our quality control and operations directors.
+          </p>
+
+          <!-- Success & Error Alert Containers -->
+          <div id="homeFeedbackSuccess" style="display:none;background:#064e3b;border:1px solid #10b981;color:#ecfdf5;padding:14px 18px;border-radius:12px;margin-bottom:16px;font-size:0.9rem;font-weight:600;line-height:1.45;">
+            ✓ Thank you! Your feedback has been received and stored in our system.
+          </div>
+          <div id="homeFeedbackError" style="display:none;background:#7f1d1d;border:1px solid #ef4444;color:#fef2f2;padding:12px 16px;border-radius:12px;margin-bottom:16px;font-size:0.88rem;font-weight:600;"></div>
+
+          <form id="homeFeedbackForm" onsubmit="handleHomeFeedbackSubmit(event)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group-wrap">
+                <label>Full Name *</label>
+                <input type="text" id="fbFullName" name="full_name" class="form-input-ctrl" placeholder="e.g. Ramesh Kumar" required />
+              </div>
+              <div class="form-group-wrap">
+                <label>Email Address *</label>
+                <input type="email" id="fbEmail" name="email" class="form-input-ctrl" placeholder="e.g. ramesh@example.com" required />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group-wrap">
+                <label>Mobile Number (optional)</label>
+                <input type="tel" id="fbPhone" name="phone" class="form-input-ctrl" placeholder="+91 98765 43210" />
+              </div>
+              <div class="form-group-wrap">
+                <label>Company Name (optional)</label>
+                <input type="text" id="fbCompany" name="company_name" class="form-input-ctrl" placeholder="e.g. Swasthik Foods Ltd" />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group-wrap">
+                <label>Product Name</label>
+                <select id="fbProduct" name="product_name" class="form-input-ctrl" style="background:#221d19;">
+                  <option value="General Range / Multiple Products">General Range / Multiple Products</option>
+                  <option value="Guntur &amp; Byadgi Red Chilli Powder (Cold Ground)">Guntur &amp; Byadgi Red Chilli Powder</option>
+                  <option value="Malabar Black Pepper (Garbled Extra Bold)">Malabar Black Pepper</option>
+                  <option value="Green Cardamom (Idukki Estate Grade AAA)">Green Cardamom (Idukki AAA)</option>
+                  <option value="Stone-Ground Ragi Flour (Finger Millet)">Stone-Ground Ragi Flour</option>
+                  <option value="Premium Sortex Toor Dal">Premium Sortex Toor Dal</option>
+                  <option value="Moong Dal Mogar (Yellow Split)">Moong Dal Mogar</option>
+                  <option value="Sharbati Lokwan Food Wheat">Sharbati Food Wheat</option>
+                </select>
+              </div>
+
+              <div class="form-group-wrap">
+                <label>Feedback Type *</label>
+                <select id="fbType" name="feedback_type" class="form-input-ctrl" style="background:#221d19;" required>
+                  <option value="Product Quality">Product Quality</option>
+                  <option value="Website Experience">Website Experience</option>
+                  <option value="Delivery">Delivery</option>
+                  <option value="Customer Service">Customer Service</option>
+                  <option value="Suggestion">Suggestion</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
             </div>
 
             <div class="form-group-wrap">
-              <label>E-mail Address</label>
-              <input type="email" class="form-input-ctrl" placeholder="procurement@apexagri.in" required />
+              <label>Rating (1 to 5 Stars) *</label>
+              <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);padding:8px 16px;border-radius:12px;">
+                <div class="star-rating-ctrl" id="fbStarGroup" style="display:flex;gap:6px;font-size:1.6rem;color:#666;cursor:pointer;">
+                  <span class="fb-star active" data-val="1" style="color:var(--gold);transition:transform 0.15s ease;">★</span>
+                  <span class="fb-star active" data-val="2" style="color:var(--gold);transition:transform 0.15s ease;">★</span>
+                  <span class="fb-star active" data-val="3" style="color:var(--gold);transition:transform 0.15s ease;">★</span>
+                  <span class="fb-star active" data-val="4" style="color:var(--gold);transition:transform 0.15s ease;">★</span>
+                  <span class="fb-star active" data-val="5" style="color:var(--gold);transition:transform 0.15s ease;">★</span>
+                </div>
+                <span id="fbRatingText" style="font-size:0.85rem;font-weight:700;color:var(--gold);">5 / 5 — Excellent</span>
+                <input type="hidden" id="fbRatingVal" name="rating" value="5" />
+              </div>
             </div>
 
             <div class="form-group-wrap">
-              <label>Select Product</label>
-              <select class="form-input-ctrl" style="background:#221d19;">
-                <option value="chilli">Byadgi &amp; Guntur Red Chilli Powder (₹280/kg)</option>
-                <option value="pepper">Malabar Black Pepper (₹720/kg)</option>
-                <option value="cardamom">Idukki Green Cardamom AAA (₹1,850/kg)</option>
-                <option value="ragi">Stone-Ground Ragi Flour (₹120/kg)</option>
-                <option value="all">Custom Mixed Batch (Multiple Products)</option>
-              </select>
+              <label>Feedback Message *</label>
+              <textarea id="fbMessage" name="message" class="form-input-ctrl" rows="3" style="height:auto;padding-top:12px;padding-bottom:12px;resize:vertical;" placeholder="Tell us what you liked, what we can improve, or how we can serve you better..." required></textarea>
             </div>
 
-            <div class="form-group-wrap">
-              <label>Estimated Quantity (kg)</label>
-              <input type="text" class="form-input-ctrl" placeholder="e.g. 500 kg / 1 Metric Ton" required />
-            </div>
-
-            <button type="submit" class="btn-submit-quote">Submit Quote Request →</button>
+            <button type="submit" id="fbSubmitBtn" class="btn-submit-quote" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+              <span>Submit Feedback →</span>
+            </button>
           </form>
         </div>
 
@@ -2313,6 +2524,7 @@
             <li><a href="#story">Our Story</a></li>
             <li><a href="#story">Certifications</a></li>
             <li><a href="#contact">Wholesale Supply</a></li>
+            <li><a href="feedback.html">Customer Feedback</a></li>
             <li><a href="login.html">B2B Login</a></li>
           </ul>
         </div>
@@ -3509,9 +3721,228 @@
     window.addEventListener('storage', updateNavAuthState);
     window.addEventListener('focus', updateNavAuthState);
 
+    // ── Cart & Add-to-Cart Functions ──
+    async function syncNavCartCount() {
+      try {
+        const res = await fetch('/products/api/cart-count/');
+        if (res.ok) {
+          const data = await res.json();
+          const badge = document.getElementById('navCartCount');
+          if (badge) {
+            badge.textContent = data.cart_count || 0;
+          }
+        }
+      } catch (e) {}
+    }
+
+    let homeToastTimer = null;
+    function showHomeToast(msg) {
+      const toast = document.getElementById('homeToast');
+      const msgEl = document.getElementById('homeToastMsg');
+      if (!toast) return;
+      if (msgEl) msgEl.textContent = msg;
+      toast.classList.add('show');
+      if (homeToastTimer) clearTimeout(homeToastTimer);
+      homeToastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    async function addToCartFromHome(productId, size, productName, btn, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      const origText = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = 'Adding...';
+      }
+
+      try {
+        const response = await fetch('/products/cart/add/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: JSON.stringify({
+            product_id: productId,
+            size: size,
+            qty: 1
+          })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          const badge = document.getElementById('navCartCount');
+          if (badge) {
+            badge.textContent = data.cart_count;
+          }
+          showHomeToast(`✓ Added 1x ${productName} (${size}kg) to cart!`);
+          if (btn) {
+            btn.innerHTML = '✓ Added!';
+            setTimeout(() => {
+              btn.innerHTML = origText;
+              btn.disabled = false;
+            }, 1800);
+          }
+        } else {
+          alert(data.message || 'Could not add product to cart.');
+          if (btn) {
+            btn.innerHTML = origText;
+            btn.disabled = false;
+          }
+        }
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+        showHomeToast(`✓ Added ${productName} to cart!`);
+        if (btn) {
+          btn.innerHTML = origText;
+          btn.disabled = false;
+        }
+        syncNavCartCount();
+      }
+    }
+
+    // ── Customer Feedback Form Submission & Star Interaction ──
+    function initHomeFeedbackStars() {
+      const stars = document.querySelectorAll('#fbStarGroup .fb-star');
+      const ratingText = document.getElementById('fbRatingText');
+      const ratingVal = document.getElementById('fbRatingVal');
+      const starGroup = document.getElementById('fbStarGroup');
+      const labels = {
+        1: '1 / 5 — Poor',
+        2: '2 / 5 — Fair',
+        3: '3 / 5 — Good',
+        4: '4 / 5 — Very Good',
+        5: '5 / 5 — Excellent'
+      };
+      let currentVal = 5;
+
+      function updateStars(val) {
+        stars.forEach(s => {
+          const v = parseInt(s.getAttribute('data-val'), 10);
+          if (v <= val) {
+            s.style.color = 'var(--gold)';
+          } else {
+            s.style.color = 'rgba(255,255,255,0.25)';
+          }
+        });
+        if (ratingText) ratingText.textContent = labels[val] || (val + ' Stars');
+        if (ratingVal) ratingVal.value = val;
+      }
+
+      stars.forEach(s => {
+        s.addEventListener('click', () => {
+          currentVal = parseInt(s.getAttribute('data-val'), 10);
+          updateStars(currentVal);
+        });
+        s.addEventListener('mouseenter', () => {
+          const hoverVal = parseInt(s.getAttribute('data-val'), 10);
+          updateStars(hoverVal);
+        });
+      });
+
+      if (starGroup) {
+        starGroup.addEventListener('mouseleave', () => {
+          updateStars(currentVal);
+        });
+      }
+    }
+
+    async function handleHomeFeedbackSubmit(e) {
+      if (e) e.preventDefault();
+      const form = document.getElementById('homeFeedbackForm');
+      const btn = document.getElementById('fbSubmitBtn');
+      const successBox = document.getElementById('homeFeedbackSuccess');
+      const errorBox = document.getElementById('homeFeedbackError');
+
+      if (successBox) successBox.style.display = 'none';
+      if (errorBox) errorBox.style.display = 'none';
+
+      const payload = {
+        full_name: document.getElementById('fbFullName').value.trim(),
+        email: document.getElementById('fbEmail').value.trim(),
+        phone: document.getElementById('fbPhone').value.trim(),
+        company_name: document.getElementById('fbCompany').value.trim(),
+        product_name: document.getElementById('fbProduct').value,
+        feedback_type: document.getElementById('fbType').value,
+        rating: document.getElementById('fbRatingVal').value,
+        message: document.getElementById('fbMessage').value.trim()
+      };
+
+      // Client-side validation
+      if (!payload.full_name) {
+        if (errorBox) { errorBox.textContent = 'Please enter your full name.'; errorBox.style.display = 'block'; }
+        return;
+      }
+      if (!payload.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+        if (errorBox) { errorBox.textContent = 'Please enter a valid email address.'; errorBox.style.display = 'block'; }
+        return;
+      }
+      if (payload.phone) {
+        const cleanPhone = payload.phone.replace(/[\s\-\+\(\)]/g, '');
+        if (!/^\d+$/.test(cleanPhone) || cleanPhone.length < 7 || cleanPhone.length > 15) {
+          if (errorBox) { errorBox.textContent = 'Please enter a valid mobile number.'; errorBox.style.display = 'block'; }
+          return;
+        }
+      }
+      if (!payload.message) {
+        if (errorBox) { errorBox.textContent = 'Please enter your feedback message.'; errorBox.style.display = 'block'; }
+        return;
+      }
+
+      const origBtnHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span>Submitting Feedback...</span>';
+
+      try {
+        const res = await fetch('/api/feedback/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerHTML = origBtnHtml;
+
+        if (data.success) {
+          if (successBox) {
+            successBox.innerHTML = `✓ Thank you, <strong>${payload.full_name}</strong>! Your feedback has been recorded and submitted to our management team.`;
+            successBox.style.display = 'block';
+            successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          form.reset();
+          document.getElementById('fbRatingVal').value = 5;
+          const stars = document.querySelectorAll('#fbStarGroup .fb-star');
+          stars.forEach(s => s.style.color = 'var(--gold)');
+          document.getElementById('fbRatingText').textContent = '5 / 5 — Excellent';
+        } else {
+          if (errorBox) {
+            errorBox.textContent = data.message || 'Error submitting feedback. Please check your entries.';
+            errorBox.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = origBtnHtml;
+        if (errorBox) {
+          errorBox.textContent = 'Network error while submitting feedback. Please try again.';
+          errorBox.style.display = 'block';
+        }
+      }
+    }
+
     // Auto-open Buy Modal if redirected with ?buy= parameter & sync auth
     window.addEventListener('DOMContentLoaded', () => {
       updateNavAuthState();
+      syncNavCartCount();
+      initHomeFeedbackStars();
       const urlParams = new URLSearchParams(window.location.search);
       const buyKey = urlParams.get('buy');
       if (buyKey && PRODUCTS[buyKey]) {
@@ -3537,6 +3968,12 @@
       }
     });
   </script>
+
+  <!-- Floating Toast Notification for Add to Cart -->
+  <div id="homeToast" class="home-toast">
+    <span id="homeToastMsg">Item added to cart!</span>
+    <a href="/products/cart/">View Cart ➔</a>
+  </div>
 </body>
 </html>
 

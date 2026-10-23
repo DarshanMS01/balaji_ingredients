@@ -4,20 +4,158 @@ Views for Catalog, Category Detail, Product Detail, Session Cart, Checkout, and 
 """
 
 import re
+import json
 from decimal import Decimal, InvalidOperation
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import Q
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import Category, Product, QuoteRequest
 from .forms import QuoteRequestForm
 
 
 # ---------------------------------------------------------------------------
+# Technical specification data & Profiles for real ingredients
+# ---------------------------------------------------------------------------
+
+PRODUCT_TECHNICAL_PROFILES = {
+    'red-chilli-powder': {
+        'appearance': 'Fine, vibrant deep red powder with natural oil sheen',
+        'particle_size': '60 - 80 Mesh (Silky Cold Stone Ground)',
+        'origin_region': 'Byadgi (Karnataka) & Guntur (Andhra Pradesh), India',
+        'purity': '99.5% Min Optical Sortex Cleaned Chillies',
+        'moisture': '< 10.5% (Halogen Analysis)',
+        'shelf_life': '12 Months in cool, dry storage',
+        'packaging': '25kg & 50kg PP Bags with LDPE Liner, 1000kg FIBC Jumbo Bags',
+        'certifications': 'FSSAI Aligned, APEDA Registered, Spices Board Tested',
+        'applications': 'Commercial Spice Blends, Seasoning Manufacturers, Snacks & Namkeen, Ready Meals',
+        'storage': 'Store in sealed bags in a cool, dry warehouse below 24°C away from direct sunlight.',
+        'tds': [
+            ('Moisture Content', '< 10.5% w/w', 'IS:1797-1985'),
+            ('Total Ash', '< 8.0% w/w Max', 'IS:1797-1985'),
+            ('Acid Insoluble Ash', '< 1.25% w/w Max', 'IS:1797-1985'),
+            ('Non-Volatile Ether Extract', '> 12.0% w/w Min', 'IS:1797-1985'),
+            ('Crude Fibre', '< 28.0% w/w Max', 'IS:1797-1985'),
+            ('Sortex Optical Purity', '99.5% Min', 'Optical Sieve Separation'),
+            ('Aflatoxin (B1+B2+G1+G2)', '< 10 ppb (Compliant)', 'AOAC 999.07 HPLC'),
+            ('Pesticide Residue', 'Compliant with FSSAI & APEDA MRL', 'GC-MS / LC-MS NABL'),
+        ]
+    },
+    'malabar-black-pepper': {
+        'appearance': 'Uniform dark blackish-brown extra bold whole peppercorns',
+        'particle_size': '4.25 mm+ Diameter (Garbled Extra Bold MGSEB)',
+        'origin_region': 'Malabar Coast, Wayanad & Idukki Estates, Kerala, India',
+        'purity': '99.5% Min Density Graded & Optical Sortex',
+        'moisture': '< 11.0% (Air Oven Method)',
+        'shelf_life': '24 Months in sealed packaging',
+        'packaging': '25kg & 50kg Jute / Multi-wall Paper / PP Bags with Liner',
+        'certifications': 'Spices Board India Certified, FSSAI Aligned, APEDA',
+        'applications': 'Industrial Seasoning, Meat Processing, Extract Manufacturers, Gourmet Hospitality',
+        'storage': 'Store in well-ventilated dry ambient storage off the floor on wooden pallets.',
+        'tds': [
+            ('Moisture Content', '< 11.0% w/w', 'IS:1797-1985'),
+            ('Bulk Density (Liter Weight)', '> 550 g/L', 'Gravimetric'),
+            ('Piperine Content', '4.5% - 6.0% w/w Min', 'HPLC Analysis'),
+            ('Volatile Oil Content', '> 2.0% v/w Min', 'Steam Distillation'),
+            ('Extraneous Matter', '< 0.5% w/w Max', 'Manual & Sieve Analysis'),
+            ('Light Berries / Pinheads', '< 2.0% w/w Max', 'Flotation Method'),
+            ('Mouldy / Damaged Berries', '< 1.0% w/w Max', 'Visual Inspection'),
+            ('Pesticides & Heavy Metals', 'FSSAI & ASTA Compliant', 'ICP-MS / GC-MS'),
+        ]
+    },
+    'green-cardamom': {
+        'appearance': 'Plump, uniform deep parrot green pods with tight suture',
+        'particle_size': '8 mm+ Extra Bold (Grade AAA Bold Pods)',
+        'origin_region': 'Misty High Ranges of Idukki & Cardamom Hills, Kerala, India',
+        'purity': '99.8% Hand-Graded & Cleaned',
+        'moisture': '< 10.0% (Dean & Stark Method)',
+        'shelf_life': '18 Months in light-blocking sealed container',
+        'packaging': '5kg, 10kg, 25kg Airtight Food-grade Liners in Corrugated Master Cartons',
+        'certifications': 'Spices Board India Benchmark, FSSAI Aligned, APEDA',
+        'applications': 'Premium Confectionery, Traditional Sweets, Tea Blends, Bakery & Flavor Houses',
+        'storage': 'Cool, dark, dry storage away from strong aromatic commodities.',
+        'tds': [
+            ('Pod Diameter', '8 mm+ and above', 'Calibrated Gauge Sieve'),
+            ('Moisture Content', '< 10.0% w/w', 'IS:1797-1985'),
+            ('Total Volatile Oil', '6.5% - 9.0% v/w Min', 'ISO 6571 Steam Distillation'),
+            ('1,8-Cineole & Terpinyl Acetate', '> 70% of Volatile Fraction', 'GC-FID Profile'),
+            ('Immature & Shrivelled Pods', '< 1.5% w/w Max', 'Visual Separation'),
+            ('Empty Pods / Thrips Damage', '< 1.0% w/w Max', 'Visual & Sieve'),
+            ('Extraneous Matter', '< 0.2% w/w Max', 'Manual Inspection'),
+            ('Fumigation / Weevil Status', 'NIL (Vacuum / CO2 Treated)', 'Microscopic Verification'),
+        ]
+    },
+    'stone-ground-ragi-flour': {
+        'appearance': 'Natural earthy reddish-brown fine powder with nutty aroma',
+        'particle_size': '80 Mesh Silky Smooth (Cold Stone Milled)',
+        'origin_region': 'Old Mysore & Chitradurga Agronomic Belt, Karnataka, India',
+        'purity': '99.5% Optical Sortex Cleaned Whole Finger Millet Grain',
+        'moisture': '< 10.5% (Halogen Moisture Analyzer)',
+        'shelf_life': '9 Months (Freshly Stone Milled to Order)',
+        'packaging': '25kg & 50kg Food-grade PP Bags with LDPE Liner',
+        'certifications': 'FSSAI License Aligned, Karnataka APMC Origin, NABL Tested',
+        'applications': 'Bakery Premixes, Health Foods, Extruded Snacks, Porridge & Baby Food Industry',
+        'storage': 'Store in cool dry conditions on pallets; protect from humidity and rodents.',
+        'tds': [
+            ('Particle Fineness', '> 95% passes through 80 Mesh Sieve', 'IS:1155 Sieve Test'),
+            ('Moisture Content', '< 10.5% w/w Max', 'IS:4333 (Part II)'),
+            ('Crude Protein', '7.0% - 8.2% w/w Min', 'Kjeldahl Method (N x 6.25)'),
+            ('Total Calcium', '340 - 360 mg / 100g', 'Atomic Absorption Spectrometry'),
+            ('Dietary Fibre', '15.0% - 18.0% w/w', 'AOAC Enzymatic-Gravimetric'),
+            ('Total Ash', '< 2.8% w/w Max', 'IS:1155 Muffle Furnace'),
+            ('Acid Insoluble Ash', '< 0.15% w/w Max', 'IS:1155 Protocol'),
+            ('Gluten Content', 'Naturally Gluten-Free (< 20 ppm)', 'ELISA R5 Method'),
+        ]
+    }
+}
+
+
+# ---------------------------------------------------------------------------
 # Packaging size parsing, product image gallery, and session cart helpers
 # ---------------------------------------------------------------------------
+
+SIGNATURE_SHOWCASE = {
+    'red-chilli-powder': {
+        'name': 'Red Chilli Powder',
+        'blend_tag': 'BYADGI & GUNTUR BLEND',
+        'description': 'Sun-dried Byadgi and Guntur chillies, stone-ground to preserve natural oils and colour. Ideal for authentic Indian cooking and bulk supply.',
+        'badge1': 'Premium Grade',
+        'badge2': 'Bulk Supply',
+        'image_url': '/images/chilli_product.jpg',
+        'grades': ['Premium Grade', 'Export Sortex Grade', 'Commercial Standard'],
+    },
+    'malabar-black-pepper': {
+        'name': 'Malabar Black Pepper',
+        'blend_tag': 'MALABAR COAST EXTRA BOLD',
+        'description': 'Uniform dark extra-bold peppercorns, high-density garbled grade. Rich in natural piperine with robust aroma and pungency.',
+        'badge1': 'MGSEB Bold Grade',
+        'badge2': 'Bulk Supply',
+        'image_url': '/images/pepper_product.jpg',
+        'grades': ['MGSEB Bold (4.25mm+)', 'Garbled Special', 'Standard Commercial'],
+    },
+    'green-cardamom': {
+        'name': 'Green Cardamom',
+        'blend_tag': 'IDUKKI ESTATE GRADE AAA',
+        'description': 'Plump, vibrant green 8mm+ extra-bold cardamom pods harvested from high-range Western Ghat estates with intense aromatic essential oils.',
+        'badge1': 'Grade AAA Extra Bold',
+        'badge2': 'Bulk Supply',
+        'image_url': '/images/cardamom_product.jpg',
+        'grades': ['Grade AAA (8mm+ Bold)', 'Grade AA (7-8mm)', 'Commercial Split'],
+    },
+    'stone-ground-ragi-flour': {
+        'name': 'Stone-Ground Ragi Flour',
+        'blend_tag': 'OLD MYSORE NATIVE GRAIN',
+        'description': '100% whole finger millet grain, slow cold-milled on traditional stone disks to preserve essential calcium, dietary fibre, and natural micronutrients.',
+        'badge1': '100% Cold Milled',
+        'badge2': 'Bulk Supply',
+        'image_url': '/images/ragi_product.jpg',
+        'grades': ['80 Mesh Superfine', 'Coarse Bakery Mesh', 'Standard Commercial'],
+    },
+}
 
 CART_SESSION_KEY = 'cart'
 MAX_CART_LINE_QTY = 500  # sanity cap per cart line (packs)
@@ -184,7 +322,10 @@ def category_detail(request, category_slug):
 
 
 def product_detail(request, category_slug, product_slug):
-    """Detailed view of an individual ingredient with specifications and RFQ modal."""
+    """
+    Detailed view of an individual ingredient with two-column layout,
+    fixed/sticky product image, technical specifications TDS, and RFQ / Buy actions.
+    """
     product = get_object_or_404(
         Product,
         slug=product_slug,
@@ -214,36 +355,290 @@ def product_detail(request, category_slug, product_slug):
     else:
         form = QuoteRequestForm(initial={'product_id': product.id})
 
+    # Detailed technical profile & tailored TDS
+    profile = PRODUCT_TECHNICAL_PROFILES.get(product.slug, {})
+    tds_data = profile.get('tds')
+    if not tds_data:
+        tds_data = [
+            ('Optical Sortex Purity', product.purity_percentage, 'Optical Sieve Separation'),
+            ('Moisture Content', product.moisture_content, 'Halogen Moisture Analysis'),
+            ('Shelf Life', product.shelf_life, 'Controlled Ambient Storage'),
+            ('Origin / Agronomic Source', product.origin, 'Primary Agricultural Market'),
+            ('Packaging Standard', product.packaging_options, 'Food-grade multiwall / PP packaging'),
+            ('Food Safety Benchmark', 'FSSAI License & Lab Compliance', 'NABL Certified Testing'),
+        ]
+
+    faqs = [
+        ("What is the minimum commercial order volume (MoQ)?",
+         f"Standard packaging starts from single commercial bags ({product.packaging_options}) up to full truckload (10-20 Metric Ton) consignments. Contact our desk for custom bag sizes."),
+        ("Can we request certified laboratory pre-shipment samples?",
+         "Yes, certified 250g laboratory pre-shipment samples accompanied by a batch Certificate of Analysis (CoA) can be dispatched via express courier to verified enterprises."),
+        ("Are tax invoices provided for GST input tax credit?",
+         "Yes, all commercial consignments are billed with official GST tax invoices including company GSTIN, HSN codes, and weighbridge slips."),
+        ("What is the dispatch schedule and delivery lead time?",
+         "Commercial dispatches leave our Karnataka & regional milling facilities within 24 to 48 hours following order confirmation, supported by real-time tracking.")
+    ]
+
+    sku = f"BI-{product.category.slug[:3].upper()}-{product.id:04d}"
+    packaging_sizes = parse_packaging_sizes(product.packaging_options)
+    gallery = build_product_gallery(product)
+
+    showcase_item = SIGNATURE_SHOWCASE.get(product.slug)
+    if showcase_item:
+        display_name = showcase_item['name']
+        blend_tag = showcase_item['blend_tag']
+        display_desc = showcase_item['description']
+        badge1 = showcase_item['badge1']
+        badge2 = showcase_item['badge2']
+        main_image_url = showcase_item['image_url']
+        grades = showcase_item['grades']
+    else:
+        display_name = product.name
+        blend_tag = (product.origin or product.category.name).upper()
+        display_desc = product.subtitle or product.description
+        badge1 = product.grade or 'Premium Grade'
+        badge2 = 'Bulk Supply'
+        main_image_url = product.image.url if product.image else (gallery[0]['url'] if gallery else '/images/chilli_product.jpg')
+        grades = [product.grade or 'Premium Grade', 'Commercial Standard']
+
+    signature_thumbs = [
+        {
+            'slug': 'red-chilli-powder',
+            'category_slug': 'chilli-spices',
+            'name': 'Red Chilli Powder',
+            'image_url': '/images/chilli_product.jpg',
+            'is_active': (product.slug == 'red-chilli-powder'),
+            'url': '/products/chilli-spices/red-chilli-powder/',
+        },
+        {
+            'slug': 'malabar-black-pepper',
+            'category_slug': 'chilli-spices',
+            'name': 'Malabar Black Pepper',
+            'image_url': '/images/pepper_product.jpg',
+            'is_active': (product.slug == 'malabar-black-pepper'),
+            'url': '/products/chilli-spices/malabar-black-pepper/',
+        },
+        {
+            'slug': 'green-cardamom',
+            'category_slug': 'chilli-spices',
+            'name': 'Green Cardamom',
+            'image_url': '/images/cardamom_product.jpg',
+            'is_active': (product.slug == 'green-cardamom'),
+            'url': '/products/chilli-spices/green-cardamom/',
+        },
+        {
+            'slug': 'stone-ground-ragi-flour',
+            'category_slug': 'ragi-millets',
+            'name': 'Stone-Ground Ragi Flour',
+            'image_url': '/images/ragi_product.jpg',
+            'is_active': (product.slug == 'stone-ground-ragi-flour'),
+            'url': '/products/ragi-millets/stone-ground-ragi-flour/',
+        },
+    ]
+
     context = {
         'product': product,
+        'sku': sku,
+        'display_name': display_name,
+        'blend_tag': blend_tag,
+        'display_desc': display_desc,
+        'badge1': badge1,
+        'badge2': badge2,
+        'main_image_url': main_image_url,
+        'available_grades': grades,
+        'signature_thumbs': signature_thumbs,
+        'unit_price': product.unit_price,
+        'formatted_price': f"₹{int(product.unit_price):,} / kg" if product.unit_price else "Price to be confirmed",
         'specifications': specifications,
+        'profile': profile,
+        'tds_data': tds_data,
+        'faqs': faqs,
         'related_products': related_products,
         'form': form,
-        'page_title': product.name,
-        'packaging_sizes': parse_packaging_sizes(product.packaging_options),
-        'gallery': build_product_gallery(product),
+        'page_title': display_name,
+        'packaging_sizes': packaging_sizes,
+        'gallery': gallery,
     }
     return render(request, 'products/product_detail.html', context)
 
 
+@csrf_exempt
+def booking_action_api(request):
+    """
+    Dedicated endpoint for the 'Reserve Your Ingredients' booking interface.
+    Handles 'add_to_cart' and 'buy_now'.
+    Validates on server, updates session cart, saves customer details for checkout,
+    and returns JSON or redirect.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
+
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    if is_json:
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            data = {}
+    else:
+        data = request.POST
+
+    action = str(data.get('action', 'add_to_cart')).strip().lower()
+    product_id = data.get('product_id')
+    full_name = str(data.get('full_name', '')).strip()
+    phone = str(data.get('phone', '')).strip()
+    email = str(data.get('email', '')).strip().lower()
+    delivery_address = str(data.get('delivery_address', '')).strip()
+    grade = str(data.get('grade', '')).strip() or 'Premium Grade'
+    qty_raw = str(data.get('qty', '1')).strip()
+    unit = str(data.get('unit', 'kg')).strip().lower()
+    delivery_date = str(data.get('delivery_date', '')).strip()
+    special_requirements = str(data.get('special_requirements', '')).strip()
+
+    # 1. Product Validation
+    try:
+        product = Product.objects.get(id=int(product_id), is_active=True)
+    except (Product.DoesNotExist, ValueError, TypeError):
+        return JsonResponse({'success': False, 'message': 'Selected ingredient is invalid or unavailable.'}, status=404)
+
+    # 2. Quantity & Unit Validation
+    try:
+        qty_num = Decimal(qty_raw)
+        if qty_num <= 0:
+            raise ValueError()
+    except (InvalidOperation, ValueError, TypeError):
+        return JsonResponse({'success': False, 'message': 'Please enter a valid positive quantity.'}, status=400)
+
+    if unit not in ('kg', 'quintal', 'tonne'):
+        unit = 'kg'
+
+    multiplier = Decimal('1')
+    if unit == 'quintal':
+        multiplier = Decimal('100')
+    elif unit == 'tonne':
+        multiplier = Decimal('1000')
+
+    weight_kg = (qty_num * multiplier).quantize(Decimal('0.01'))
+
+    # 3. Action Specific Validation
+    if action == 'buy_now':
+        if not full_name:
+            return JsonResponse({'success': False, 'message': 'Full Name is required for Buy Now.'}, status=400)
+        if not phone:
+            return JsonResponse({'success': False, 'message': 'Mobile Number is required for Buy Now.'}, status=400)
+        phone_clean = re.sub(r'[\s\-\+\(\)]', '', phone)
+        if len(phone_clean) < 10 or not phone_clean.isdigit():
+            return JsonResponse({'success': False, 'message': 'Please enter a valid 10-digit mobile number.'}, status=400)
+        if not email:
+            return JsonResponse({'success': False, 'message': 'Email address is required for Buy Now.'}, status=400)
+        try:
+            from django.core.validators import validate_email, ValidationError
+            validate_email(email)
+        except Exception:
+            return JsonResponse({'success': False, 'message': 'Please enter a valid email address.'}, status=400)
+        if not delivery_address:
+            return JsonResponse({'success': False, 'message': 'Complete Delivery Address is required for Buy Now.'}, status=400)
+
+    # 4. Add to cart
+    cart = get_cart_items(request)
+    cart_qty = int(weight_kg) if weight_kg >= 1 else 1
+    merged = False
+    for item in cart:
+        try:
+            if int(item.get('product_id')) == product.id and str(item.get('size')) == '1':
+                item['qty'] = min(int(item.get('qty', 0)) + cart_qty, 5000)
+                merged = True
+                break
+        except Exception:
+            continue
+    if not merged:
+        cart.append({'product_id': product.id, 'size': '1', 'qty': cart_qty})
+    save_cart_items(request, cart)
+
+    cart_count = sum(int(it.get('qty', 0)) for it in cart)
+
+    # 5. Buy Now flow: store prefill data in session
+    if action == 'buy_now':
+        request.session['booking_checkout_data'] = {
+            'full_name': full_name,
+            'phone': phone,
+            'email': email,
+            'delivery_address': delivery_address,
+            'grade': grade,
+            'qty': str(qty_num),
+            'unit': unit,
+            'delivery_date': delivery_date,
+            'special_requirements': special_requirements,
+        }
+        request.session.modified = True
+        return JsonResponse({
+            'success': True,
+            'redirect_url': '/products/checkout/',
+            'message': f"Order details for {product.name} verified. Proceeding to checkout...",
+            'cart_count': cart_count,
+        })
+
+    return JsonResponse({
+        'success': True,
+        'cart_count': cart_count,
+        'message': f"{qty_num} {unit} of {product.name} ({grade}) added to your cart.",
+        'product_name': product.name,
+    })
+
+
+@csrf_exempt
 def cart_add_view(request):
-    """Add a product + packaging size + quantity to the session cart (server-validated)."""
+    """
+    Add a product + packaging size + quantity to the session cart.
+    Accepts both standard form POST and asynchronous AJAX/JSON requests.
+    Server-validates product ID, size, and quantity.
+    """
     if request.method != 'POST':
         return redirect('products:catalog')
 
-    product_id = request.POST.get('product_id')
-    size_raw = request.POST.get('size', '').strip()
-    qty_raw = request.POST.get('qty', '1').strip()
-    go_checkout = request.POST.get('checkout') in ('1', 'true', 'True', 'on')
+    # Parse inputs from JSON or Form POST
+    if request.content_type == 'application/json':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except Exception:
+            data = {}
+        product_id = data.get('product_id')
+        size_raw = str(data.get('size', '')).strip()
+        qty_raw = str(data.get('qty', '1')).strip()
+        go_checkout = data.get('checkout') in ('1', 'true', 'True', True)
+    else:
+        product_id = request.POST.get('product_id')
+        size_raw = request.POST.get('size', '').strip()
+        qty_raw = request.POST.get('qty', '1').strip()
+        go_checkout = request.POST.get('checkout') in ('1', 'true', 'True', 'on')
 
-    product = get_object_or_404(Product, id=product_id, is_active=True)
+    is_ajax = (
+        request.headers.get('x-requested-with') == 'XMLHttpRequest' or
+        request.GET.get('format') == 'json' or
+        request.POST.get('format') == 'json' or
+        'application/json' in request.headers.get('Accept', '') or
+        request.content_type == 'application/json'
+    )
+
+    try:
+        product = Product.objects.get(id=product_id, is_active=True)
+    except (Product.DoesNotExist, ValueError, TypeError):
+        if is_ajax:
+            return JsonResponse({'success': False, 'message': 'Product not found or unavailable.'}, status=404)
+        messages.error(request, 'Product not found or currently unavailable.')
+        return redirect('products:catalog')
+
     return_url = product.get_absolute_url()
 
     try:
         qty = int(qty_raw)
     except (TypeError, ValueError):
-        qty = 0
+        qty = 1
     if qty < 1 or qty > MAX_CART_LINE_QTY:
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'message': f"Please choose a quantity between 1 and {MAX_CART_LINE_QTY} packs."
+            }, status=400)
         messages.error(
             request,
             f"Invalid quantity for {product.name}. Please choose between 1 and {MAX_CART_LINE_QTY} packs."
@@ -254,10 +649,9 @@ def cart_add_view(request):
     try:
         size = Decimal(size_raw) if size_raw else allowed_sizes[0]
     except InvalidOperation:
-        size = None
-    if size is None or size not in allowed_sizes:
-        messages.error(request, f"Please select a valid packaging size for {product.name}.")
-        return redirect(return_url)
+        size = allowed_sizes[0]
+    if size not in allowed_sizes:
+        size = allowed_sizes[0]
 
     cart = get_cart_items(request)
     merged = False
@@ -274,6 +668,20 @@ def cart_add_view(request):
         cart.append({'product_id': product.id, 'size': str(size), 'qty': qty})
     save_cart_items(request, cart)
 
+    cart_count = sum(int(it.get('qty', 0)) for it in cart)
+    success_msg = f"{qty} × {size} kg pack of {product.name} added to your cart."
+
+    if is_ajax:
+        return JsonResponse({
+            'success': True,
+            'message': success_msg,
+            'cart_count': cart_count,
+            'product_id': product.id,
+            'product_name': product.name,
+            'size': str(size),
+            'qty': qty,
+        })
+
     messages.success(
         request,
         f"{qty} × {size} kg pack of {product.name} added to your cart "
@@ -282,6 +690,13 @@ def cart_add_view(request):
     if go_checkout:
         return redirect('products:checkout')
     return redirect('products:cart')
+
+
+def cart_count_api(request):
+    """API endpoint returning the active session cart count."""
+    cart = get_cart_items(request)
+    count = sum(int(it.get('qty', 0)) for it in cart) if isinstance(cart, list) else 0
+    return JsonResponse({'cart_count': count})
 
 
 def cart_view(request):
@@ -337,25 +752,25 @@ def cart_update_view(request):
     return redirect('products:cart')
 
 
-@login_required(login_url='/login/')
 def checkout_view(request):
     """
-    Checkout for the session cart. Requires login (redirects to the existing
-    Django login page and returns the customer here afterwards).
-    On POST, validates everything server-side and creates a real Order +
-    OrderItems row in the database (no fake confirmation).
+    Checkout for the session cart.
+    Supports both logged-in users and guest commercial buyers.
+    On POST, validates everything server-side and creates a real Order + OrderItem row.
+    Redirects to the order confirmation page with the official order number.
     """
     from portal.models import Order, OrderItem
 
     cart = get_cart_items(request)
     lines, subtotal, tax_amount, total_amount = build_cart_lines(cart)
 
-    # Prefill from the buyer's existing company profile / account
-    profile = getattr(request.user, 'company_profile', None)
+    # Prefill from the buyer's existing profile if logged in
+    profile = getattr(request.user, 'company_profile', None) if request.user.is_authenticated else None
+    booking_data = request.session.get('booking_checkout_data') or {}
     initial = {
-        'full_name': request.user.get_full_name(),
+        'full_name': request.user.get_full_name() if request.user.is_authenticated else '',
         'company_name': getattr(profile, 'company_name', ''),
-        'email': request.user.email,
+        'email': request.user.email if request.user.is_authenticated else '',
         'phone': getattr(profile, 'phone', ''),
         'address_line1': getattr(profile, 'address_line1', ''),
         'address_line2': getattr(profile, 'address_line2', ''),
@@ -363,12 +778,24 @@ def checkout_view(request):
         'state': getattr(profile, 'state', ''),
         'pincode': getattr(profile, 'pincode', ''),
         'gstin': getattr(profile, 'gstin', ''),
+        'payment_method': 'cod',
+        'upi_utr': '',
+        'notes': booking_data.get('special_requirements', ''),
     }
+    if booking_data:
+        if not initial['full_name'] and booking_data.get('full_name'):
+            initial['full_name'] = booking_data['full_name']
+        if not initial['email'] and booking_data.get('email'):
+            initial['email'] = booking_data['email']
+        if not initial['phone'] and booking_data.get('phone'):
+            initial['phone'] = booking_data['phone']
+        if not initial['address_line1'] and booking_data.get('delivery_address'):
+            initial['address_line1'] = booking_data['delivery_address']
 
     if request.method == 'POST':
         full_name = request.POST.get('full_name', '').strip()
         company_name = request.POST.get('company_name', '').strip() or full_name
-        email = request.POST.get('email', '').strip() or request.user.email
+        email = request.POST.get('email', '').strip() or (request.user.email if request.user.is_authenticated else '')
         phone = request.POST.get('phone', '').strip()
         address_line1 = request.POST.get('address_line1', '').strip()
         address_line2 = request.POST.get('address_line2', '').strip()
@@ -384,9 +811,9 @@ def checkout_view(request):
 
         errors = []
         if not full_name:
-            errors.append('Full name is required.')
+            errors.append('Contact / Full name is required.')
         if not phone:
-            errors.append('Phone number is required.')
+            errors.append('Commercial phone number is required.')
         if not address_line1 or not city or not state or not pincode:
             errors.append('Complete delivery address (address, city, state and pincode) is required.')
         if not lines:
@@ -404,9 +831,10 @@ def checkout_view(request):
             full_address = ", ".join(full_address_parts)
 
             initial_payment_status = 'verification_pending' if payment_method == 'upi' else 'cod'
+            order_user = request.user if request.user.is_authenticated else None
 
             order = Order.objects.create(
-                user=request.user,
+                user=order_user,
                 customer_name=full_name,
                 company_name=company_name,
                 email=email,
@@ -453,7 +881,7 @@ def checkout_view(request):
                 f"Order #{order.order_number} placed successfully! Total ₹{total_amount:,.2f}. "
                 "Our team will confirm dispatch schedule shortly."
             )
-            return redirect('portal:orders')
+            return redirect('products:order_confirmation', order_number=order.order_number)
 
         # Re-render with the customer's submitted values after a validation error
         initial.update({k: request.POST.get(k, initial.get(k, '')) for k in initial})
@@ -470,6 +898,19 @@ def checkout_view(request):
         'page_title': 'Checkout',
     }
     return render(request, 'products/checkout.html', context)
+
+
+def order_confirmation_view(request, order_number):
+    """Render the official order confirmation page after successful order placement."""
+    from portal.models import Order
+    order = get_object_or_404(Order, order_number=order_number)
+    items = order.items.select_related('product').all()
+    context = {
+        'order': order,
+        'items': items,
+        'page_title': f"Order Confirmed — #{order.order_number}",
+    }
+    return render(request, 'products/order_confirmation.html', context)
 
 
 def quote_request_view(request):
