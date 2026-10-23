@@ -556,9 +556,50 @@ def booking_action_api(request):
 
     cart_count = sum(int(it.get('qty', 0)) for it in cart)
 
-    # 5. Buy Now flow: store prefill data in session
+    # 5. Buy Now flow: create Order and redirect to online payment interface
     if action == 'buy_now':
+        from portal.models import Order, OrderItem
+        from django.utils import timezone
+
+        subtotal = (weight_kg * product.unit_price).quantize(Decimal('0.01'))
+        tax_amount = (subtotal * Decimal('0.05')).quantize(Decimal('0.01'))
+        total_amount = subtotal + tax_amount
+
+        order_seq = Order.objects.count() + 1
+        today_str = timezone.now().strftime('%Y%m%d')
+        order_number = f"BI-{today_str}-{order_seq:04d}"
+
+        order = Order.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            order_number=order_number,
+            customer_name=full_name,
+            company_name=full_name,
+            email=email,
+            phone=phone,
+            delivery_address=delivery_address,
+            quality=grade,
+            payment_method='upi',
+            payment_status='verification_pending',
+            status='pending',
+            subtotal=subtotal,
+            tax_amount=tax_amount,
+            total_amount=total_amount,
+            customer_notes=special_requirements,
+        )
+
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            product_name=product.name,
+            unit=f"{qty_num} {unit}",
+            quantity=weight_kg,
+            packaging=f"{weight_kg}kg bulk pack",
+            unit_price=product.unit_price,
+            total_price=subtotal,
+        )
+
         request.session['booking_checkout_data'] = {
+            'order_number': order.order_number,
             'full_name': full_name,
             'phone': phone,
             'email': email,
@@ -570,10 +611,13 @@ def booking_action_api(request):
             'special_requirements': special_requirements,
         }
         request.session.modified = True
+
         return JsonResponse({
             'success': True,
-            'redirect_url': '/products/checkout/',
-            'message': f"Order details for {product.name} verified. Proceeding to checkout...",
+            'redirect_url': f'/products/payment/{order.order_number}/',
+            'order_id': order.order_number,
+            'total_amount': f"{total_amount:,.2f}",
+            'message': f"Order #{order.order_number} created. Opening online payment interface...",
             'cart_count': cart_count,
         })
 
@@ -1145,3 +1189,126 @@ def payment_config_api(request):
     })
 
 
+
+
+def order_payment_view(request, order_number):
+    """
+    Renders the dedicated Online Payment interface with the user's uploaded PhonePe QR code,
+    order ID, payable amount, and Start / Stop controls.
+    """
+    from portal.models import Order
+    order = get_object_or_404(Order, order_number=order_number)
+    items = order.items.select_related('product').all()
+    primary_item = items.first()
+    product = primary_item.product if primary_item else None
+
+    return_url = product.get_absolute_url() if product else '/'
+    qr_image_url = '/images/phonepe_payment_qr.jpg'
+
+    context = {
+        'order': order,
+        'items': items,
+        'primary_item': primary_item,
+        'product': product,
+        'return_url': return_url,
+        'qr_image_url': qr_image_url,
+        'page_title': f"Complete Payment — Order #{order.order_number}",
+    }
+    return render(request, 'products/order_payment.html', context)
+
+
+def order_status_api(request, order_number):
+    """
+    Returns real-time payment and order status for polling.
+    Admins can verify and mark as 'paid' in Django Admin.
+    """
+    from portal.models import Order
+    try:
+        order = Order.objects.get(order_number=order_number)
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
+
+    return JsonResponse({
+        'success': True,
+        'order_number': order.order_number,
+        'payment_status': order.payment_status,
+        'is_paid': (order.payment_status == 'paid'),
+        'status': order.status,
+        'total_amount': float(order.total_amount),
+        'upi_utr_number': order.upi_utr_number or '',
+    })
+
+
+@csrf_exempt
+def order_submit_utr_api(request, order_number):
+    """
+    Allows the customer to submit their UPI UTR / Transaction reference.
+    Keeps status as Payment Pending until manually verified by the administrator.
+    """
+    from portal.models import Order
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
+
+    try:
+        order = Order.objects.get(order_number=order_number)
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
+
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    if is_json:
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            data = {}
+    else:
+        data = request.POST
+
+    utr = str(data.get('utr', '')).strip()
+    if not utr:
+        return JsonResponse({'success': False, 'message': 'Please enter a valid Transaction / UTR number.'}, status=400)
+
+    order.upi_utr_number = utr
+    order.save(update_fields=['upi_utr_number'])
+
+    return JsonResponse({
+        'success': True,
+        'message': f"Reference {utr} submitted. Payment is pending manual verification by our accounts desk.",
+        'upi_utr': utr,
+        'payment_status': order.payment_status,
+    })
+
+
+@csrf_exempt
+def order_update_method_api(request, order_number):
+    """
+    Updates the selected payment option (e.g. Google Pay, PhonePe, Paytm, Other UPI, Scan & Pay)
+    for the specified order without creating duplicate orders.
+    """
+    from portal.models import Order
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
+
+    try:
+        order = Order.objects.get(order_number=order_number)
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
+
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    if is_json:
+        try:
+            data = json.loads(request.body)
+        except Exception:
+            data = {}
+    else:
+        data = request.POST
+
+    method = str(data.get('method', 'UPI')).strip()
+    order.payment_method = 'upi'
+    order.admin_notes = f"Selected Payment Option: {method}"
+    order.save(update_fields=['payment_method', 'admin_notes'])
+
+    return JsonResponse({
+        'success': True,
+        'method': method,
+        'order_number': order.order_number,
+    })
