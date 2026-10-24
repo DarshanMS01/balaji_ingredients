@@ -1084,6 +1084,115 @@ def health_check(request):
     return HttpResponse('OK', content_type='text/plain')
 
 
+def send_feedback_notification_email(feedback_obj):
+    """
+    Sends an email notification to the administrator upon new feedback submission.
+    Safe failure handling: Any email error is logged and does NOT undo or crash
+    the feedback record or customer response.
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+
+    try:
+        from django.core.mail import EmailMultiAlternatives
+        from django.conf import settings
+        from django.utils import timezone
+
+        admin_email = getattr(settings, 'ADMIN_EMAIL', None) or getattr(settings, 'EMAIL_HOST_USER', None) or 'yadavdarshanms@gmail.com'
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or getattr(settings, 'EMAIL_HOST_USER', None) or 'noreply@balaji-ingredients.com'
+
+        stars = '★' * feedback_obj.rating + '☆' * (5 - feedback_obj.rating)
+        date_str = feedback_obj.created_at.strftime('%d %B %Y, %I:%M %p') if getattr(feedback_obj, 'created_at', None) else timezone.now().strftime('%d %B %Y, %I:%M %p')
+
+        subject = f"[Balaji Ingredients] New Customer Feedback from {feedback_obj.full_name} ({feedback_obj.rating}★)"
+
+        text_content = f"""New Customer Feedback Received — Balaji Ingredients
+
+Customer Name:   {feedback_obj.full_name}
+Customer Email:  {feedback_obj.email}
+Phone Number:    {feedback_obj.phone or 'Not provided'}
+Company Name:    {feedback_obj.company_name or 'Not provided'}
+Product:         {feedback_obj.product_name or 'General / All Products'}
+Feedback Type:   {feedback_obj.feedback_type}
+Rating:          {feedback_obj.rating}/5 Stars ({stars})
+Submission Date: {date_str}
+
+Feedback Message:
+--------------------------------------------------
+{feedback_obj.message}
+--------------------------------------------------
+
+Review in Django Admin:
+http://127.0.0.1:8000/admin/core/customerfeedback/{feedback_obj.id}/change/
+"""
+
+        html_content = f"""<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 20px; background-color: #f9fafb; }}
+    .card {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }}
+    .header {{ background: linear-gradient(135deg, #1b4332, #2d6a4f); color: #ffffff; padding: 24px; }}
+    .header h1 {{ margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em; }}
+    .header p {{ margin: 6px 0 0; font-size: 14px; opacity: 0.9; }}
+    .body {{ padding: 24px; }}
+    .meta-table {{ width: 100%; border-collapse: collapse; margin-bottom: 20px; }}
+    .meta-table td {{ padding: 8px 12px; font-size: 14px; border-bottom: 1px solid #f3f4f6; }}
+    .meta-table td.label {{ font-weight: 600; color: #4b5563; width: 140px; }}
+    .meta-table td.value {{ color: #111827; }}
+    .badge-stars {{ display: inline-block; padding: 4px 10px; background: #fef3c7; color: #92400e; border-radius: 9999px; font-weight: 700; font-size: 14px; }}
+    .message-box {{ background: #f3f4f6; border-left: 4px solid #1b4332; padding: 16px; border-radius: 6px; margin: 16px 0 24px; font-size: 15px; color: #1f2937; white-space: pre-wrap; }}
+    .btn {{ display: inline-block; background: #1b4332; color: #ffffff !important; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }}
+    .footer {{ background: #f9fafb; padding: 16px 24px; font-size: 12px; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb; }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h1>New Customer Feedback</h1>
+      <p>Submitted on {date_str}</p>
+    </div>
+    <div class="body">
+      <table class="meta-table">
+        <tr><td class="label">Customer Name:</td><td class="value"><strong>{feedback_obj.full_name}</strong></td></tr>
+        <tr><td class="label">Email Address:</td><td class="value"><a href="mailto:{feedback_obj.email}">{feedback_obj.email}</a></td></tr>
+        <tr><td class="label">Phone:</td><td class="value">{feedback_obj.phone or 'Not provided'}</td></tr>
+        <tr><td class="label">Company:</td><td class="value">{feedback_obj.company_name or 'Not provided'}</td></tr>
+        <tr><td class="label">Product:</td><td class="value">{feedback_obj.product_name or 'General / All Products'}</td></tr>
+        <tr><td class="label">Feedback Type:</td><td class="value">{feedback_obj.feedback_type}</td></tr>
+        <tr><td class="label">Rating:</td><td class="value"><span class="badge-stars">{stars} ({feedback_obj.rating}/5)</span></td></tr>
+      </table>
+
+      <h3 style="margin: 0 0 8px; font-size: 15px; color: #374151;">Feedback Message</h3>
+      <div class="message-box">{feedback_obj.message}</div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="http://127.0.0.1:8000/admin/core/customerfeedback/{feedback_obj.id}/change/" class="btn">View in Admin Panel &rarr;</a>
+      </div>
+    </div>
+    <div class="footer">
+      This automated notification was generated by Balaji Ingredients Web Platform.
+    </div>
+  </div>
+</body>
+</html>"""
+
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=from_email,
+            to=[admin_email],
+        )
+        msg.attach_alternative(html_content, "text/html")
+        msg.send(fail_silently=False)
+        logger.info(f"Feedback notification email successfully sent for feedback #{feedback_obj.id} to {admin_email}")
+        return True
+    except Exception as exc:
+        logger.error(f"Failed to send feedback notification email for feedback #{getattr(feedback_obj, 'id', 'unknown')}: {exc}", exc_info=True)
+        return False
+
+
 @csrf_exempt
 def api_submit_feedback(request):
     """
@@ -1181,6 +1290,9 @@ def api_submit_feedback(request):
         rating=rating,
         message=message,
     )
+
+    # Automatically send admin email notification (fail-safe)
+    send_feedback_notification_email(feedback_obj)
 
     if not is_json:
         messages.success(request, 'Thank you! Your feedback has been received and saved.')

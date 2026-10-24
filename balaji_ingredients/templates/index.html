@@ -144,6 +144,118 @@
       color: var(--text);
     }
 
+    /* ==========================================
+       CATEGORIES DROPDOWN MENU STYLING
+    ========================================== */
+    .nav-categories-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .btn-categories-nav {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      outline: none;
+      line-height: normal;
+    }
+
+    .btn-categories-nav:hover,
+    .btn-categories-nav:focus-visible,
+    .btn-categories-nav.open {
+      color: var(--red);
+    }
+
+    .btn-categories-nav .dropdown-chevron-icon {
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .btn-categories-nav.open .dropdown-chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    /* White Dropdown Background with Clean Readable Text */
+    .categories-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 320px;
+      width: max-content;
+      max-width: 90vw;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+      padding: 8px 0;
+      margin: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+      z-index: 1100;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .categories-dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Dropdown Items on White Background */
+    .category-dropdown-item {
+      display: block;
+      padding: 11px 20px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #1F2937;
+      text-decoration: none;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+      cursor: pointer;
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    /* Blue Highlight on Hover and Selection (Visual Reference) */
+    .category-dropdown-item:hover,
+    .category-dropdown-item:focus,
+    .category-dropdown-item.keyboard-focused,
+    .category-dropdown-item.active-category {
+      background-color: #2563EB !important;
+      color: #FFFFFF !important;
+      outline: none;
+    }
+
+    @media (max-width: 768px) {
+      .categories-dropdown-menu {
+        left: -10px;
+        min-width: 280px;
+        max-width: calc(100vw - 32px);
+      }
+      .category-dropdown-item {
+        white-space: normal;
+        padding: 11px 16px;
+        font-size: 0.88rem;
+      }
+    }
+
+    
     /* Right Action Elements */
     .nav-right {
       display: flex;
@@ -1029,7 +1141,46 @@
         <!-- Nav Menu -->
         <div class="nav-menu">
           <a href="#hero" class="nav-link active">Home</a>
-          <a href="#products" class="nav-link">Products</a>
+          <!-- Categories Dropdown Navigation -->
+          <div class="nav-categories-dropdown" id="navCategoriesDropdown">
+            <button type="button" 
+                    id="navCategoriesBtn" 
+                    class="nav-link btn-categories-nav" 
+                    aria-expanded="false" 
+                    aria-haspopup="true"
+                    aria-controls="navCategoriesMenu">
+              <span>Categories</span>
+              <svg class="dropdown-chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="categories-dropdown-menu" id="navCategoriesMenu" role="menu" aria-labelledby="navCategoriesBtn">
+              <a href="/#products" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="all">
+                General Range / Multiple Products
+              </a>
+              <a href="/products/chilli-spices/red-chilli-powder/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="chilli">
+                Guntur &amp; Byadgi Red Chilli Powder
+              </a>
+              <a href="/products/chilli-spices/malabar-black-pepper/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="pepper">
+                Malabar Black Pepper
+              </a>
+              <a href="/products/chilli-spices/green-cardamom/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="cardamom">
+                Green Cardamom (Idukki AAA)
+              </a>
+              <a href="/products/ragi-millets/stone-ground-ragi-flour/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="ragi">
+                Stone-Ground Ragi Flour
+              </a>
+              <a href="/products/pulses-dal/premium-sortex-toor-dal/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="toor-dal">
+                Premium Sortex Toor Dal
+              </a>
+              <a href="/products/pulses-dal/moong-dal-mogar/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="moong-dal">
+                Moong Dal Mogar
+              </a>
+              <a href="/products/grains-cereals/sharbati-lokwan-wheat/" class="category-dropdown-item" role="menuitem" tabindex="-1" data-cat="wheat">
+                Sharbati Food Wheat
+              </a>
+            </div>
+          </div>
           <a href="#story" class="nav-link">Our Story</a>
           <a href="#contact" class="nav-link">Contact</a>
         </div>
@@ -1584,6 +1735,128 @@
       </div>
     </div>
   </footer>
+
+<!-- Categories Dropdown Controller -->
+  <script>
+    (function initCategoriesDropdown() {
+      const dropdownWrap = document.getElementById('navCategoriesDropdown');
+      const dropdownBtn = document.getElementById('navCategoriesBtn');
+      const dropdownMenu = document.getElementById('navCategoriesMenu');
+      if (!dropdownWrap || !dropdownBtn || !dropdownMenu) return;
+
+      const items = Array.from(dropdownMenu.querySelectorAll('.category-dropdown-item'));
+      let focusedIndex = -1;
+
+      function openMenu() {
+        dropdownMenu.classList.add('show');
+        dropdownBtn.classList.add('open');
+        dropdownBtn.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeMenu() {
+        dropdownMenu.classList.remove('show');
+        dropdownBtn.classList.remove('open');
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+        if (focusedIndex >= 0 && items[focusedIndex]) {
+          items[focusedIndex].classList.remove('keyboard-focused');
+        }
+        focusedIndex = -1;
+      }
+
+      function toggleMenu(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (dropdownMenu.classList.contains('show')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      }
+
+      dropdownBtn.addEventListener('click', toggleMenu);
+
+      // Close when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!dropdownWrap.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      // Keyboard navigation & accessibility
+      dropdownWrap.addEventListener('keydown', function(e) {
+        const isOpen = dropdownMenu.classList.contains('show');
+
+        if (e.key === 'Escape') {
+          if (isOpen) {
+            e.preventDefault();
+            closeMenu();
+            dropdownBtn.focus();
+          }
+          return;
+        }
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (!isOpen) {
+            openMenu();
+            focusedIndex = 0;
+          } else {
+            focusedIndex = (focusedIndex + 1) % items.length;
+          }
+          updateFocus();
+          return;
+        }
+
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (!isOpen) {
+            openMenu();
+            focusedIndex = items.length - 1;
+          } else {
+            focusedIndex = (focusedIndex - 1 + items.length) % items.length;
+          }
+          updateFocus();
+          return;
+        }
+
+        if ((e.key === 'Enter' || e.key === ' ') && isOpen && focusedIndex >= 0) {
+          e.preventDefault();
+          items[focusedIndex].click();
+        }
+      });
+
+      function updateFocus() {
+        items.forEach((item, idx) => {
+          if (idx === focusedIndex) {
+            item.classList.add('keyboard-focused');
+            item.focus();
+          } else {
+            item.classList.remove('keyboard-focused');
+          }
+        });
+      }
+
+      // Handle item selection and smooth scrolling if on homepage
+      items.forEach(item => {
+        item.addEventListener('click', function(e) {
+          items.forEach(it => it.classList.remove('active-category'));
+          this.classList.add('active-category');
+          closeMenu();
+
+          const href = this.getAttribute('href');
+          if (href === '/#products' || href === '#products') {
+            const prodSection = document.getElementById('products');
+            if (prodSection && (window.location.pathname === '/' || window.location.pathname === '/index.html')) {
+              e.preventDefault();
+              prodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      });
+    })();
+  </script>
 
 </body>
 </html>
