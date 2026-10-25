@@ -66,9 +66,30 @@
           <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #1b381e; border-top: 1px solid rgba(200, 169, 110, 0.35); padding-top: 0.8rem;">
             <span>Estimated Total</span><span>₹{{ total_amount|floatformat:2 }}</span>
           </div>
-          <a href="{% url 'products:checkout' %}" class="btn-pill btn-pill-gold" style="display: block; text-align: center; margin-top: 1.1rem; padding: 0.85rem 1rem; font-weight: 800; text-decoration: none;">
+          <a href="{% url 'products:checkout' %}" id="btnProceedCheckout" class="btn-pill btn-pill-gold" style="display: block; text-align: center; margin-top: 1.1rem; padding: 0.85rem 1rem; font-weight: 800; text-decoration: none;">
             Proceed to Checkout →
           </a>
+          <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('btnProceedCheckout');
+            if (btn) {
+              btn.addEventListener('click', function(e) {
+                if (typeof isUserAuthenticated === 'function' && !isUserAuthenticated()) {
+                  e.preventDefault();
+                  window.pendingProtectedAction = () => {
+                    window.location.href = "{% url 'products:checkout' %}";
+                  };
+                  if (typeof openAuthModal === 'function') {
+                    openAuthModal({
+                      title: 'Sign In to Checkout',
+                      subtitle: 'Please sign in to review delivery address and complete checkout.'
+                    });
+                  }
+                }
+              });
+            }
+          });
+          </script>
           <p style="font-size: 0.74rem; color: #64748b; margin: 0.75rem 0 0 0;">Final prices, GST, and delivery are confirmed by our team when your order is reviewed.</p>
         </div>
       </div>

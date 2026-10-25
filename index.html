@@ -1945,6 +1945,540 @@
       .modal-field-group.full-width { grid-column: span 1; }
       .modal-foot-actions { flex-direction: column; }
     }
+  
+    /* ==========================================================
+       TARGETED RESPONSIVE LAYOUT ENGINE (MOBILE, TABLET, LAPTOP)
+       Inspired by Blinkit / JioMart Responsive Adaptation
+    ========================================================== */
+    
+    /* Global Viewport & Horizontal Overflow Prevention */
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+    }
+
+    /* Hamburger Button */
+    .nav-hamburger-btn {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+      z-index: 1010;
+      margin-left: 4px;
+    }
+    .nav-hamburger-btn:hover {
+      background: var(--bg-alt);
+      border-color: var(--red);
+    }
+    .nav-hamburger-btn .ham-bar {
+      width: 20px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.25s ease;
+    }
+    .nav-hamburger-btn.active .ham-bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .nav-hamburger-btn.active .ham-bar:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-hamburger-btn.active .ham-bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile Drawer */
+    .mobile-nav-drawer {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 2px solid var(--gold);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.15);
+      animation: drawerSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1005;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    @keyframes drawerSlideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-nav-inner {
+      padding: 18px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mobile-nav-link {
+      padding: 12px 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      border-radius: 10px;
+      transition: all 0.15s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .mobile-nav-link:hover, .mobile-nav-link:active {
+      background: var(--bg-alt);
+      color: var(--red);
+    }
+    .mobile-cat-sublist {
+      padding: 6px 0 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-left: 2px solid #E5E7EB;
+      margin-left: 14px;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+    .mobile-sublink {
+      padding: 9px 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+    .mobile-sublink:hover {
+      background: #EFF6FF;
+      color: #2563EB;
+    }
+    .mobile-drawer-bottom {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #E5E7EB;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-phone-link {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mobile-quote-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 20px;
+    }
+
+    /* ── Breakpoint: 1024px and Below (Tablets & Medium Screens) ── */
+    @media (max-width: 1024px) {
+      .container {
+        padding: 0 20px;
+      }
+      .nav-menu {
+        display: none !important;
+      }
+      .nav-hamburger-btn {
+        display: flex;
+      }
+      .nav-right {
+        gap: 10px;
+      }
+      .phone-link {
+        display: none !important;
+      }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .hero-content {
+        max-width: 680px;
+      }
+      .story-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .quote-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .stats-4col-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+      }
+      .products-2x2-grid {
+        gap: 20px;
+      }
+    }
+
+    /* ── Breakpoint: 768px and Below (Standard Phones & Small Tablets) ── */
+    @media (max-width: 768px) {
+      .nav-inner {
+        height: 66px;
+      }
+      .brand-name {
+        font-size: 1.1rem;
+      }
+      .brand-sub {
+        font-size: 0.58rem;
+      }
+      .flame-icon {
+        width: 34px;
+        height: 34px;
+      }
+      .flame-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .btn-quote {
+        display: none !important;
+      }
+      .hero-section {
+        padding: 36px 0 50px;
+      }
+      .hero-title {
+        font-size: clamp(2.1rem, 7.5vw, 2.9rem);
+        line-height: 1.14;
+        margin-bottom: 16px;
+      }
+      .hero-desc {
+        font-size: 0.98rem;
+        line-height: 1.55;
+        margin-bottom: 26px;
+      }
+      .hero-actions {
+        gap: 14px;
+        margin-bottom: 30px;
+      }
+      .btn-explore {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+      }
+      .btn-wholesale {
+        font-size: 0.9rem;
+      }
+
+      /* Story section adjustments & fixing the -20px floating badge defect */
+      .story-section {
+        padding: 60px 0;
+      }
+      .story-main-img {
+        height: 320px;
+        border-radius: 20px;
+      }
+      .floating-badge-box {
+        position: static;
+        margin-top: 14px;
+        max-width: 100%;
+        right: auto;
+        bottom: auto;
+        border-radius: 16px;
+        padding: 18px 20px;
+      }
+
+      /* Products grid on mobile */
+      .signature-section {
+        padding: 60px 0;
+      }
+      .products-2x2-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .product-card-hero {
+        height: 340px;
+        border-radius: 20px;
+      }
+      .card-full-overlay {
+        padding: 18px 20px;
+      }
+      .prod-name-title {
+        font-size: 1.55rem;
+      }
+
+      /* Marquee font adjustments */
+      .marquee-item {
+        font-size: 1.45rem;
+        gap: 24px;
+      }
+      .dark-marquee-strip {
+        padding: 16px 0;
+      }
+    }
+
+    /* ── Breakpoint: 480px and Below (Narrow Mobile Phones 320px–480px) ── */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 16px;
+      }
+      .nav-inner {
+        height: 60px;
+      }
+      .brand-logo {
+        gap: 8px;
+      }
+      .brand-name {
+        font-size: 1rem;
+      }
+      .brand-sub {
+        font-size: 0.52rem;
+        letter-spacing: 0.08em;
+      }
+      .btn-nav-cart {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        gap: 5px;
+      }
+      .btn-login-nav {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+      .btn-login-nav span {
+        display: inline;
+      }
+      .btn-login-nav svg {
+        display: none;
+      }
+      .btn-nav-orders {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      /* Hero section mobile typography */
+      .estate-badge {
+        font-size: 0.65rem;
+        padding: 5px 12px;
+        margin-bottom: 18px;
+      }
+      .hero-title {
+        font-size: clamp(1.85rem, 8.5vw, 2.4rem);
+        line-height: 1.18;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .btn-explore {
+        width: 100%;
+        justify-content: center;
+      }
+      .btn-wholesale {
+        text-align: center;
+        padding: 6px 0;
+      }
+      .trust-badges-row {
+        gap: 12px;
+        font-size: 0.74rem;
+      }
+
+      /* Hero 4-card visual grid */
+      .hero-visual-grid {
+        gap: 10px;
+      }
+      .showcase-card {
+        border-radius: 14px;
+      }
+      .showcase-overlay {
+        padding: 10px;
+      }
+      .card-sig-pill {
+        font-size: 0.55rem;
+        padding: 2px 6px;
+      }
+      .plus-circle {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+      }
+      .card-sub-tag {
+        font-size: 0.6rem;
+      }
+      .card-main-title {
+        font-size: 0.88rem;
+      }
+
+      /* Product cards on narrow phones */
+      .product-card-hero {
+        height: 310px;
+        border-radius: 18px;
+      }
+      .card-full-overlay {
+        padding: 16px;
+      }
+      .prod-name-title {
+        font-size: 1.35rem;
+      }
+      .card-bottom-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .info-left-side {
+        max-width: 100%;
+      }
+      .price-box {
+        text-align: left;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .price-box .from-label {
+        display: inline;
+      }
+      .card-action-btns {
+        width: 100%;
+        justify-content: flex-start !important;
+      }
+      .btn-card-addcart, .btn-card-buynow {
+        padding: 6px 12px;
+        font-size: 0.74rem;
+      }
+
+      /* Story 2x2 features */
+      .story-features-2x2 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .feat-card {
+        padding: 16px;
+      }
+      .story-heading {
+        font-size: 1.85rem;
+      }
+      .story-main-img {
+        height: 240px;
+      }
+
+      /* Stats 4-col grid */
+      .stats-4col-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .stat-card-white {
+        padding: 18px 10px;
+        border-radius: 14px;
+      }
+      .stat-large-num {
+        font-size: 1.95rem;
+      }
+      .stat-label-text {
+        font-size: 0.62rem;
+      }
+
+      /* Quote form */
+      .quote-section {
+        padding: 45px 0;
+      }
+      .quote-form-card {
+        padding: 20px 16px;
+        border-radius: 18px;
+      }
+
+      /* Footer */
+      .site-footer {
+        padding: 36px 0 20px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      /* Modals */
+      .balaji-order-modal-backdrop {
+        padding: 6px;
+      }
+      .balaji-order-modal-dialog {
+        border-radius: 16px;
+        max-height: 96vh;
+      }
+      .modal-head-banner {
+        padding: 14px 16px;
+      }
+      .modal-head-title h3 {
+        font-size: 1.1rem;
+      }
+      .modal-stepper-bar {
+        padding: 8px 12px;
+      }
+      .modal-body-scrollable {
+        padding: 14px;
+      }
+      .selected-product-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .quantity-input-combo {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .modal-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .modal-foot-actions {
+        padding: 12px 14px 16px;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .btn-modal-action-primary, .btn-modal-action-secondary {
+        width: 100%;
+        flex: none;
+      }
+      .payment-methods-grid {
+        grid-template-columns: 1fr;
+      }
+      .upi-qr-display-box {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .upi-qr-img {
+        width: 140px;
+        height: 140px;
+      }
+      .upi-id-badge {
+        margin: 8px auto;
+      }
+      .balaji-auth-card {
+        padding: 22px 16px 18px;
+        border-radius: 16px;
+        max-width: 95vw;
+      }
+      .balaji-auth-title {
+        font-size: 1.18rem;
+      }
+    }
+  
   </style>
 </head>
 <body>
@@ -1970,7 +2504,7 @@
         </a>
 
         <!-- Nav Menu -->
-        <div class="nav-menu">
+        <div class="nav-menu" id="desktopNavMenu">
           <a href="#hero" class="nav-link active">Home</a>
           <!-- Categories Dropdown Navigation -->
           <div class="nav-categories-dropdown" id="navCategoriesDropdown">
@@ -2034,7 +2568,7 @@
 
           <!-- Logged Out State: Sign In & Request a Quote -->
           <div id="navAuthLoggedOut" style="display: flex; align-items: center; gap: 10px;">
-            <a href="login.html" class="btn-login-nav" title="Sign In to B2B Portal">
+            <a href="javascript:void(0)" onclick="openAuthModal()" class="btn-login-nav" title="Sign In to B2B Portal">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/>
               </svg>
@@ -2058,8 +2592,51 @@
               🚪 Sign Out
             </button>
           </div>
+
+          <!-- Mobile Hamburger Toggle Button -->
+          <button type="button" class="nav-hamburger-btn" id="navHamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleMobileNav()">
+            <span class="ham-bar"></span>
+            <span class="ham-bar"></span>
+            <span class="ham-bar"></span>
+          </button>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" style="display: none;">
+      <div class="mobile-nav-inner">
+        <a href="#hero" class="mobile-nav-link" onclick="closeMobileNav()">Home</a>
+        
+        <!-- Mobile Categories Accordion -->
+        <div class="mobile-cat-group">
+          <button type="button" class="mobile-nav-link mobile-cat-toggle" onclick="toggleMobileCategories(this)">
+            <span>Categories</span>
+            <span class="cat-chevron">▾</span>
+          </button>
+          <div class="mobile-cat-sublist" style="display: none;">
+            <a href="/#products" class="mobile-sublink" onclick="closeMobileNav()">General Range / Multiple Products</a>
+            <a href="/products/chilli-spices/red-chilli-powder/" class="mobile-sublink" onclick="closeMobileNav()">Guntur &amp; Byadgi Red Chilli Powder</a>
+            <a href="/products/chilli-spices/malabar-black-pepper/" class="mobile-sublink" onclick="closeMobileNav()">Malabar Black Pepper</a>
+            <a href="/products/chilli-spices/green-cardamom/" class="mobile-sublink" onclick="closeMobileNav()">Green Cardamom (Idukki AAA)</a>
+            <a href="/products/ragi-millets/stone-ground-ragi-flour/" class="mobile-sublink" onclick="closeMobileNav()">Stone-Ground Ragi Flour</a>
+            <a href="/products/pulses-dal/premium-sortex-toor-dal/" class="mobile-sublink" onclick="closeMobileNav()">Premium Sortex Toor Dal</a>
+            <a href="/products/pulses-dal/moong-dal-mogar/" class="mobile-sublink" onclick="closeMobileNav()">Moong Dal Mogar</a>
+            <a href="/products/grains-cereals/sharbati-lokwan-wheat/" class="mobile-sublink" onclick="closeMobileNav()">Sharbati Food Wheat</a>
+          </div>
+        </div>
+
+        <a href="#story" class="mobile-nav-link" onclick="closeMobileNav()">Our Story</a>
+        <a href="#contact" class="mobile-nav-link" onclick="closeMobileNav()">Contact</a>
+        <a href="feedback.html" class="mobile-nav-link" onclick="closeMobileNav()">Feedback</a>
+
+        <div class="mobile-drawer-bottom">
+          <a href="tel:+916360635801" class="mobile-phone-link">
+            📞 Desk: +91 63606 35801
+          </a>
+          <a href="#contact" class="btn-quote mobile-quote-btn" onclick="closeMobileNav()">Request a Quote</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -3354,6 +3931,16 @@
 
     // Open Buy Now Modal for specific product
     function openBuyModal(productKey) {
+      if (!isUserAuthenticated()) {
+        window.pendingProtectedAction = () => {
+          openBuyModal(productKey);
+        };
+        openAuthModal({
+          title: 'Sign In to Buy Now',
+          subtitle: 'Please sign in to continue with instant wholesale booking.'
+        });
+        return;
+      }
       if (!window.BALAJI_MARKET_RATES[productKey]) {
         productKey = 'ragi';
       }
@@ -3856,14 +4443,14 @@
     }
 
     async function handleLogout() {
-      if (confirm('Are you sure you want to sign out of Balaji Ingredients?')) {
-        try {
-          await fetch('/api/auth/logout/', { method: 'POST' });
-        } catch (e) {}
-        localStorage.removeItem('balaji_logged_in');
-        localStorage.removeItem('balaji_user');
-        updateNavAuthState();
-        window.location.href = 'login.html';
+      try {
+        await fetch('/api/auth/logout/', { method: 'POST' });
+      } catch (e) {}
+      localStorage.removeItem('balaji_logged_in');
+      localStorage.removeItem('balaji_user');
+      updateNavAuthState();
+      if (typeof showHomeToast === 'function') {
+        showHomeToast('✓ You have been signed out.');
       }
     }
 
@@ -3902,6 +4489,17 @@
       if (event) {
         event.stopPropagation();
         event.preventDefault();
+      }
+
+      if (!isUserAuthenticated()) {
+        window.pendingProtectedAction = () => {
+          addToCartFromHome(productId, size, productName, btn, null);
+        };
+        openAuthModal({
+          title: 'Sign In to Add to Cart',
+          subtitle: 'Please sign in to add 1x ' + productName + ' (' + size + 'kg) to your cart.'
+        });
+        return;
       }
       const origText = btn ? btn.innerHTML : '';
       if (btn) {
@@ -4246,6 +4844,651 @@
       });
     })();
   </script>
+
+<!-- ===================== SAME-PAGE AUTH MODAL (BLINKIT / JIOMART STYLE) ===================== -->
+<style id="balajiAuthModalStyles">
+.balaji-auth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: authBackdropFade 0.2s ease-out;
+}
+@keyframes authBackdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.balaji-auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 32px 28px 24px;
+  color: #1e293b;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  animation: authCardPop 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+@keyframes authCardPop {
+  from { opacity: 0; transform: scale(0.94) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.balaji-auth-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  line-height: 1;
+}
+.balaji-auth-close:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+  transform: rotate(90deg);
+}
+.balaji-auth-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.balaji-auth-brandmark {
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b381e 0%, #2f6834 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px -4px rgba(27, 56, 30, 0.35);
+}
+.auth-mark-text {
+  color: #d4af37;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 0.5px;
+  font-family: 'Manrope', sans-serif;
+}
+.balaji-auth-title {
+  margin: 0 0 6px;
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  font-family: 'Manrope', sans-serif;
+}
+.balaji-auth-subtitle {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+.balaji-auth-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  gap: 4px;
+}
+.balaji-auth-tab {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.balaji-auth-tab.active {
+  background: #FFFFFF;
+  color: #1b381e;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.balaji-auth-alert {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.balaji-auth-alert.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+.balaji-auth-alert.success {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+.balaji-auth-form .auth-field-group {
+  margin-bottom: 14px;
+}
+.balaji-auth-form label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+.balaji-auth-form .auth-input-wrap input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.94rem;
+  color: #0f172a;
+  background: #f8fafc;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+.balaji-auth-form .auth-input-wrap input:focus {
+  border-color: #2f6834;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(47, 104, 52, 0.15);
+}
+.balaji-auth-submit-btn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b381e 0%, #234c27 100%);
+  color: #d4af37;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(27, 56, 30, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.balaji-auth-submit-btn:hover {
+  background: linear-gradient(135deg, #152c17 0%, #1c3e20 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(27, 56, 30, 0.32);
+}
+.balaji-auth-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+.auth-demo-helper {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.btn-demo-fill {
+  background: #e2e8f0;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-demo-fill:hover {
+  background: #cbd5e1;
+}
+.balaji-auth-footer {
+  text-align: center;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.74rem;
+  color: #94a3b8;
+}
+</style>
+
+<div id="balajiAuthModal" class="balaji-auth-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+  <div class="balaji-auth-card">
+    <!-- Close button -->
+    <button type="button" class="balaji-auth-close" onclick="closeAuthModal()" aria-label="Close modal">✕</button>
+
+    <!-- Header / Brand -->
+    <div class="balaji-auth-header">
+      <div class="balaji-auth-brandmark">
+        <span class="auth-mark-text">BI</span>
+      </div>
+      <h3 id="authModalTitle" class="balaji-auth-title">Sign In to Balaji Ingredients</h3>
+      <p id="authModalSubtitle" class="balaji-auth-subtitle">Access wholesale pricing, instant ordering, and track dispatches.</p>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="balaji-auth-tabs">
+      <button type="button" class="balaji-auth-tab active" id="tabBtnSignIn" onclick="switchAuthTab('login')">Sign In</button>
+      <button type="button" class="balaji-auth-tab" id="tabBtnRegister" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+
+    <!-- Alert Banner -->
+    <div id="authModalAlert" class="balaji-auth-alert" style="display: none;"></div>
+
+    <!-- SIGN IN FORM -->
+    <form id="modalLoginForm" class="balaji-auth-form" onsubmit="handleModalLogin(event)">
+      <div class="auth-field-group">
+        <label for="modalLoginIdentifier">Email, Username, or Mobile</label>
+        <div class="auth-input-wrap">
+          <input type="text" id="modalLoginIdentifier" required placeholder="trade@balajiingredients.com or 9876543210" autocomplete="username">
+        </div>
+      </div>
+      <div class="auth-field-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+          <label for="modalLoginPassword" style="margin-bottom: 0;">Password</label>
+          <button type="button" onclick="togglePasswordVisibility('modalLoginPassword', this)" style="background: none; border: none; font-size: 0.78rem; color: #166534; cursor: pointer; font-weight: 600;">Show</button>
+        </div>
+        <div class="auth-input-wrap">
+          <input type="password" id="modalLoginPassword" required placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <button type="submit" id="modalLoginBtn" class="balaji-auth-submit-btn">
+        <span class="btn-text">Sign In &amp; Continue</span>
+        <span class="btn-spinner" style="display: none;">⏳ Signing In...</span>
+      </button>
+
+      <!-- Quick Fill Demo Credentials -->
+      <div class="auth-demo-helper">
+        <span style="font-size: 0.76rem; color: #64748b;">Quick Demo Login:</span>
+        <button type="button" class="btn-demo-fill" onclick="fillDemoCredentials()">Fill Demo Account</button>
+      </div>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="modalRegisterForm" class="balaji-auth-form" style="display: none;" onsubmit="handleModalRegister(event)">
+      <div class="auth-field-group">
+        <label for="modalRegName">Full Name / Business Owner</label>
+        <div class="auth-input-wrap">
+          <input type="text" id="modalRegName" required placeholder="e.g. Ramesh Patel">
+        </div>
+      </div>
+      <div class="auth-field-group">
+        <label for="modalRegEmail">Email Address</label>
+        <div class="auth-input-wrap">
+          <input type="email" id="modalRegEmail" required placeholder="e.g. ramesh@enterprise.com">
+        </div>
+      </div>
+      <div class="auth-field-group">
+        <label for="modalRegPhone">Mobile Number (10 Digits)</label>
+        <div class="auth-input-wrap">
+          <input type="tel" id="modalRegPhone" required placeholder="9876543210" maxlength="10">
+        </div>
+      </div>
+      <div class="auth-field-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+          <label for="modalRegPassword" style="margin-bottom: 0;">Create Password</label>
+          <button type="button" onclick="togglePasswordVisibility('modalRegPassword', this)" style="background: none; border: none; font-size: 0.78rem; color: #166534; cursor: pointer; font-weight: 600;">Show</button>
+        </div>
+        <div class="auth-input-wrap">
+          <input type="password" id="modalRegPassword" required placeholder="Min 6 characters" minlength="6">
+        </div>
+      </div>
+      <button type="submit" id="modalRegisterBtn" class="balaji-auth-submit-btn">
+        <span class="btn-text">Create Account &amp; Continue</span>
+        <span class="btn-spinner" style="display: none;">⏳ Creating Account...</span>
+      </button>
+    </form>
+
+    <!-- Footer Trust Note -->
+    <div class="balaji-auth-footer">
+      <span>🔒 256-Bit SSL Encrypted • FSSAI &amp; APEDA Aligned Procurement</span>
+    </div>
+  </div>
+</div>
+
+<script id="balajiAuthModalScript">
+(function() {
+  window.pendingProtectedAction = null;
+
+  window.isUserAuthenticated = function() {
+    return localStorage.getItem('balaji_logged_in') === 'true';
+  };
+
+  window.openAuthModal = function(options) {
+    options = options || {};
+    const title = options.title || 'Sign In to Balaji Ingredients';
+    const subtitle = options.subtitle || 'Access wholesale pricing, instant ordering, and track dispatches.';
+    
+    const titleEl = document.getElementById('authModalTitle');
+    const subEl = document.getElementById('authModalSubtitle');
+    if (titleEl) titleEl.textContent = title;
+    if (subEl) subEl.textContent = subtitle;
+
+    if (typeof options.onSuccess === 'function') {
+      window.pendingProtectedAction = options.onSuccess;
+    }
+
+    const modal = document.getElementById('balajiAuthModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      const alertBox = document.getElementById('authModalAlert');
+      if (alertBox) alertBox.style.display = 'none';
+      switchAuthTab('login');
+      setTimeout(() => {
+        const idInput = document.getElementById('modalLoginIdentifier');
+        if (idInput) idInput.focus();
+      }, 100);
+    }
+  };
+
+  window.closeAuthModal = function() {
+    const modal = document.getElementById('balajiAuthModal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    // Per requirements: If the visitor closes popup, do not perform action
+    window.pendingProtectedAction = null;
+  };
+
+  window.switchAuthTab = function(tab) {
+    const loginForm = document.getElementById('modalLoginForm');
+    const regForm = document.getElementById('modalRegisterForm');
+    const tabLogin = document.getElementById('tabBtnSignIn');
+    const tabReg = document.getElementById('tabBtnRegister');
+    const alertBox = document.getElementById('authModalAlert');
+    if (alertBox) alertBox.style.display = 'none';
+
+    if (tab === 'register') {
+      if (loginForm) loginForm.style.display = 'none';
+      if (regForm) regForm.style.display = 'block';
+      if (tabLogin) tabLogin.classList.remove('active');
+      if (tabReg) tabReg.classList.add('active');
+    } else {
+      if (loginForm) loginForm.style.display = 'block';
+      if (regForm) regForm.style.display = 'none';
+      if (tabLogin) tabLogin.classList.add('active');
+      if (tabReg) tabReg.classList.remove('active');
+    }
+  };
+
+  window.showAuthAlert = function(msg, isSuccess) {
+    const alertBox = document.getElementById('authModalAlert');
+    if (!alertBox) return;
+    alertBox.className = 'balaji-auth-alert ' + (isSuccess ? 'success' : 'error');
+    alertBox.textContent = msg;
+    alertBox.style.display = 'block';
+  };
+
+  window.togglePasswordVisibility = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = 'Hide';
+    } else {
+      input.type = 'password';
+      btn.textContent = 'Show';
+    }
+  };
+
+  window.fillDemoCredentials = function() {
+    const idInput = document.getElementById('modalLoginIdentifier');
+    const pwdInput = document.getElementById('modalLoginPassword');
+    if (idInput) idInput.value = 'trade@balajiingredients.com';
+    if (pwdInput) pwdInput.value = 'Balaji@2026!';
+  };
+
+  window.handleModalLogin = async function(e) {
+    if (e) e.preventDefault();
+    const idInput = document.getElementById('modalLoginIdentifier');
+    const pwdInput = document.getElementById('modalLoginPassword');
+    const btn = document.getElementById('modalLoginBtn');
+    const textSpan = btn ? btn.querySelector('.btn-text') : null;
+    const spinSpan = btn ? btn.querySelector('.btn-spinner') : null;
+
+    const identifier = idInput ? idInput.value.trim() : '';
+    const password = pwdInput ? pwdInput.value.trim() : '';
+
+    if (!identifier || !password) {
+      showAuthAlert('Please enter your email/username and password.', false);
+      return;
+    }
+
+    if (btn) btn.disabled = true;
+    if (textSpan) textSpan.style.display = 'none';
+    if (spinSpan) spinSpan.style.display = 'inline';
+
+    try {
+      const response = await fetch('/api/auth/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: identifier, password: password })
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showAuthAlert('✓ Signed in successfully!', true);
+        localStorage.setItem('balaji_logged_in', 'true');
+        if (data.user) {
+          localStorage.setItem('balaji_user', JSON.stringify(data.user));
+        }
+        if (typeof updateNavAuthState === 'function') {
+          updateNavAuthState();
+        }
+
+        setTimeout(() => {
+          const actionToRun = window.pendingProtectedAction;
+          window.pendingProtectedAction = null;
+          
+          const modal = document.getElementById('balajiAuthModal');
+          if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+          }
+
+          if (typeof showHomeToast === 'function') {
+            showHomeToast('✓ Welcome, ' + (data.user ? data.user.name : 'Partner') + '!');
+          }
+
+          if (typeof actionToRun === 'function') {
+            actionToRun();
+          }
+        }, 350);
+      } else {
+        showAuthAlert(data.message || 'Invalid credentials. Please verify your login details.', false);
+        if (btn) btn.disabled = false;
+        if (textSpan) textSpan.style.display = 'inline';
+        if (spinSpan) spinSpan.style.display = 'none';
+      }
+    } catch (err) {
+      console.error(err);
+      showAuthAlert('Network or server error. Please try again.', false);
+      if (btn) btn.disabled = false;
+      if (textSpan) textSpan.style.display = 'inline';
+      if (spinSpan) spinSpan.style.display = 'none';
+    }
+  };
+
+  window.handleModalRegister = async function(e) {
+    if (e) e.preventDefault();
+    const nameInput = document.getElementById('modalRegName');
+    const emailInput = document.getElementById('modalRegEmail');
+    const phoneInput = document.getElementById('modalRegPhone');
+    const pwdInput = document.getElementById('modalRegPassword');
+    const btn = document.getElementById('modalRegisterBtn');
+    const textSpan = btn ? btn.querySelector('.btn-text') : null;
+    const spinSpan = btn ? btn.querySelector('.btn-spinner') : null;
+
+    const full_name = nameInput ? nameInput.value.trim() : '';
+    const email = emailInput ? emailInput.value.trim() : '';
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+    const password = pwdInput ? pwdInput.value.trim() : '';
+
+    if (!full_name || !email || !phone || !password) {
+      showAuthAlert('Please fill in all registration fields.', false);
+      return;
+    }
+
+    if (btn) btn.disabled = true;
+    if (textSpan) textSpan.style.display = 'none';
+    if (spinSpan) spinSpan.style.display = 'inline';
+
+    try {
+      const response = await fetch('/api/auth/register/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: full_name,
+          email: email,
+          phone: phone,
+          password: password
+        })
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        showAuthAlert('✓ Account created successfully!', true);
+        localStorage.setItem('balaji_logged_in', 'true');
+        if (data.user) {
+          localStorage.setItem('balaji_user', JSON.stringify(data.user));
+        }
+        if (typeof updateNavAuthState === 'function') {
+          updateNavAuthState();
+        }
+
+        setTimeout(() => {
+          const actionToRun = window.pendingProtectedAction;
+          window.pendingProtectedAction = null;
+
+          const modal = document.getElementById('balajiAuthModal');
+          if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+          }
+
+          if (typeof showHomeToast === 'function') {
+            showHomeToast('✓ Welcome, ' + (data.user ? data.user.name : full_name) + '!');
+          }
+
+          if (typeof actionToRun === 'function') {
+            actionToRun();
+          }
+        }, 350);
+      } else {
+        showAuthAlert(data.message || 'Registration failed. Please verify your details.', false);
+        if (btn) btn.disabled = false;
+        if (textSpan) textSpan.style.display = 'inline';
+        if (spinSpan) spinSpan.style.display = 'none';
+      }
+    } catch (err) {
+      console.error(err);
+      showAuthAlert('Network or server error during registration.', false);
+      if (btn) btn.disabled = false;
+      if (textSpan) textSpan.style.display = 'inline';
+      if (spinSpan) spinSpan.style.display = 'none';
+    }
+  };
+
+  window.addEventListener('click', function(e) {
+    const modal = document.getElementById('balajiAuthModal');
+    if (e.target === modal) {
+      closeAuthModal();
+    }
+  });
+
+  window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('balajiAuthModal');
+      if (modal && modal.style.display !== 'none') {
+        closeAuthModal();
+      }
+    }
+  });
+})();
+</script>
+
+<script>
+
+    // ── Mobile Navigation Drawer Controller ──
+    function toggleMobileNav() {
+      const drawer = document.getElementById('mobileNavDrawer');
+      const btn = document.getElementById('navHamburgerBtn');
+      if (!drawer || !btn) return;
+      const isOpen = drawer.style.display !== 'none';
+      if (isOpen) {
+        closeMobileNav();
+      } else {
+        drawer.style.display = 'block';
+        btn.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeMobileNav() {
+      const drawer = document.getElementById('mobileNavDrawer');
+      const btn = document.getElementById('navHamburgerBtn');
+      if (!drawer || !btn) return;
+      drawer.style.display = 'none';
+      btn.classList.remove('active');
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    function toggleMobileCategories(btn) {
+      const sublist = btn.nextElementSibling;
+      const chevron = btn.querySelector('.cat-chevron');
+      if (!sublist) return;
+      const isOpen = sublist.style.display !== 'none';
+      if (isOpen) {
+        sublist.style.display = 'none';
+        if (chevron) chevron.textContent = '▾';
+      } else {
+        sublist.style.display = 'flex';
+        if (chevron) chevron.textContent = '▴';
+      }
+    }
+
+    // Close mobile drawer on escape
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeMobileNav();
+      }
+    });
+
+    // Close on resize above mobile
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 1024) {
+        closeMobileNav();
+      }
+    });
+  
+</script>
 </body>
 </html>
 

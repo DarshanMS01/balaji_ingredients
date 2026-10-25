@@ -1129,6 +1129,16 @@
 
   // Booking submission: handles Buy Now and Add to Cart
   async function submitBooking(action) {
+    if (!isUserAuthenticated()) {
+      window.pendingProtectedAction = () => {
+        submitBooking(action);
+      };
+      openAuthModal({
+        title: action === 'buy_now' ? 'Sign In to Buy Now' : 'Sign In to Add to Cart',
+        subtitle: 'Please sign in to proceed with your commercial order.'
+      });
+      return;
+    }
     const fullName = document.getElementById('bookingFullName').value.trim();
     const phone = document.getElementById('bookingPhone').value.trim();
     const email = document.getElementById('bookingEmail').value.trim();
@@ -1199,6 +1209,19 @@
       });
 
       const res = await response.json();
+      if (response.status === 401 || res.require_login) {
+        localStorage.removeItem('balaji_logged_in');
+        window.pendingProtectedAction = () => {
+          submitBooking(action);
+        };
+        openAuthModal({
+          title: action === 'buy_now' ? 'Sign In to Buy Now' : 'Sign In to Add to Cart',
+          subtitle: 'Please sign in to proceed with your commercial order.'
+        });
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
       if (res.success) {
         if (action === 'buy_now') {
           showAlert('Order details verified! Redirecting to checkout...', true);

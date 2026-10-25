@@ -473,6 +473,13 @@ def booking_action_api(request):
     if request.method != 'POST':
         return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
 
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'success': False,
+            'require_login': True,
+            'message': 'Please sign in to reserve ingredients or place orders.'
+        }, status=401)
+
     is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
     if is_json:
         try:
@@ -663,6 +670,16 @@ def cart_add_view(request):
         request.content_type == 'application/json'
     )
 
+    if not request.user.is_authenticated:
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'require_login': True,
+                'message': 'Please sign in to add products to your cart.'
+            }, status=401)
+        messages.warning(request, 'Please sign in to add products to your cart.')
+        return redirect('core:home')
+
     try:
         product = Product.objects.get(id=product_id, is_active=True)
     except (Product.DoesNotExist, ValueError, TypeError):
@@ -805,6 +822,21 @@ def checkout_view(request):
     """
     from portal.models import Order, OrderItem
 
+    if not request.user.is_authenticated:
+        is_ajax = (
+            request.headers.get('x-requested-with') == 'XMLHttpRequest' or
+            'application/json' in request.headers.get('Accept', '') or
+            request.content_type == 'application/json'
+        )
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'require_login': True,
+                'message': 'Please sign in to proceed to checkout.'
+            }, status=401)
+        messages.info(request, 'Please sign in to complete checkout.')
+        return redirect('products:cart')
+
     cart = get_cart_items(request)
     lines, subtotal, tax_amount, total_amount = build_cart_lines(cart)
 
@@ -837,6 +869,16 @@ def checkout_view(request):
             initial['address_line1'] = booking_data['delivery_address']
 
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            if is_ajax:
+                return JsonResponse({
+                    'success': False,
+                    'require_login': True,
+                    'message': 'Please sign in to complete your purchase.'
+                }, status=401)
+            messages.info(request, 'Please sign in to complete your purchase.')
+            return redirect('core:home')
+
         full_name = request.POST.get('full_name', '').strip()
         company_name = request.POST.get('company_name', '').strip() or full_name
         email = request.POST.get('email', '').strip() or (request.user.email if request.user.is_authenticated else '')
