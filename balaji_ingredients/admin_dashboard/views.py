@@ -1790,42 +1790,506 @@ def support_ticket_update(request, ticket_id):
 
 
 # ==============================================================================
-# PHASE 5 — MISSING MODULE E: STAFF ROLE MANAGEMENT (Superuser Only)
+# PHASE 5 & 6 — STAFF & ROLE MANAGEMENT (Superuser & Authorized Staff)
 # ==============================================================================
+
+# Standard Business Roles Definition
+DEFAULT_ROLES = [
+    {
+        'name': 'Product Manager',
+        'description': 'Manages commercial ingredients catalog, categories, pricing, and technical specs.',
+        'codenames': [
+            'add_product', 'change_product', 'delete_product', 'view_product',
+            'add_category', 'change_category', 'delete_category', 'view_category',
+            'add_productspecification', 'change_productspecification', 'view_productspecification',
+            'view_quoterequest', 'change_quoterequest'
+        ]
+    },
+    {
+        'name': 'Order Manager',
+        'description': 'Manages customer orders, workflow transitions, logistics tracking, and invoices.',
+        'codenames': [
+            'view_order', 'change_order', 'view_orderitem', 'change_orderitem',
+            'view_stockmovement', 'add_stockmovement'
+        ]
+    },
+    {
+        'name': 'Inventory Manager',
+        'description': 'Monitors stock levels, physical inventory audits, and warehouse movements.',
+        'codenames': [
+            'view_product', 'change_product',
+            'view_stockmovement', 'add_stockmovement', 'change_stockmovement'
+        ]
+    },
+    {
+        'name': 'Customer Support',
+        'description': 'Handles buyer support tickets, product reviews, and direct inquiries.',
+        'codenames': [
+            'view_supportticket', 'change_supportticket',
+            'view_contactmessage', 'change_contactmessage',
+            'view_customerfeedback', 'change_customerfeedback',
+            'view_companyprofile'
+        ]
+    },
+    {
+        'name': 'Finance Manager',
+        'description': 'Supervises commercial payment records, UPI settings, and promotional discount coupons.',
+        'codenames': [
+            'view_order', 'view_paymentconfig', 'change_paymentconfig',
+            'view_promotion', 'add_promotion', 'change_promotion', 'delete_promotion'
+        ]
+    }
+]
+
+# Business Module Permission Catalog with Human-Readable Labels
+PERMISSION_MODULES = [
+    {
+        'module': 'Dashboard & Governance',
+        'icon': '📊',
+        'permissions': [
+            ('view_auditlog', 'View Audit Trail', 'Can inspect administrator activity logs and system events'),
+        ]
+    },
+    {
+        'module': 'Products & Catalog',
+        'icon': '🌾',
+        'permissions': [
+            ('view_product', 'View Products', 'Can view product listings, inventory data, and specifications'),
+            ('add_product', 'Add Products', 'Can create and configure new commercial ingredients'),
+            ('change_product', 'Edit Products', 'Can edit pricing, descriptions, and specifications'),
+            ('delete_product', 'Archive / Delete Products', 'Can deactivate or permanently remove products'),
+            ('view_category', 'View Categories', 'Can browse ingredient categories'),
+            ('add_category', 'Add Categories', 'Can add new product categories'),
+            ('change_category', 'Edit Categories', 'Can modify category descriptions and metadata'),
+            ('delete_category', 'Delete Categories', 'Can remove unused categories'),
+        ]
+    },
+    {
+        'module': 'Orders & Logistics',
+        'icon': '📦',
+        'permissions': [
+            ('view_order', 'View Orders', 'Can view order pipeline and commercial buyer orders'),
+            ('change_order', 'Update Order Status', 'Can change order workflow, dispatch details, and invoices'),
+            ('delete_order', 'Cancel Orders', 'Can cancel orders and restock inventory'),
+        ]
+    },
+    {
+        'module': 'Inventory & Stock',
+        'icon': '🏭',
+        'permissions': [
+            ('view_stockmovement', 'View Stock Movements', 'Can view inventory logs and physical audits'),
+            ('add_stockmovement', 'Adjust Stock Levels', 'Can perform manual stock in/out adjustments'),
+        ]
+    },
+    {
+        'module': 'Customers & Buyers',
+        'icon': '👥',
+        'permissions': [
+            ('view_companyprofile', 'View Customer Profiles', 'Can inspect B2B buyer companies and GST details'),
+            ('change_companyprofile', 'Edit Customer Profiles', 'Can verify GST and update buyer profile'),
+        ]
+    },
+    {
+        'module': 'Feedback & Support',
+        'icon': '💬',
+        'permissions': [
+            ('view_supportticket', 'View Support Tickets', 'Can view client support requests and tickets'),
+            ('change_supportticket', 'Respond to Support Tickets', 'Can resolve tickets and add admin responses'),
+            ('view_customerfeedback', 'View Product Feedback', 'Can read customer reviews and star ratings'),
+            ('change_customerfeedback', 'Moderate Feedback', 'Can mark customer reviews as reviewed'),
+            ('view_contactmessage', 'View Contact Messages', 'Can read incoming contact form inquiries'),
+        ]
+    },
+    {
+        'module': 'Payments & Promotions',
+        'icon': '💳',
+        'permissions': [
+            ('view_paymentconfig', 'View Payment Config', 'Can view UPI ID and QR code settings'),
+            ('change_paymentconfig', 'Update UPI Settings', 'Can update business UPI and QR code'),
+            ('view_promotion', 'View Coupons', 'Can view discount coupons and promotional offers'),
+            ('add_promotion', 'Create Coupons', 'Can create new discount campaigns'),
+            ('change_promotion', 'Edit Coupons', 'Can toggle or edit coupon parameters'),
+            ('delete_promotion', 'Delete Coupons', 'Can delete expired promotional codes'),
+        ]
+    },
+    {
+        'module': 'Staff & User Access',
+        'icon': '🔐',
+        'permissions': [
+            ('add_user', 'Add Users', 'Can create staff and buyer accounts'),
+            ('change_user', 'Manage Users', 'Can edit user details, roles, and access status'),
+        ]
+    }
+]
+
+
+def ensure_default_roles():
+    """Ensures standard Django groups exist with their assigned permissions."""
+    from django.contrib.auth.models import Group, Permission
+    for r in DEFAULT_ROLES:
+        group, _ = Group.objects.get_or_create(name=r['name'])
+        perms = Permission.objects.filter(codename__in=r['codenames'])
+        group.permissions.set(perms)
+
 
 @staff_required
 def staff_management(request):
     """
-    Superuser-only view: manage staff users and their permissions.
-    Lists all is_staff=True users, allows toggling superuser and is_staff.
+    Staff & Role Management Main View:
+    - Search by username, full name, email, phone, company.
+    - Filter by Account Type (All / Staff / Customers).
+    - Filter by Role (Superuser or Group name).
+    - Filter by Status (Active / Inactive).
+    - Metrics overview (Total, Staff, Superusers, Customers).
+    - Clean pagination without cramped displays.
     """
     if not request.user.is_superuser:
-        messages.error(request, "Staff management requires superuser privileges.")
+        messages.error(request, "Staff and role administration requires superuser privileges.")
         return redirect('admin_dashboard:overview')
 
-    from django.contrib.auth.models import Permission, Group
-    from django.contrib.contenttypes.models import ContentType
+    from django.contrib.auth.models import Group
 
-    staff_users = User.objects.filter(is_staff=True).order_by('-is_superuser', 'username')
+    # Ensure default business groups exist
+    ensure_default_roles()
 
-    # Relevant permissions for this dashboard
-    dashboard_perms = Permission.objects.filter(
-        content_type__app_label__in=['products', 'portal', 'admin_dashboard', 'core']
-    ).select_related('content_type').order_by('content_type__app_label', 'codename')
+    q = request.GET.get('q', '').strip()
+    account_type = request.GET.get('account_type', 'all').strip()  # 'all', 'staff', 'customer'
+    role_filter = request.GET.get('role', '').strip()
+    status_filter = request.GET.get('status', '').strip()
+
+    users_qs = User.objects.select_related('company_profile').prefetch_related('groups').all()
+
+    # Search
+    if q:
+        users_qs = users_qs.filter(
+            Q(username__icontains=q) |
+            Q(first_name__icontains=q) |
+            Q(last_name__icontains=q) |
+            Q(email__icontains=q) |
+            Q(company_profile__company_name__icontains=q) |
+            Q(company_profile__phone__icontains=q)
+        )
+
+    # Account Type Filter
+    if account_type == 'staff':
+        users_qs = users_qs.filter(is_staff=True)
+    elif account_type == 'customer':
+        users_qs = users_qs.filter(is_staff=False)
+
+    # Role Filter
+    if role_filter == 'superuser':
+        users_qs = users_qs.filter(is_superuser=True)
+    elif role_filter.isdigit():
+        users_qs = users_qs.filter(groups__id=int(role_filter))
+
+    # Status Filter
+    if status_filter == 'active':
+        users_qs = users_qs.filter(is_active=True)
+    elif status_filter == 'inactive':
+        users_qs = users_qs.filter(is_active=False)
+
+    # Prioritize superusers, then staff, then recent joins
+    users_qs = users_qs.order_by('-is_superuser', '-is_staff', '-date_joined')
+
+    # Metrics
+    total_users = User.objects.count()
+    staff_count = User.objects.filter(is_staff=True).count()
+    superuser_count = User.objects.filter(is_superuser=True).count()
+    customer_count = User.objects.filter(is_staff=False).count()
+    active_count = User.objects.filter(is_active=True).count()
+
+    paginator = Paginator(users_qs, 12)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    all_groups = Group.objects.all().order_by('name')
 
     context = {
         'page_title': 'Staff & Role Management',
         'active_menu': 'staff',
-        'staff_users': staff_users,
-        'dashboard_perms': dashboard_perms,
+        'page_obj': page_obj,
+        'all_groups': all_groups,
+        'q': q,
+        'account_type': account_type,
+        'role_filter': role_filter,
+        'status_filter': status_filter,
+        'total_users': total_users,
+        'staff_count': staff_count,
+        'superuser_count': superuser_count,
+        'customer_count': customer_count,
+        'active_count': active_count,
     }
     return render(request, 'admin_dashboard/staff.html', context)
 
 
 @staff_required
 @transaction.atomic
+def staff_add(request):
+    """
+    Creates a new user account (Staff or Customer).
+    - Enforces secure password hashing via Django User.objects.create_user.
+    - Validates username, email, and password minimum length.
+    - Prevents unauthorized privilege escalation.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can create new user accounts.")
+        return redirect('admin_dashboard:staff')
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:staff')
+
+    from django.contrib.auth.models import Group
+
+    full_name = request.POST.get('full_name', '').strip()
+    username = request.POST.get('username', '').strip()
+    email = request.POST.get('email', '').strip()
+    phone = request.POST.get('phone', '').strip()
+    account_type = request.POST.get('account_type', 'staff').strip()  # 'staff' or 'customer'
+    role_id = request.POST.get('role_id', '').strip()
+    is_superuser = request.POST.get('is_superuser') == 'on'
+    is_active = request.POST.get('is_active') == 'on'
+    password = request.POST.get('password', '').strip()
+
+    # Validation
+    if not username:
+        messages.error(request, "Username is required.")
+        return redirect('admin_dashboard:staff')
+
+    if User.objects.filter(username=username).exists():
+        messages.error(request, f"Username '{username}' is already in use.")
+        return redirect('admin_dashboard:staff')
+
+    if email and User.objects.filter(email=email).exists():
+        messages.error(request, f"Email '{email}' is already registered to another account.")
+        return redirect('admin_dashboard:staff')
+
+    if len(password) < 8:
+        messages.error(request, "Password must be at least 8 characters long.")
+        return redirect('admin_dashboard:staff')
+
+    # Split full name into first/last
+    name_parts = full_name.split(' ', 1)
+    first_name = name_parts[0]
+    last_name = name_parts[1] if len(name_parts) > 1 else ''
+
+    is_staff = (account_type == 'staff') or is_superuser
+
+    # Create account with properly hashed password
+    new_user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+        first_name=first_name,
+        last_name=last_name,
+        is_staff=is_staff,
+        is_superuser=is_superuser and request.user.is_superuser,
+        is_active=is_active
+    )
+
+    # Assign Group/Role if specified
+    if role_id and role_id.isdigit():
+        try:
+            group = Group.objects.get(id=int(role_id))
+            new_user.groups.add(group)
+        except Group.DoesNotExist:
+            pass
+
+    # Create CompanyProfile for phone contact or customer record
+    if phone or account_type == 'customer':
+        from portal.models import CompanyProfile
+        CompanyProfile.objects.create(
+            user=new_user,
+            company_name=full_name or username,
+            phone=phone,
+            address_line1='Registered via Admin Console',
+            city='Bangalore',
+            state='Karnataka',
+            pincode='560001'
+        )
+
+    role_desc = "Super Administrator" if new_user.is_superuser else ("Staff" if new_user.is_staff else "Customer")
+    AuditLog.log(
+        user=request.user,
+        action="Created User Account",
+        model_name="User",
+        object_id=new_user.id,
+        details=f"Created user '{username}' ({role_desc}, Email: {email})",
+        request=request
+    )
+
+    messages.success(request, f"Account '{username}' created successfully as {role_desc}.")
+    return redirect('admin_dashboard:staff')
+
+
+@staff_required
+def staff_user_detail(request, user_id):
+    """
+    Detailed user inspection modal or standalone view:
+    Returns user info, role, permissions summary, and recent audit activity.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Access restricted to superusers.")
+        return redirect('admin_dashboard:staff')
+
+    target_user = get_object_or_404(
+        User.objects.select_related('company_profile').prefetch_related('groups'),
+        id=user_id
+    )
+    profile = getattr(target_user, 'company_profile', None)
+    user_audit = AuditLog.objects.filter(user=target_user).order_by('-created_at')[:10]
+
+    # Customer orders if applicable
+    orders_count = Order.objects.filter(user=target_user).count()
+
+    context = {
+        'page_title': f"User Details — {target_user.username}",
+        'active_menu': 'staff',
+        'target_user': target_user,
+        'profile': profile,
+        'user_audit': user_audit,
+        'orders_count': orders_count,
+    }
+    return render(request, 'admin_dashboard/user_detail.html', context)
+
+
+@staff_required
+@transaction.atomic
+def staff_user_edit(request, user_id):
+    """
+    Updates user profile, role assignment, and active status.
+    Guards against self-demotion or deactivation of the last superuser.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can edit user credentials.")
+        return redirect('admin_dashboard:staff')
+
+    target_user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        from django.contrib.auth.models import Group
+
+        full_name = request.POST.get('full_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        role_id = request.POST.get('role_id', '').strip()
+        account_type = request.POST.get('account_type', '').strip()  # 'staff' or 'customer'
+        is_active = request.POST.get('is_active') == 'on'
+
+        # Email duplicate check
+        if email and User.objects.filter(email=email).exclude(id=target_user.id).exists():
+            messages.error(request, f"Email '{email}' is already used by another account.")
+            return redirect('admin_dashboard:staff')
+
+        # Safety Check: Cannot deactivate self
+        if target_user.id == request.user.id and not is_active:
+            messages.error(request, "You cannot deactivate your own account.")
+            return redirect('admin_dashboard:staff')
+
+        # Safety Check: Cannot deactivate the last remaining active superuser
+        if target_user.is_superuser and not is_active:
+            active_superusers = User.objects.filter(is_superuser=True, is_active=True).count()
+            if active_superusers <= 1:
+                messages.error(request, "Action blocked: You cannot deactivate the only active Super Administrator.")
+                return redirect('admin_dashboard:staff')
+
+        name_parts = full_name.split(' ', 1)
+        target_user.first_name = name_parts[0]
+        target_user.last_name = name_parts[1] if len(name_parts) > 1 else ''
+        target_user.email = email
+        target_user.is_active = is_active
+
+        if account_type == 'staff':
+            target_user.is_staff = True
+        elif account_type == 'customer' and not target_user.is_superuser:
+            target_user.is_staff = False
+
+        target_user.save()
+
+        # Update role/group
+        if role_id and role_id.isdigit():
+            try:
+                group = Group.objects.get(id=int(role_id))
+                target_user.groups.set([group])
+            except Group.DoesNotExist:
+                target_user.groups.clear()
+        elif role_id == 'none':
+            target_user.groups.clear()
+
+        # Update phone on profile
+        if phone:
+            from portal.models import CompanyProfile
+            profile, _ = CompanyProfile.objects.get_or_create(
+                user=target_user,
+                defaults={'company_name': full_name or target_user.username}
+            )
+            profile.phone = phone
+            profile.save(update_fields=['phone'])
+
+        AuditLog.log(
+            user=request.user,
+            action="Updated User Account",
+            model_name="User",
+            object_id=target_user.id,
+            details=f"Updated details/role for '{target_user.username}' (Active: {is_active})",
+            request=request
+        )
+
+        messages.success(request, f"User account '{target_user.username}' updated successfully.")
+
+    return redirect('admin_dashboard:staff')
+
+
+@staff_required
+@transaction.atomic
+def staff_user_toggle_status(request, user_id):
+    """
+    Safely activates or deactivates an account with protection for the last superuser.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can toggle user status.")
+        return redirect('admin_dashboard:staff')
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:staff')
+
+    target_user = get_object_or_404(User, id=user_id)
+
+    # Safety: Cannot deactivate own account
+    if target_user.id == request.user.id:
+        messages.error(request, "You cannot deactivate your own account.")
+        return redirect('admin_dashboard:staff')
+
+    # Safety: Cannot deactivate the last active superuser
+    if target_user.is_superuser and target_user.is_active:
+        active_superusers = User.objects.filter(is_superuser=True, is_active=True).count()
+        if active_superusers <= 1:
+            messages.error(request, "Cannot deactivate the only active Super Administrator.")
+            return redirect('admin_dashboard:staff')
+
+    target_user.is_active = not target_user.is_active
+    target_user.save(update_fields=['is_active'])
+
+    action_label = "Activated" if target_user.is_active else "Deactivated"
+    AuditLog.log(
+        user=request.user,
+        action=f"{action_label} User Account",
+        model_name="User",
+        object_id=target_user.id,
+        details=f"Account '{target_user.username}' set to {'Active' if target_user.is_active else 'Inactive'}",
+        request=request
+    )
+
+    messages.info(request, f"Account '{target_user.username}' has been {action_label.lower()}.")
+    return redirect('admin_dashboard:staff')
+
+
+@staff_required
+@transaction.atomic
 def staff_toggle_superuser(request, user_id):
-    """Toggle superuser status for a staff user (superuser-only)."""
+    """
+    Toggle superuser status for a staff user (superuser-only).
+    Protects against self-demotion or removal of the last superuser.
+    """
     if not request.user.is_superuser:
         messages.error(request, "Only superusers can modify superuser privileges.")
         return redirect('admin_dashboard:staff')
@@ -1838,72 +2302,197 @@ def staff_toggle_superuser(request, user_id):
         messages.error(request, "You cannot change your own superuser status.")
         return redirect('admin_dashboard:staff')
 
-    target = get_object_or_404(User, id=user_id, is_staff=True)
+    target = get_object_or_404(User, id=user_id)
+
+    # Protect last active superuser
+    if target.is_superuser:
+        active_superusers = User.objects.filter(is_superuser=True, is_active=True).count()
+        if active_superusers <= 1:
+            messages.error(request, "Cannot demote the only remaining Super Administrator.")
+            return redirect('admin_dashboard:staff')
+
     old_val = target.is_superuser
     target.is_superuser = not target.is_superuser
-    target.save(update_fields=['is_superuser'])
+    if target.is_superuser:
+        target.is_staff = True
+    target.save(update_fields=['is_superuser', 'is_staff'])
 
     AuditLog.log(
         user=request.user,
-        action="Changed Staff Superuser Status",
+        action="Changed Superuser Privilege",
         model_name="User",
         object_id=target.id,
         details=f"Staff user '{target.username}' superuser: {old_val} -> {target.is_superuser}",
         request=request
     )
 
-    status_text = "granted superuser" if target.is_superuser else "removed superuser from"
+    status_text = "granted superuser privileges to" if target.is_superuser else "removed superuser privileges from"
     messages.success(request, f"Successfully {status_text} '{target.username}'.")
     return redirect('admin_dashboard:staff')
 
 
 @staff_required
 @transaction.atomic
-def staff_add(request):
-    """Add a new staff member (superuser-only)."""
+def staff_user_reset_password(request, user_id):
+    """
+    Secure Admin Password Reset Flow:
+    - Never shows plaintext password, OTP, or token to the administrator.
+    - Generates a secure, expiring OTP and token via PasswordResetOTP.
+    - Attempts email delivery; if SMTP is unconfigured, truthfully informs admin without pretending it was sent.
+    """
     if not request.user.is_superuser:
-        messages.error(request, "Only superusers can create new staff accounts.")
+        messages.error(request, "Only superusers can initiate password resets.")
         return redirect('admin_dashboard:staff')
 
     if request.method != 'POST':
         return redirect('admin_dashboard:staff')
 
-    username = request.POST.get('username', '').strip()
-    email = request.POST.get('email', '').strip()
-    password = request.POST.get('password', '').strip()
-    is_superuser = request.POST.get('is_superuser') == 'on'
+    target_user = get_object_or_404(User, id=user_id)
 
-    if not username or not password:
-        messages.error(request, "Username and password are required to create a staff account.")
+    if not target_user.email:
+        messages.error(request, f"User '{target_user.username}' has no email address configured. Cannot send password reset.")
         return redirect('admin_dashboard:staff')
 
-    if User.objects.filter(username=username).exists():
-        messages.error(request, f"Username '{username}' is already taken.")
-        return redirect('admin_dashboard:staff')
+    import secrets
+    import hashlib
+    from django.core.mail import send_mail
+    from portal.models import PasswordResetOTP
 
-    if len(password) < 8:
-        messages.error(request, "Password must be at least 8 characters long.")
-        return redirect('admin_dashboard:staff')
+    # Expire previous OTPs
+    PasswordResetOTP.objects.filter(user=target_user, is_used=False).update(is_used=True)
 
-    new_staff = User.objects.create_user(
-        username=username,
-        email=email,
-        password=password,
-        is_staff=True,
-        is_superuser=is_superuser
+    otp_plain = str(secrets.randbelow(900000) + 100000)
+    otp_hash = hashlib.sha256(otp_plain.encode()).hexdigest()
+    reset_token = secrets.token_urlsafe(48)
+    expires_at = timezone.now() + timedelta(minutes=30)
+
+    PasswordResetOTP.objects.create(
+        user=target_user,
+        identifier=target_user.email,
+        method='email',
+        otp_hash=otp_hash,
+        reset_token=reset_token,
+        expires_at=expires_at,
+        is_used=False,
+        attempts=0
     )
+
+    # Send reset notification email
+    email_dispatched = False
+    try:
+        from django.conf import settings as dj_settings
+        send_mail(
+            subject="Balaji Ingredients — Password Reset Request",
+            message=(
+                f"Hello {target_user.get_full_name() or target_user.username},\n\n"
+                f"An administrator has initiated a password reset for your Balaji Ingredients account ({target_user.email}).\n\n"
+                f"Your One-Time Password (OTP) is: {otp_plain}\n\n"
+                f"This OTP is valid for 30 minutes. Never share this OTP with anyone.\n\n"
+                f"If you did not request this, please contact support immediately.\n\n"
+                f"— Balaji Ingredients Security Team"
+            ),
+            from_email=getattr(dj_settings, 'DEFAULT_FROM_EMAIL', 'noreply@balaji-ingredients.com'),
+            recipient_list=[target_user.email],
+            fail_silently=False
+        )
+        email_dispatched = True
+    except Exception:
+        email_dispatched = False
 
     AuditLog.log(
         user=request.user,
-        action="Created Staff Account",
+        action="Initiated Password Reset",
         model_name="User",
-        object_id=new_staff.id,
-        details=f"New staff account created: '{username}' (superuser={is_superuser})",
+        object_id=target_user.id,
+        details=f"Admin initiated password reset for '{target_user.username}' ({target_user.email}). Email sent: {email_dispatched}. Token not exposed.",
         request=request
     )
 
-    messages.success(request, f"Staff account '{username}' created successfully.")
+    if email_dispatched:
+        messages.success(request, f"Password reset OTP successfully sent to {target_user.email}.")
+    else:
+        messages.warning(
+            request,
+            f"Reset OTP record generated for {target_user.email}. "
+            "Note: Email dispatch was not completed because outgoing SMTP email settings are not configured in environment."
+        )
+
     return redirect('admin_dashboard:staff')
+
+
+@staff_required
+def staff_roles_view(request):
+    """
+    Dedicated Role and Permissions Management Page:
+    - Lists all business roles (Django Groups).
+    - Shows member count and member list for each role.
+    - Displays clean, human-readable permission matrices grouped by business module.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Role administration requires superuser privileges.")
+        return redirect('admin_dashboard:staff')
+
+    from django.contrib.auth.models import Group
+
+    ensure_default_roles()
+
+    roles = Group.objects.annotate(member_count=Count('user')).order_by('name')
+
+    # Selected role for permission matrix inspection
+    selected_role_id = request.GET.get('role_id')
+    selected_role = None
+    if selected_role_id and selected_role_id.isdigit():
+        selected_role = Group.objects.filter(id=int(selected_role_id)).first()
+    if not selected_role and roles.exists():
+        selected_role = roles.first()
+
+    # Get active permission codenames for the selected role
+    active_perms = set()
+    if selected_role:
+        active_perms = set(selected_role.permissions.values_list('codename', flat=True))
+
+    context = {
+        'page_title': 'Roles & Permissions Matrix',
+        'active_menu': 'staff',
+        'roles': roles,
+        'selected_role': selected_role,
+        'active_perms': active_perms,
+        'permission_modules': PERMISSION_MODULES,
+    }
+    return render(request, 'admin_dashboard/roles.html', context)
+
+
+@staff_required
+@transaction.atomic
+def staff_role_edit(request, group_id):
+    """
+    Updates the permissions assigned to a business role.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can edit role permissions.")
+        return redirect('admin_dashboard:staff_roles')
+
+    from django.contrib.auth.models import Group, Permission
+
+    group = get_object_or_404(Group, id=group_id)
+
+    if request.method == 'POST':
+        selected_codenames = request.POST.getlist('permissions')
+        perms = Permission.objects.filter(codename__in=selected_codenames)
+        group.permissions.set(perms)
+
+        AuditLog.log(
+            user=request.user,
+            action="Updated Role Permissions",
+            model_name="Group",
+            object_id=group.id,
+            details=f"Updated permissions for role '{group.name}' ({len(perms)} permissions assigned)",
+            request=request
+        )
+
+        messages.success(request, f"Permissions for role '{group.name}' have been saved.")
+
+    return redirect(f"/admin-dashboard/staff/roles/?role_id={group.id}")
 
 
 # ==============================================================================

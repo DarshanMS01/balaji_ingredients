@@ -73,10 +73,16 @@ urlpatterns = [
     path('reports/', views.reports_view, name='reports'),
     path('reports/export/<str:export_type>/', views.reports_export_csv, name='reports_export_csv'),
 
-    # ── Staff & Role Management (Phase 5) ───────────────────────────────────────
+    # ── Staff & Role Management (Phases 2-7) ───────────────────────────────────
     path('staff/', views.staff_management, name='staff'),
     path('staff/add/', views.staff_add, name='staff_add'),
+    path('staff/<int:user_id>/detail/', views.staff_user_detail, name='staff_user_detail'),
+    path('staff/<int:user_id>/edit/', views.staff_user_edit, name='staff_user_edit'),
+    path('staff/<int:user_id>/toggle-status/', views.staff_user_toggle_status, name='staff_user_toggle_status'),
     path('staff/<int:user_id>/toggle-superuser/', views.staff_toggle_superuser, name='staff_toggle_superuser'),
+    path('staff/<int:user_id>/reset-password/', views.staff_user_reset_password, name='staff_user_reset_password'),
+    path('staff/roles/', views.staff_roles_view, name='staff_roles'),
+    path('staff/roles/<int:group_id>/edit/', views.staff_role_edit, name='staff_role_edit'),
 
     # ── Audit Logs ──────────────────────────────────────────────────────────────
     path('audit-logs/', views.audit_logs_view, name='audit_logs'),
