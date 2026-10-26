@@ -1,0 +1,232 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Category Management — Balaji Ingredients Enterprise{% endblock %}
+
+{% block header_actions %}
+<button class="btn-primary-action" onclick="openModal('addCategoryModal')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    <span>Add Category</span>
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width: 60px;">Icon</th>
+                    <th>Category Name</th>
+                    <th>Slug</th>
+                    <th>Tagline</th>
+                    <th>Commodities</th>
+                    <th>Display Order</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in categories %}
+                <tr>
+                    <td>
+                        <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: {{ c.accent_color|default:'#1b381e' }}20; color: {{ c.accent_color|default:'#1b381e' }}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem;">
+                            {{ c.icon|default:"◈" }}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 0.98rem;">{{ c.name }}</div>
+                        {% if c.description %}
+                        <div style="font-size: 0.78rem; color: var(--text-muted); max-width: 300px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; margin-top: 2px;">
+                            {{ c.description }}
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td style="font-family: monospace; font-size: 0.86rem; color: var(--text-muted);">
+                        {{ c.slug }}
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-body);">
+                        {{ c.tagline|default:"—" }}
+                    </td>
+                    <td>
+                        <span class="badge" style="background: #f1f5f9; color: var(--text-heading); font-weight: 800; font-size: 0.84rem; padding: 6px 12px;">
+                            {{ c.product_count }} item{{ c.product_count|pluralize }}
+                        </span>
+                    </td>
+                    <td style="font-weight: 700; font-size: 0.94rem;">
+                        {{ c.order }}
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_dashboard:category_toggle_status' c.id %}" title="Toggle active status">
+                            {% if c.is_active %}
+                            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; cursor: pointer; padding: 6px 12px;">Active</span>
+                            {% else %}
+                            <span class="badge" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; cursor: pointer; padding: 6px 12px;">Inactive</span>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                            <button class="btn-sm" onclick="openEditCategoryModal('{{ c.id }}', '{{ c.name|escapejs }}', '{{ c.tagline|escapejs }}', '{{ c.description|escapejs }}', '{{ c.icon|escapejs }}', '{{ c.accent_color|default:'#1b381e' }}', '{{ c.order }}', {{ c.is_active|lower }})">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                <span>Edit</span>
+                            </button>
+
+                            <form method="POST" action="{% url 'admin_dashboard:category_delete' c.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete category \'{{ c.name|escapejs }}\'? If it contains products, deletion will be blocked.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-sm btn-danger" title="Delete Category">
+                                    <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                        No product categories created yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ADD CATEGORY MODAL -->
+<div id="addCategoryModal" class="modal-backdrop">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'admin_dashboard:category_add' %}">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h3 class="modal-title">Create Commodity Category</h3>
+                <button type="button" class="modal-close" onclick="closeModal('addCategoryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Category Name *</label>
+                    <input type="text" name="name" class="form-input" required placeholder="e.g. Premium Sortex Pulses">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">URL Slug (Auto-generated if empty)</label>
+                    <input type="text" name="slug" class="form-input" placeholder="e.g. premium-pulses">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tagline</label>
+                    <input type="text" name="tagline" class="form-input" placeholder="Farm-fresh unpolished protein staples">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-textarea" rows="2" placeholder="Brief category description for website catalog"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                    <div class="form-group">
+                        <label class="form-label">Display Icon</label>
+                        <input type="text" name="icon" class="form-input" value="◈">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Accent Color</label>
+                        <input type="color" name="accent_color" class="form-input" value="#1b381e" style="height: 46px; padding: 2px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Display Order</label>
+                        <input type="number" name="order" class="form-input" value="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.94rem; font-weight: 600;">
+                        <input type="checkbox" name="is_active" checked style="accent-color: var(--primary); width: 18px; height: 18px;">
+                        <span>Active (Visible in Navigation)</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-sm" onclick="closeModal('addCategoryModal')">Cancel</button>
+                <button type="submit" class="btn-primary-action">Save Category</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- EDIT CATEGORY MODAL -->
+<div id="editCategoryModal" class="modal-backdrop">
+    <div class="modal-dialog">
+        <form id="editCategoryForm" method="POST" action="">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Category</h3>
+                <button type="button" class="modal-close" onclick="closeModal('editCategoryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Category Name *</label>
+                    <input type="text" id="edit_cat_name" name="name" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tagline</label>
+                    <input type="text" id="edit_cat_tagline" name="tagline" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="edit_cat_description" name="description" class="form-textarea" rows="2"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+                    <div class="form-group">
+                        <label class="form-label">Display Icon</label>
+                        <input type="text" id="edit_cat_icon" name="icon" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Accent Color</label>
+                        <input type="color" id="edit_cat_accent_color" name="accent_color" class="form-input" style="height: 46px; padding: 2px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Display Order</label>
+                        <input type="number" id="edit_cat_order" name="order" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.94rem; font-weight: 600;">
+                        <input type="checkbox" id="edit_cat_is_active" name="is_active" style="accent-color: var(--primary); width: 18px; height: 18px;">
+                        <span>Active (Visible in Navigation)</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-sm" onclick="closeModal('editCategoryModal')">Cancel</button>
+                <button type="submit" class="btn-primary-action">Update Category</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function openEditCategoryModal(id, name, tagline, desc, icon, color, order, active) {
+        const form = document.getElementById('editCategoryForm');
+        form.action = `/admin-dashboard/categories/${id}/edit/`;
+
+        document.getElementById('edit_cat_name').value = name;
+        document.getElementById('edit_cat_tagline').value = tagline;
+        document.getElementById('edit_cat_description').value = desc;
+        document.getElementById('edit_cat_icon').value = icon;
+        document.getElementById('edit_cat_accent_color').value = color;
+        document.getElementById('edit_cat_order').value = order;
+        document.getElementById('edit_cat_is_active').checked = active;
+
+        openModal('editCategoryModal');
+    }
+</script>
+{% endblock %}

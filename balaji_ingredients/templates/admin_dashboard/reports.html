@@ -1,0 +1,174 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Business Intelligence & CSV Exports — Balaji Ingredients Enterprise{% endblock %}
+
+{% block extra_head %}
+<style>
+    .export-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 22px;
+        margin-bottom: 32px;
+    }
+
+    .export-card {
+        background: #ffffff;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        padding: 26px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 18px;
+    }
+
+    .export-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-md);
+        background: #ecfdf5;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .export-card h3 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--text-heading);
+    }
+
+    .export-card p {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 30-Day Snapshot -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 26px;">
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.6px;">Last 30 Days Gross Revenue</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.1;">₹{{ total_sales_month|floatformat:2 }}</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Period: {{ thirty_days_ago|date:"d M" }} &ndash; {{ today|date:"d M Y" }}</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--accent-gold); letter-spacing: 0.6px;">Last 30 Days Order Volume</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: var(--text-heading); margin-top: 8px; line-height: 1.1;">{{ total_orders_month }} Orders</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Delivered and pending client fulfillment</div>
+    </div>
+</div>
+
+<!-- Instant CSV Exports Header -->
+<div class="card-header" style="margin-top: 14px; margin-bottom: 18px;">
+    <div>
+        <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--text-heading);">1-Click Enterprise Data Exports (CSV)</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 3px;">Download full system records directly for Excel, accounting, and tax audits</p>
+    </div>
+</div>
+
+<div class="export-grid">
+    <!-- Orders Export -->
+    <div class="export-card">
+        <div>
+            <div class="export-card-icon">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <h3 style="margin-top: 14px;">Orders & Sales Ledger</h3>
+            <p>Complete historical transactions, line items, customer info, GST breakdown, and UTR payment details.</p>
+        </div>
+        <a href="{% url 'admin_dashboard:reports_export_csv' 'orders' %}" class="btn-primary-action" style="justify-content: center; padding: 12px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Download Orders CSV</span>
+        </a>
+    </div>
+
+    <!-- Products Export -->
+    <div class="export-card">
+        <div>
+            <div class="export-card-icon" style="background: #eff6ff; color: #1d4ed8;">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            </div>
+            <h3 style="margin-top: 14px;">Inventory & Catalog</h3>
+            <p>Full commodity list with SKU codes, categories, wholesale rates, units, and real-time physical stock counts.</p>
+        </div>
+        <a href="{% url 'admin_dashboard:reports_export_csv' 'products' %}" class="btn-primary-action" style="justify-content: center; background: #1d4ed8; border-color: #1e40af; padding: 12px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Download Catalog CSV</span>
+        </a>
+    </div>
+
+    <!-- Customers Export -->
+    <div class="export-card">
+        <div>
+            <div class="export-card-icon" style="background: #fdf2f8; color: #be185d;">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+            <h3 style="margin-top: 14px;">B2B Buyer Directory</h3>
+            <p>Registered buyers, corporate business entities, contact phone numbers, emails, and account status.</p>
+        </div>
+        <a href="{% url 'admin_dashboard:reports_export_csv' 'customers' %}" class="btn-primary-action" style="justify-content: center; background: #be185d; border-color: #9d174d; padding: 12px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Download Buyers CSV</span>
+        </a>
+    </div>
+
+    <!-- Feedback Export -->
+    <div class="export-card">
+        <div>
+            <div class="export-card-icon" style="background: #fffbeb; color: #b45309;">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            </div>
+            <h3 style="margin-top: 14px;">Customer Feedback & Reviews</h3>
+            <p>All ratings, text reviews, customer contact details, and satisfaction review timestamps.</p>
+        </div>
+        <a href="{% url 'admin_dashboard:reports_export_csv' 'feedback' %}" class="btn-primary-action" style="justify-content: center; background: #b45309; border-color: #92400e; padding: 12px;">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Download Feedback CSV</span>
+        </a>
+    </div>
+</div>
+
+<!-- Category Distribution Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="card-header" style="padding: 20px 24px; margin-bottom: 0;">
+        <h3 class="card-title">Category Commodity Distribution</h3>
+    </div>
+
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Total Commodities</th>
+                    <th>Active / Live Products</th>
+                    <th>Sort Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cat in category_breakdown %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--text-heading); font-size: 0.96rem;">
+                        {{ cat.name }}
+                    </td>
+                    <td style="font-weight: 700;">
+                        {{ cat.prod_count }}
+                    </td>
+                    <td>
+                        <span class="badge" style="background: #ecfdf5; color: #047857; padding: 6px 12px;">{{ cat.active_prod_count }} live</span>
+                    </td>
+                    <td style="font-weight: 600;">
+                        {{ cat.order }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

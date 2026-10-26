@@ -1,0 +1,128 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}CMS & Company Settings — Balaji Ingredients Enterprise{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 26px;">
+    <!-- Company Information Form -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title">Corporate Profile & Contact Details</h3>
+                <p class="card-subtitle">Public business data displayed on storefront, footer, and invoices</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{% url 'admin_dashboard:settings' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action_type" value="site_info">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+                <div class="form-group">
+                    <label class="form-label">Enterprise Entity Name *</label>
+                    <input type="text" name="company_name" class="form-input" value="{{ settings.company_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Corporate Tagline</label>
+                    <input type="text" name="tagline" class="form-input" value="{{ settings.tagline }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Customer Support Phone</label>
+                    <input type="text" name="phone" class="form-input" value="{{ settings.phone }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Official Business Email</label>
+                    <input type="email" name="email" class="form-input" value="{{ settings.email }}">
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label class="form-label">Headquarters / Dispatch Address</label>
+                    <textarea name="office_address" class="form-textarea" rows="2">{{ settings.office_address }}</textarea>
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label class="form-label">Operating Hours</label>
+                    <input type="text" name="business_hours" class="form-input" value="{{ settings.business_hours }}">
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label class="form-label">About Section Headline</label>
+                    <input type="text" name="about_title" class="form-input" value="{{ settings.about_title }}">
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label class="form-label">About Narrative</label>
+                    <textarea name="about_text" class="form-textarea" rows="4">{{ settings.about_text }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">LinkedIn Page URL</label>
+                    <input type="url" name="linkedin_url" class="form-input" value="{{ settings.linkedin_url|default:'' }}" placeholder="https://linkedin.com/company/...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Instagram Page URL</label>
+                    <input type="url" name="instagram_url" class="form-input" value="{{ settings.instagram_url|default:'' }}" placeholder="https://instagram.com/...">
+                </div>
+            </div>
+
+            <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn-primary-action" style="padding: 12px 24px;">
+                    Save Corporate Settings
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Website Proof Metrics (SiteStats) -->
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title">Homepage Proof Numbers</h3>
+                <p class="card-subtitle">Social proof counters rendered on storefront</p>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            {% for s in stats %}
+            <form method="POST" action="{% url 'admin_dashboard:settings' %}" style="padding: 16px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                {% csrf_token %}
+                <input type="hidden" name="action_type" value="update_stat">
+                <input type="hidden" name="stat_id" value="{{ s.id }}">
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 10px;">
+                    <div>
+                        <label class="form-label" style="font-size: 0.78rem;">Metric Label</label>
+                        <input type="text" name="label" class="form-input" value="{{ s.label }}" style="font-weight: 700; padding: 8px 12px; font-size: 0.88rem;">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 0.78rem;">Display Value</label>
+                        <input type="text" name="value" class="form-input" value="{{ s.value }}" style="font-weight: 800; color: var(--primary); padding: 8px 12px; font-size: 0.92rem;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label class="form-label" style="font-size: 0.78rem;">Subtitle / Description</label>
+                    <input type="text" name="description" class="form-input" value="{{ s.description }}" style="padding: 8px 12px; font-size: 0.84rem;">
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Sort Order:</span>
+                        <input type="number" name="order" value="{{ s.order }}" style="width: 60px; padding: 6px; font-size: 0.82rem; border: 1px solid var(--border-subtle); border-radius: 6px;">
+                    </div>
+                    <button type="submit" class="btn-sm btn-primary">Update</button>
+                </div>
+            </form>
+            {% empty %}
+            <div style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                No storefront statistics found.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

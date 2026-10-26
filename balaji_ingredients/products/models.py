@@ -42,6 +42,13 @@ class Product(models.Model):
     description = models.TextField()
 
     # Technical Specifications summary
+    sku = models.CharField(
+        max_length=50,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="Unique Product Code or SKU (e.g. BI-CHILLI-01)"
+    )
     grade = models.CharField(max_length=100, default='Sortex Cleaned Grade A')
     purity_percentage = models.CharField(max_length=50, default='99.5% Min')
     moisture_content = models.CharField(max_length=50, default='< 11%')
@@ -64,6 +71,18 @@ class Product(models.Model):
         max_length=40,
         default='Quintal (100 kg)',
         help_text="Unit of measurement e.g. Quintal, Metric Ton, 50kg Bag"
+    )
+    stock_quantity = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=Decimal('500.00'),
+        help_text="Available stock in inventory (kg / units)"
+    )
+    low_stock_threshold = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=Decimal('10.00'),
+        help_text="Alert threshold for low stock warnings"
     )
 
     applications = models.CharField(

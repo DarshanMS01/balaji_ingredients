@@ -1,0 +1,239 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Feedback & Inquiries — Balaji Ingredients Enterprise{% endblock %}
+
+{% block extra_head %}
+<style>
+    .star-rating {
+        color: #f59e0b;
+        font-size: 1.15rem;
+        letter-spacing: 2px;
+    }
+
+    .feedback-tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 26px;
+    }
+
+    .f-tab {
+        padding: 12px 24px;
+        background: #ffffff;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+        font-size: 0.94rem;
+        font-weight: 700;
+        color: var(--text-body);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.15s;
+        box-shadow: var(--shadow-subtle);
+    }
+
+    .f-tab:hover {
+        background: var(--surface-bg);
+    }
+
+    .f-tab.active {
+        background: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary-dark);
+    }
+
+    .f-badge {
+        background: #f1f5f9;
+        color: var(--text-heading);
+        padding: 3px 10px;
+        border-radius: 9999px;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .f-tab.active .f-badge {
+        background: rgba(255, 255, 255, 0.25);
+        color: #ffffff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Overview Stats -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 26px;">
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.6px;">Customer Satisfaction Rating</div>
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 8px;">
+            <div style="font-size: 2.1rem; font-weight: 800; color: var(--primary); line-height: 1.1;">{{ avg_rating }} / 5.0</div>
+            <div class="star-rating">★★★★★</div>
+        </div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Based on {{ total_feedback }} customer reviews</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #b45309; letter-spacing: 0.6px;">Unreviewed Feedback</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: #b45309; margin-top: 8px; line-height: 1.1;">{{ unread_feedback }} Submissions</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Awaiting administrative verification</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--primary); letter-spacing: 0.6px;">Contact Inquiries</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.1;">{{ new_contacts }} New Messages</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">{{ total_contacts }} total inquiries received</div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="feedback-tabs">
+    <a href="?tab=feedback" class="f-tab {% if tab == 'feedback' %}active{% endif %}">
+        <span>Product & Service Reviews</span>
+        <span class="f-badge">{{ total_feedback }}</span>
+    </a>
+    <a href="?tab=contact" class="f-tab {% if tab == 'contact' %}active{% endif %}">
+        <span>General Contact Inquiries</span>
+        <span class="f-badge">{{ total_contacts }}</span>
+    </a>
+</div>
+
+{% if tab == 'feedback' %}
+<!-- Feedback Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer & Entity</th>
+                    <th>Commodity / Subject</th>
+                    <th>Rating</th>
+                    <th>Feedback Type</th>
+                    <th>Review Message</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fb in feedbacks %}
+                <tr style="{% if not fb.is_reviewed %}background: #fffbeb15;{% endif %}">
+                    <td style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">
+                        {{ fb.created_at|date:"d M Y H:i" }}
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 0.96rem;">{{ fb.full_name }}</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                            {{ fb.email }}{% if fb.company_name %} &bull; {{ fb.company_name }}{% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading);">{{ fb.product_name|default:"General Commodity Range" }}</div>
+                    </td>
+                    <td>
+                        <div class="star-rating">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                            {% endfor %}
+                        </div>
+                        <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600;">{{ fb.rating }} of 5 Stars</div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: #f1f5f9; color: var(--text-body); text-transform: uppercase; font-size: 0.8rem;">
+                            {{ fb.feedback_type|default:"Product" }}
+                        </span>
+                    </td>
+                    <td style="max-width: 340px;">
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.5;">
+                            {{ fb.message }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if fb.is_reviewed %}
+                        <span class="badge" style="background: #ecfdf5; color: #047857; padding: 6px 12px;">Reviewed</span>
+                        {% else %}
+                        <span class="badge" style="background: #fffbeb; color: #b45309; padding: 6px 12px;">New / Unread</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        {% if not fb.is_reviewed %}
+                        <a href="{% url 'admin_dashboard:feedback_mark_reviewed' fb.id %}" class="btn-sm btn-primary">
+                            ✓ Mark Reviewed
+                        </a>
+                        {% else %}
+                        <span style="font-size: 0.84rem; color: var(--text-muted); font-weight: 600;">Archived</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                        No customer feedback entries recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<!-- Contact Messages Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Contact Person</th>
+                    <th>Subject</th>
+                    <th>Message Body</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in contacts %}
+                <tr style="{% if msg.status == 'new' %}background: #fffbeb15;{% endif %}">
+                    <td style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">
+                        {{ msg.created_at|date:"d M Y H:i" }}
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 0.96rem;">{{ msg.name }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                            <a href="mailto:{{ msg.email }}">{{ msg.email }}</a> &bull; {{ msg.phone }}
+                        </div>
+                    </td>
+                    <td style="font-weight: 700; color: var(--text-heading);">
+                        {{ msg.subject|default:"General Inquiry" }}
+                    </td>
+                    <td style="max-width: 380px;">
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.5;">
+                            {{ msg.message }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if msg.status == 'new' %}
+                        <span class="badge" style="background: #fffbeb; color: #b45309; padding: 6px 12px;">NEW</span>
+                        {% else %}
+                        <span class="badge" style="background: #f1f5f9; color: #64748b; padding: 6px 12px;">READ</span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: right;">
+                        {% if msg.status == 'new' %}
+                        <a href="{% url 'admin_dashboard:contact_mark_read' msg.id %}" class="btn-sm btn-primary">
+                            ✓ Mark Read
+                        </a>
+                        {% else %}
+                        <span style="font-size: 0.84rem; color: var(--text-muted); font-weight: 600;">Resolved</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                        No contact inquiries submitted.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

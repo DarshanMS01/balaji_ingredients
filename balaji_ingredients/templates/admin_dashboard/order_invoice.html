@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Invoice #{{ order.order_number }} — Balaji Ingredients</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #17381b;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+
+        .company-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #17381b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .company-subtitle {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+
+        .invoice-badge {
+            text-align: right;
+        }
+
+        .invoice-badge h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .invoice-badge p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .parties-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .party-box h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            margin: 0 0 8px;
+        }
+
+        .party-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .party-details {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #475569;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+
+        .invoice-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 10px 12px;
+            border-bottom: 1px solid #cbd5e1;
+            text-align: left;
+        }
+
+        .invoice-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .invoice-table tr:last-child td {
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+
+        .totals-table {
+            width: 300px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .totals-table td {
+            padding: 6px 10px;
+        }
+
+        .totals-table tr.grand-total td {
+            font-size: 16px;
+            font-weight: 800;
+            color: #17381b;
+            border-top: 2px solid #17381b;
+            padding-top: 10px;
+        }
+
+        .invoice-footer {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 16px;
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.5;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .print-btn-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .print-btn {
+            background: #17381b;
+            color: #ffffff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+            .invoice-container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .print-btn-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-btn-bar">
+        <button class="print-btn" onclick="window.print()">🖨 Print or Download PDF</button>
+    </div>
+
+    <div class="invoice-container">
+        <!-- HEADER -->
+        <div class="invoice-header">
+            <div>
+                <div class="company-title">Balaji Ingredients</div>
+                <div class="company-subtitle">Premium Wholesale Agro Commodities & Spices</div>
+                <div style="font-size: 11px; color: #475569; margin-top: 6px; line-height: 1.4;">
+                    {{ settings.office_address|default:"Commercial Estate, Industrial Agro Hub, Karnataka / AP, India" }}<br>
+                    Phone: {{ settings.phone|default:"+91 98450 12345" }} &bull; Email: {{ settings.email|default:"orders@balaji-ingredients.com" }}
+                </div>
+            </div>
+            <div class="invoice-badge">
+                <h1>TAX INVOICE</h1>
+                <p><strong>Invoice #:</strong> BI-INV-{{ order.order_number }}</p>
+                <p><strong>Date:</strong> {{ order.created_at|date:"d M Y" }}</p>
+                <p><strong>Order Ref:</strong> #{{ order.order_number }}</p>
+            </div>
+        </div>
+
+        <!-- PARTIES -->
+        <div class="parties-grid">
+            <div class="party-box">
+                <h4>Billed / Shipped To:</h4>
+                <div class="party-name">{{ order.customer_name }}</div>
+                {% if order.company_name %}
+                <div style="font-weight: 600; font-size: 13px; color: #334155;">{{ order.company_name }}</div>
+                {% endif %}
+                <div class="party-details">
+                    Email: {{ order.email }}<br>
+                    Phone: {{ order.phone }}<br>
+                    {% if order.gst_number %}
+                    <strong>GSTIN:</strong> {{ order.gst_number }}<br>
+                    {% endif %}
+                    {% if order.shipping_address %}
+                    <strong>Delivery Address:</strong><br>
+                    {{ order.shipping_address|linebreaksbr }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="party-box" style="text-align: right;">
+                <h4>Logistics & Payment Record:</h4>
+                <div class="party-details">
+                    <strong>Payment Mode:</strong> {{ order.get_payment_method_display }}<br>
+                    <strong>Payment Status:</strong> {{ order.get_payment_status_display|upper }}<br>
+                    {% if order.upi_utr_number %}
+                    <strong>UPI UTR / Ref #:</strong> {{ order.upi_utr_number }}<br>
+                    {% endif %}
+                    {% if order.carrier_name %}
+                    <strong>Logistics Carrier:</strong> {{ order.carrier_name }}<br>
+                    {% endif %}
+                    {% if order.tracking_consignment_no %}
+                    <strong>Bilty / LR #:</strong> {{ order.tracking_consignment_no }}<br>
+                    {% endif %}
+                    {% if order.vehicle_number %}
+                    <strong>Vehicle #:</strong> {{ order.vehicle_number }}<br>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ITEMS TABLE -->
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">#</th>
+                    <th>Commodity Description</th>
+                    <th>HSN / SKU</th>
+                    <th style="text-align: center;">Quantity</th>
+                    <th style="text-align: right;">Rate (₹)</th>
+                    <th style="text-align: right;">Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <strong style="color: #0f172a;">{{ item.product_name }}</strong>
+                        {% if item.packaging %}
+                        <div style="font-size: 11px; color: #64748b;">Pkg: {{ item.packaging }}</div>
+                        {% endif %}
+                    </td>
+                    <td style="font-family: monospace; font-size: 12px; color: #64748b;">
+                        {{ item.product.sku|default:"HSN-0904" }}
+                    </td>
+                    <td style="text-align: center; font-weight: 600;">
+                        {{ item.quantity }} {{ item.unit_name|default:"kg" }}
+                    </td>
+                    <td style="text-align: right;">
+                        {{ item.unit_price|floatformat:2 }}
+                    </td>
+                    <td style="text-align: right; font-weight: 700;">
+                        {{ item.total_price|floatformat:2 }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- TOTALS -->
+        <div class="totals-section">
+            <table class="totals-table">
+                <tr>
+                    <td style="color: #64748b;">Taxable Value:</td>
+                    <td style="text-align: right; font-weight: 600;">₹{{ order.subtotal|floatformat:2 }}</td>
+                </tr>
+                <tr>
+                    <td style="color: #64748b;">GST / Commodity Tax:</td>
+                    <td style="text-align: right; font-weight: 600;">₹{{ order.tax_amount|floatformat:2 }}</td>
+                </tr>
+                <tr class="grand-total">
+                    <td>Grand Total:</td>
+                    <td style="text-align: right;">₹{{ order.total_amount|floatformat:2 }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="invoice-footer">
+            <div>
+                <strong>Terms & Conditions:</strong><br>
+                1. Goods once sold and dispatched as per inspection standards are not returnable.<br>
+                2. Subject to local state agricultural commercial jurisdiction.
+            </div>
+            <div style="text-align: right;">
+                For <strong>Balaji Ingredients</strong><br><br><br>
+                <strong>Authorized Signatory</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

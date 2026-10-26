@@ -1,0 +1,651 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Dashboard Overview — Balaji Ingredients Enterprise{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ================= KPI CARDS GRID ================= */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 26px;
+    }
+
+    .kpi-card {
+        background: #ffffff;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-subtle);
+        padding: 22px 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: var(--shadow-card);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        min-width: 0;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-elevated);
+    }
+
+    .kpi-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--border-subtle);
+    }
+
+    .kpi-card.card-primary::after { background: var(--primary); }
+    .kpi-card.card-gold::after { background: var(--accent-gold); }
+    .kpi-card.card-warning::after { background: #f59e0b; }
+    .kpi-card.card-success::after { background: #10b981; }
+    .kpi-card.card-danger::after { background: #ef4444; }
+    .kpi-card.card-info::after { background: #3b82f6; }
+    .kpi-card.card-purple::after { background: #8b5cf6; }
+    .kpi-card.card-teal::after { background: #14b8a6; }
+
+    .kpi-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+    }
+
+    .kpi-label {
+        font-size: 0.88rem; /* 14px */
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+
+    .kpi-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--surface-bg);
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .kpi-value {
+        font-size: 1.95rem; /* ~31px */
+        font-weight: 800;
+        color: var(--text-heading);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+    }
+
+    .kpi-footer {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem; /* 13px */
+        color: var(--text-muted);
+        margin-top: 12px;
+        font-weight: 500;
+    }
+
+    .kpi-change-up {
+        color: #10b981;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* ================= WORKFLOW TABS ================= */
+    .pipeline-tabs {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: 24px;
+    }
+
+    .pipeline-pill {
+        padding: 9px 16px;
+        background: #ffffff;
+        border: 1px solid var(--border-subtle);
+        border-radius: 9999px;
+        font-size: 0.88rem; /* 14px */
+        font-weight: 600;
+        color: var(--text-body);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        transition: all 0.15s;
+        box-shadow: var(--shadow-subtle);
+    }
+
+    .pipeline-pill:hover, .pipeline-pill.active {
+        background: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary-dark);
+    }
+
+    .pipeline-count {
+        background: rgba(0, 0, 0, 0.08);
+        padding: 2px 9px;
+        border-radius: 9999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .pipeline-pill.active .pipeline-count {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ================= LAYOUT SPLIT ================= */
+    .overview-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 26px;
+        margin-bottom: 26px;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 360px;
+        width: 100%;
+    }
+
+    .action-banner {
+        background: linear-gradient(90deg, #fffbeb 0%, #fef3c7 100%);
+        border: 1px solid #fde68a;
+        border-radius: var(--radius-lg);
+        padding: 18px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-subtle);
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .action-banner-text h4 {
+        color: #92400e;
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+
+    .action-banner-text p {
+        color: #b45309;
+        font-size: 0.88rem;
+        margin-top: 3px;
+        font-weight: 500;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 1200px) {
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .overview-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .kpi-grid {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .kpi-card {
+            padding: 18px 20px;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+        }
+
+        .chart-container {
+            height: 280px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block header_actions %}
+<div style="display: flex; gap: 8px;">
+    <a href="?period=today" class="btn-sm {% if period == 'today' %}btn-primary{% endif %}">Today</a>
+    <a href="?period=week" class="btn-sm {% if period == 'week' %}btn-primary{% endif %}">7 Days</a>
+    <a href="?period=month" class="btn-sm {% if period == 'month' %}btn-primary{% endif %}">30 Days</a>
+    <a href="?period=all" class="btn-sm {% if period == 'all' or not period %}btn-primary{% endif %}">All Time</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Pending Action Banner -->
+{% if pending_upi_verification > 0 %}
+<div class="action-banner">
+    <div class="action-banner-text">
+        <h4>Action Required: {{ pending_upi_verification }} Pending UPI Payment Verification{{ pending_upi_verification|pluralize }}</h4>
+        <p>Customers have submitted bank UTR transaction numbers awaiting administrative account clearance.</p>
+    </div>
+    <a href="{% url 'admin_dashboard:orders' %}?payment_status=verification_pending" class="btn-primary-action" style="background: #92400e; border-color: #78350f;">
+        Review Pending Payments &rarr;
+    </a>
+</div>
+{% endif %}
+
+<!-- ================= 8 BALANCED KPI CARDS (4 DESKTOP, 2 TABLET, 1 MOBILE) ================= -->
+<div class="kpi-grid">
+    <!-- 1. Total Revenue -->
+    <div class="kpi-card card-primary">
+        <div class="kpi-header">
+            <span class="kpi-label">Total Realized Revenue</span>
+            <div class="kpi-icon">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value">₹{{ total_revenue|floatformat:2 }}</div>
+        <div class="kpi-footer">
+            <span class="kpi-change-up">₹{{ today_revenue|floatformat:2 }}</span> collected today
+        </div>
+    </div>
+
+    <!-- 2. Total Orders -->
+    <div class="kpi-card card-gold">
+        <div class="kpi-header">
+            <span class="kpi-label">Total Orders Placed</span>
+            <div class="kpi-icon" style="color: var(--accent-gold); background: #fef9ee;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value">{{ total_orders }}</div>
+        <div class="kpi-footer">
+            <span style="font-weight: 700; color: var(--primary);">{{ today_orders }}</span> new order{{ today_orders|pluralize }} received today
+        </div>
+    </div>
+
+    <!-- 3. Pending Orders -->
+    <div class="kpi-card card-warning">
+        <div class="kpi-header">
+            <span class="kpi-label">Pending Clearance</span>
+            <div class="kpi-icon" style="color: #b45309; background: #fffbeb;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value" style="color: {% if pending_orders > 0 %}#b45309{% else %}inherit{% endif %};">{{ pending_orders }}</div>
+        <div class="kpi-footer">
+            {{ confirmed_orders }} confirmed &bull; {{ processing_orders }} processing
+        </div>
+    </div>
+
+    <!-- 4. Total Customers -->
+    <div class="kpi-card card-success">
+        <div class="kpi-header">
+            <span class="kpi-label">B2B Customers</span>
+            <div class="kpi-icon" style="color: #047857; background: #ecfdf5;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value">{{ total_customers }}</div>
+        <div class="kpi-footer">
+            Verified business buyer accounts
+        </div>
+    </div>
+
+    <!-- 5. Total Products -->
+    <div class="kpi-card card-info">
+        <div class="kpi-header">
+            <span class="kpi-label">Total Commodities</span>
+            <div class="kpi-icon" style="color: #1d4ed8; background: #eff6ff;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value">{{ total_products }}</div>
+        <div class="kpi-footer">
+            <span style="font-weight: 700; color: #047857;">{{ active_products }} active</span> on catalog
+        </div>
+    </div>
+
+    <!-- 6. Low Stock Alerts -->
+    <div class="kpi-card card-danger">
+        <div class="kpi-header">
+            <span class="kpi-label">Low Stock Alerts</span>
+            <div class="kpi-icon" style="color: #dc2626; background: #fef2f2;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value" style="color: {% if low_stock_products > 0 %}#dc2626{% else %}inherit{% endif %};">{{ low_stock_products }}</div>
+        <div class="kpi-footer">
+            Below defined safety reorder limit
+        </div>
+    </div>
+
+    <!-- 7. Customer Feedback -->
+    <div class="kpi-card card-purple">
+        <div class="kpi-header">
+            <span class="kpi-label">Customer Reviews</span>
+            <div class="kpi-icon" style="color: #7c3aed; background: #f5f3ff;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value">{{ total_feedback }}</div>
+        <div class="kpi-footer">
+            <span style="font-weight: 700; color: #b45309;">{{ unread_feedback }} unread</span> submission{{ unread_feedback|pluralize }}
+        </div>
+    </div>
+
+    <!-- 8. Dispatched & In Transit -->
+    <div class="kpi-card card-teal">
+        <div class="kpi-header">
+            <span class="kpi-label">In Transit / Shipped</span>
+            <div class="kpi-icon" style="color: #0d9488; background: #f0fdfa;">
+                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+            </div>
+        </div>
+        <div class="kpi-value">{{ shipped_orders }}</div>
+        <div class="kpi-footer">
+            {{ delivered_orders }} completed deliveries
+        </div>
+    </div>
+</div>
+
+<!-- ================= ORDER PIPELINE WORKFLOW TABS ================= -->
+<div class="pipeline-tabs">
+    <a href="{% url 'admin_dashboard:orders' %}" class="pipeline-pill active">
+        <span>All Orders</span>
+        <span class="pipeline-count">{{ total_orders }}</span>
+    </a>
+    <a href="{% url 'admin_dashboard:orders' %}?status=pending" class="pipeline-pill">
+        <span>Pending Clearance</span>
+        <span class="pipeline-count">{{ pending_orders }}</span>
+    </a>
+    <a href="{% url 'admin_dashboard:orders' %}?status=confirmed" class="pipeline-pill">
+        <span>Confirmed</span>
+        <span class="pipeline-count">{{ confirmed_orders }}</span>
+    </a>
+    <a href="{% url 'admin_dashboard:orders' %}?status=processing" class="pipeline-pill">
+        <span>In Processing</span>
+        <span class="pipeline-count">{{ processing_orders }}</span>
+    </a>
+    <a href="{% url 'admin_dashboard:orders' %}?status=shipped" class="pipeline-pill">
+        <span>Dispatched</span>
+        <span class="pipeline-count">{{ shipped_orders }}</span>
+    </a>
+    <a href="{% url 'admin_dashboard:orders' %}?status=delivered" class="pipeline-pill">
+        <span>Delivered</span>
+        <span class="pipeline-count">{{ delivered_orders }}</span>
+    </a>
+    <a href="{% url 'admin_dashboard:orders' %}?status=cancelled" class="pipeline-pill">
+        <span>Cancelled</span>
+        <span class="pipeline-count">{{ cancelled_orders }}</span>
+    </a>
+</div>
+
+<!-- ================= CHARTS & SUPPORTING METRICS ================= -->
+<div class="overview-grid">
+    <!-- Chart: Sales & Orders Momentum -->
+    <div class="card" style="margin-bottom: 0;">
+        <div class="card-header">
+            <div>
+                <h3 class="card-title">7-Day Sales & Volume Momentum</h3>
+                <p class="card-subtitle">Daily gross revenue and order frequency tracking across store</p>
+            </div>
+            <a href="{% url 'admin_dashboard:reports' %}" class="btn-sm">Detailed Analytics &rarr;</a>
+        </div>
+        <div class="chart-container">
+            <canvas id="salesMomentumChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Quick Stock Alert & Top Selling -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+        <!-- Low Stock Items Card -->
+        <div class="card" style="margin-bottom: 0;">
+            <div class="card-header">
+                <div>
+                    <h3 class="card-title" style="color: #b45309;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        Stock Warnings
+                    </h3>
+                    <p class="card-subtitle">Commodities below safety reorder limit</p>
+                </div>
+                <a href="{% url 'admin_dashboard:inventory' %}" class="btn-sm">Manage</a>
+            </div>
+
+            {% if low_stock_items %}
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                {% for item in low_stock_items %}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #fffbeb; border-radius: var(--radius-md); border: 1px solid #fde68a;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.94rem; color: #92400e;">{{ item.name }}</div>
+                        <div style="font-size: 0.78rem; color: #b45309; margin-top: 2px;">SKU: {{ item.sku }} &bull; Min Limit: {{ item.low_stock_threshold }} {{ item.unit_name }}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge" style="background: #dc2626; color: #ffffff; padding: 6px 12px; font-size: 0.82rem;">{{ item.stock_quantity }} {{ item.unit_name }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 28px 0; color: #10b981; font-size: 0.95rem; font-weight: 700;">
+                ✓ All inventory levels are optimal!
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Top Selling Products Card -->
+        <div class="card" style="margin-bottom: 0;">
+            <div class="card-header">
+                <div>
+                    <h3 class="card-title">Top Moving Products</h3>
+                    <p class="card-subtitle">Highest volume ordered by units</p>
+                </div>
+            </div>
+
+            {% if top_products %}
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                {% for p in top_products %}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-heading);">{{ p.product_name }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">{{ p.total_qty }} units fulfilled</div>
+                    </div>
+                    <div style="font-weight: 800; font-size: 0.95rem; color: var(--primary);">
+                        ₹{{ p.total_sales|floatformat:2 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 24px 0; color: var(--text-muted); font-size: 0.88rem;">
+                No product order metrics recorded yet.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- ================= RECENT ORDERS TABLE ================= -->
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3 class="card-title">Recent Purchase Orders</h3>
+            <p class="card-subtitle">Latest inbound client orders requiring processing & dispatch</p>
+        </div>
+        <a href="{% url 'admin_dashboard:orders' %}" class="btn-primary-action">View Full Orders Pipeline &rarr;</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Customer / Company</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total (INR)</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in recent_orders %}
+                <tr>
+                    <td>
+                        <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" style="font-weight: 800; color: var(--primary); font-size: 0.96rem;">
+                            #{{ o.order_number }}
+                        </a>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 0.94rem;">{{ o.customer_name }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">{{ o.company_name|default:o.email }}</div>
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-muted);">{{ o.created_at|date:"M d, Y H:i" }}</td>
+                    <td style="font-weight: 600;">{{ o.items.count }} item{{ o.items.count|pluralize }}</td>
+                    <td style="font-weight: 800; color: var(--text-heading); font-size: 1rem;">₹{{ o.total_amount|floatformat:2 }}</td>
+                    <td>
+                        {% if o.payment_status == 'paid' %}
+                        <span class="badge badge-paid">PAID ({{ o.payment_method|upper }})</span>
+                        {% elif o.payment_status == 'verification_pending' %}
+                        <span class="badge badge-verification">PENDING UTR</span>
+                        {% else %}
+                        <span class="badge badge-unpaid">{{ o.get_payment_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ o.status }}">{{ o.get_status_display }}</span>
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" class="btn-sm btn-primary">
+                            Manage &rarr;
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 0.95rem;">
+                        No purchase orders recorded in this database yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('salesMomentumChart').getContext('2d');
+        const labels = {{ chart_dates_json|safe }};
+        const orderCounts = {{ chart_orders_json|safe }};
+        const revenue = {{ chart_revenue_json|safe }};
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Gross Sales (₹)',
+                        data: revenue,
+                        borderColor: '#17381b',
+                        backgroundColor: 'rgba(23, 56, 27, 0.08)',
+                        fill: true,
+                        tension: 0.35,
+                        yAxisID: 'yRevenue',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#17381b',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    },
+                    {
+                        label: 'Orders Count',
+                        data: orderCounts,
+                        borderColor: '#c59b27',
+                        backgroundColor: 'rgba(197, 155, 39, 0.1)',
+                        fill: false,
+                        tension: 0.2,
+                        yAxisID: 'yOrders',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#c59b27',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderDash: [5, 5]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: { family: 'Plus Jakarta Sans', size: 13, weight: 700 },
+                            usePointStyle: true,
+                            padding: 18
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#102413',
+                        titleFont: { family: 'Plus Jakarta Sans', size: 14, weight: 700 },
+                        bodyFont: { family: 'Plus Jakarta Sans', size: 13 },
+                        padding: 14,
+                        cornerRadius: 10,
+                        boxPadding: 6
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 }, color: '#64748b' }
+                    },
+                    yRevenue: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        ticks: {
+                            callback: function(val) { return '₹' + val.toLocaleString('en-IN'); },
+                            font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 },
+                            color: '#64748b'
+                        },
+                        grid: { color: 'rgba(226, 232, 240, 0.8)' }
+                    },
+                    yOrders: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        ticks: {
+                            stepSize: 1,
+                            font: { family: 'Plus Jakarta Sans', size: 12, weight: 600 },
+                            color: '#64748b'
+                        },
+                        grid: { drawOnChartArea: false }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

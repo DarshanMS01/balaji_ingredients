@@ -1,0 +1,497 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Order #{{ order.order_number }} — Balaji Ingredients Enterprise{% endblock %}
+
+{% block extra_head %}
+<style>
+    .order-header-bar {
+        background: #ffffff;
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        padding: 24px 28px;
+        margin-bottom: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        box-shadow: var(--shadow-card);
+    }
+
+    .order-title-wrap h2 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--text-heading);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        letter-spacing: -0.01em;
+    }
+
+    .order-title-wrap p {
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+        font-weight: 500;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 26px;
+    }
+
+    .status-timeline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 24px 0 12px;
+        position: relative;
+    }
+
+    .status-timeline::before {
+        content: '';
+        position: absolute;
+        top: 17px;
+        left: 24px;
+        right: 24px;
+        height: 3px;
+        background: var(--border-subtle);
+        z-index: 1;
+    }
+
+    .timeline-step {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .step-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--text-muted);
+    }
+
+    .timeline-step.completed .step-dot {
+        background: #10b981;
+        border-color: #10b981;
+        color: #ffffff;
+    }
+
+    .timeline-step.active .step-dot {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #ffffff;
+        box-shadow: 0 0 0 5px rgba(23, 56, 27, 0.16);
+    }
+
+    .timeline-step.cancelled .step-dot {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: #ffffff;
+    }
+
+    .step-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+    .timeline-step.active .step-label {
+        color: var(--primary);
+        font-weight: 800;
+    }
+
+    .section-box {
+        margin-bottom: 22px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-box:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: var(--text-heading);
+    }
+
+    @media (max-width: 1024px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block header_actions %}
+<div style="display: flex; gap: 10px;">
+    <a href="{% url 'admin_dashboard:orders' %}" class="btn-sm">
+        &larr; Back to Pipeline
+    </a>
+    <a href="{% url 'admin_dashboard:order_invoice' order.order_number %}" target="_blank" class="btn-primary-action" style="background: #ffffff; color: var(--primary); border: 1px solid var(--border-subtle);">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        <span>Print Tax Invoice</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Top Header Bar -->
+<div class="order-header-bar">
+    <div class="order-title-wrap">
+        <h2>
+            <span>Order #{{ order.order_number }}</span>
+            <span class="badge badge-{{ order.status }}" style="padding: 6px 14px; font-size: 0.85rem;">{{ order.get_status_display }}</span>
+        </h2>
+        <p>Placed on <strong>{{ order.created_at|date:"l, d F Y, h:i A" }}</strong> by <strong>{{ order.customer_name }}</strong></p>
+    </div>
+
+    <div style="text-align: right;">
+        <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">TOTAL ORDER VALUE</div>
+        <div style="font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 1.2;">₹{{ order.total_amount|floatformat:2 }}</div>
+    </div>
+</div>
+
+<!-- Order Status Progress Timeline -->
+<div class="card" style="margin-bottom: 26px; padding: 22px 28px;">
+    <div class="status-timeline">
+        <div class="timeline-step {% if order.status != 'cancelled' %}completed{% else %}cancelled{% endif %}">
+            <div class="step-dot">1</div>
+            <div class="step-label">Placed</div>
+        </div>
+
+        <div class="timeline-step {% if order.status in 'confirmed processing ready_dispatch shipped delivered' %}completed{% elif order.status == 'pending' %}active{% endif %}">
+            <div class="step-dot">2</div>
+            <div class="step-label">Confirmed</div>
+        </div>
+
+        <div class="timeline-step {% if order.status in 'processing ready_dispatch shipped delivered' %}completed{% elif order.status == 'confirmed' %}active{% endif %}">
+            <div class="step-dot">3</div>
+            <div class="step-label">Processing</div>
+        </div>
+
+        <div class="timeline-step {% if order.status in 'ready_dispatch shipped delivered' %}completed{% elif order.status == 'processing' %}active{% endif %}">
+            <div class="step-dot">4</div>
+            <div class="step-label">Dispatched</div>
+        </div>
+
+        <div class="timeline-step {% if order.status == 'delivered' %}completed{% elif order.status in 'ready_dispatch shipped' %}active{% endif %}">
+            <div class="step-dot">5</div>
+            <div class="step-label">Delivered</div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Details Grid -->
+<div class="detail-grid">
+    <!-- LEFT: Line Items & Logistics -->
+    <div>
+        <!-- Order Items Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Purchased Commodities & Specifications</h3>
+                <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted);">{{ items.count }} Line Item{{ items.count|pluralize }}</span>
+            </div>
+
+            <div class="table-responsive" style="border: none;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Commodity</th>
+                            <th>SKU</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th style="text-align: right;">Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>
+                                <div style="font-weight: 700; color: var(--text-heading); font-size: 0.98rem;">{{ item.product_name }}</div>
+                                {% if item.packaging %}
+                                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 3px;">Pkg: {{ item.packaging }}</div>
+                                {% endif %}
+                            </td>
+                            <td style="font-family: monospace; font-size: 0.86rem; color: var(--text-muted);">
+                                {{ item.product.sku|default:"N/A" }}
+                            </td>
+                            <td style="font-weight: 800; font-size: 0.98rem;">
+                                {{ item.quantity }} {{ item.unit_name|default:"kg" }}
+                            </td>
+                            <td style="font-weight: 600;">
+                                ₹{{ item.unit_price|floatformat:2 }}
+                            </td>
+                            <td style="text-align: right; font-weight: 800; color: var(--text-heading); font-size: 1.05rem;">
+                                ₹{{ item.total_price|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Totals Calculation -->
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end;">
+                <div style="min-width: 280px; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted);">
+                        <span>Subtotal:</span>
+                        <span style="font-weight: 700; color: var(--text-heading);">₹{{ order.subtotal|floatformat:2 }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.92rem; color: var(--text-muted);">
+                        <span>Applicable Tax / GST:</span>
+                        <span style="font-weight: 700; color: var(--text-heading);">₹{{ order.tax_amount|floatformat:2 }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: var(--primary); padding-top: 10px; border-top: 1px dashed var(--border-subtle);">
+                        <span>Grand Total:</span>
+                        <span>₹{{ order.total_amount|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dispatch & Logistics Info -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Dispatch & Logistics Execution</h3>
+                {% if order.dispatch_date %}
+                <span class="badge badge-shipped" style="padding: 6px 14px; font-size: 0.85rem;">Dispatched on {{ order.dispatch_date|date:"d M Y" }}</span>
+                {% endif %}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                <div>
+                    <div class="info-label">Carrier / Transport Co.</div>
+                    <div class="info-value">{{ order.carrier_name|default:"Not assigned yet" }}</div>
+                </div>
+                <div>
+                    <div class="info-label">Consignment / Tracking #</div>
+                    <div class="info-value" style="font-family: monospace;">{{ order.tracking_consignment_no|default:"N/A" }}</div>
+                </div>
+                <div>
+                    <div class="info-label">Vehicle / Lorry Reg #</div>
+                    <div class="info-value" style="font-family: monospace;">{{ order.vehicle_number|default:"N/A" }}</div>
+                </div>
+            </div>
+
+            {% if order.shipping_address %}
+            <div style="margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+                <div class="info-label">Destination Warehouse / Delivery Address</div>
+                <div style="font-size: 0.94rem; color: var(--text-heading); margin-top: 5px; line-height: 1.5; font-weight: 600;">
+                    {{ order.shipping_address|linebreaksbr }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if order.notes %}
+            <div style="margin-top: 20px; padding: 16px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                <div class="info-label">Customer Order Instructions</div>
+                <div style="font-size: 0.92rem; color: var(--text-body); margin-top: 4px;">{{ order.notes }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Administrative Audit Trail -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Administrative Audit Trail</h3>
+            </div>
+
+            {% if audit_trail %}
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                {% for log in audit_trail %}
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 14px; background: #f8fafc; border-radius: var(--radius-md); font-size: 0.88rem;">
+                    <div>
+                        <span style="font-weight: 800; color: var(--primary);">{{ log.user.username|default:"System" }}</span>:
+                        <span style="font-weight: 600; color: var(--text-heading);">{{ log.action }}</span> —
+                        <span style="color: var(--text-body);">{{ log.details }}</span>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; margin-left: 14px; font-weight: 600;">
+                        {{ log.created_at|date:"d M H:i" }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="font-size: 0.9rem; color: var(--text-muted); padding: 14px 0;">No administrative changes recorded for this order yet.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- RIGHT: Controls & Payment Verification -->
+    <div>
+        <!-- Payment Verification Panel -->
+        <div class="card" style="border: 2px solid {% if order.payment_status == 'paid' %}#a7f3d0{% elif order.payment_status == 'verification_pending' %}#fde68a{% else %}var(--border-subtle){% endif %};">
+            <div class="card-header">
+                <h3 class="card-title">Payment Status</h3>
+                {% if order.payment_status == 'paid' %}
+                <span class="badge badge-paid" style="padding: 6px 12px; font-size: 0.82rem;">PAID & VERIFIED</span>
+                {% elif order.payment_status == 'verification_pending' %}
+                <span class="badge badge-verification" style="padding: 6px 12px; font-size: 0.82rem;">NEEDS VERIFICATION</span>
+                {% else %}
+                <span class="badge badge-unpaid" style="padding: 6px 12px; font-size: 0.82rem;">{{ order.get_payment_status_display }}</span>
+                {% endif %}
+            </div>
+
+            <div class="section-box">
+                <div class="info-label">Payment Method</div>
+                <div class="info-value">{{ order.get_payment_method_display }}</div>
+            </div>
+
+            {% if order.upi_utr_number %}
+            <div class="section-box" style="background: #fffbeb; padding: 14px; border-radius: var(--radius-md); border: 1px solid #fde68a;">
+                <div class="info-label" style="color: #92400e;">Submitted UPI UTR / Ref Number</div>
+                <div style="font-size: 1.25rem; font-weight: 800; font-family: monospace; color: #78350f; margin-top: 3px;">
+                    {{ order.upi_utr_number }}
+                </div>
+                <div style="font-size: 0.78rem; color: #b45309; margin-top: 5px; font-weight: 500;">
+                    Verify this reference in your business bank statement before marking confirmed.
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Payment Action Form -->
+            <form method="POST" action="{% url 'admin_dashboard:order_verify_payment' order.order_number %}" style="margin-top: 18px;">
+                {% csrf_token %}
+                <div style="display: flex; gap: 10px;">
+                    {% if order.payment_status != 'paid' %}
+                    <button type="submit" name="action" value="verify_paid" class="btn-sm btn-primary" style="flex: 1; justify-content: center; background: #047857; border-color: #065f46; padding: 10px;">
+                        ✓ Mark as Paid & Verified
+                    </button>
+                    {% endif %}
+                    {% if order.payment_status != 'failed' and order.status != 'delivered' %}
+                    <button type="submit" name="action" value="mark_failed" class="btn-sm btn-danger" style="flex: 1; justify-content: center; padding: 10px;">
+                        ✗ Mark Failed
+                    </button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <!-- Status Transition & Dispatch Management -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Order Workflow Transition</h3>
+            </div>
+
+            <form method="POST" action="{% url 'admin_dashboard:order_update_status' order.order_number %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="form-label">Workflow Status *</label>
+                    <select name="status" class="form-select" required>
+                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending Clearance</option>
+                        <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                        <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing / Packaging</option>
+                        <option value="ready_dispatch" {% if order.status == 'ready_dispatch' %}selected{% endif %}>Ready for Dispatch</option>
+                        <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped / In Transit</option>
+                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered & Closed</option>
+                        <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Logistics Carrier Name</label>
+                    <input type="text" name="carrier_name" class="form-input" value="{{ order.carrier_name|default:'' }}" placeholder="e.g. VRL Logistics, Safechem">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tracking / Bilty / LR Number</label>
+                    <input type="text" name="tracking_no" class="form-input" value="{{ order.tracking_consignment_no|default:'' }}" placeholder="e.g. VRL-BLR-84920">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Vehicle Registration Number</label>
+                    <input type="text" name="vehicle_no" class="form-input" value="{{ order.vehicle_number|default:'' }}" placeholder="e.g. KA-01-AB-1234">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Reason / Status Note</label>
+                    <input type="text" name="reason" class="form-input" placeholder="e.g. Loaded on truck for Hyderabad warehouse">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Append Internal Admin Note</label>
+                    <textarea name="admin_notes" class="form-textarea" rows="2" placeholder="Private internal note..."></textarea>
+                </div>
+
+                {% if order.admin_notes %}
+                <div style="margin-bottom: 18px; padding: 12px; background: #f8fafc; border-radius: var(--radius-md); font-size: 0.82rem; font-family: monospace; white-space: pre-wrap; color: var(--text-body); max-height: 140px; overflow-y: auto;">
+                    {{ order.admin_notes }}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn-primary-action" style="width: 100%; justify-content: center; padding: 12px;">
+                    Save Status & Dispatch Details
+                </button>
+            </form>
+        </div>
+
+        <!-- Customer Profile Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Client Account Info</h3>
+            </div>
+
+            <div class="section-box">
+                <div class="info-label">Customer Name</div>
+                <div class="info-value">{{ order.customer_name }}</div>
+            </div>
+
+            {% if order.company_name %}
+            <div class="section-box">
+                <div class="info-label">Company / Business Entity</div>
+                <div class="info-value">{{ order.company_name }}</div>
+            </div>
+            {% endif %}
+
+            <div class="section-box">
+                <div class="info-label">Email Address</div>
+                <div class="info-value">
+                    <a href="mailto:{{ order.email }}" style="color: var(--primary);">{{ order.email }}</a>
+                </div>
+            </div>
+
+            <div class="section-box">
+                <div class="info-label">Phone Contact</div>
+                <div class="info-value">
+                    <a href="tel:{{ order.phone }}" style="color: var(--primary);">{{ order.phone }}</a>
+                </div>
+            </div>
+
+            {% if order.gst_number %}
+            <div class="section-box">
+                <div class="info-label">GSTIN Identification</div>
+                <div class="info-value" style="font-family: monospace;">{{ order.gst_number }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

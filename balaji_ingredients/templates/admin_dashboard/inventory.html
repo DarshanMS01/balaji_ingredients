@@ -1,0 +1,238 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Inventory & Warehouse Stock — Balaji Ingredients Enterprise{% endblock %}
+
+{% block header_actions %}
+<button class="btn-primary-action" onclick="openModal('inventoryAdjustModal')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    <span>Stock Adjustment</span>
+</button>
+{% endblock %}
+
+{% block content %}
+<!-- Inventory KPI Summary -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 26px;">
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.6px;">Total Physical Stock</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: var(--primary); margin-top: 8px; line-height: 1.1;">{{ total_stock_units|floatformat:0 }} Units</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Across all active wholesale commodities</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #b45309; letter-spacing: 0.6px;">Low Stock Warnings</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: #b45309; margin-top: 8px; line-height: 1.1;">{{ low_stock_count }} Commodities</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Under defined safety reorder limit</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #dc2626; letter-spacing: 0.6px;">Out of Stock</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: #dc2626; margin-top: 8px; line-height: 1.1;">{{ out_of_stock_count }} Commodities</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Zero physical units available in warehouse</div>
+    </div>
+</div>
+
+<!-- Stock Filter Bar -->
+<div class="card" style="padding: 18px 24px; margin-bottom: 26px;">
+    <form method="GET" action="{% url 'admin_dashboard:inventory' %}" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1; flex-wrap: wrap;">
+            <input type="text" name="q" class="form-input" placeholder="Search commodity by name or SKU..." value="{{ q }}" style="max-width: 340px;">
+            <select name="status" class="form-select" style="width: auto; padding: 10px 14px; font-size: 0.9rem;" onchange="this.form.submit()">
+                <option value="">All Stock Health</option>
+                <option value="low" {% if status_filter == 'low' %}selected{% endif %}>Low Stock Warnings Only</option>
+                <option value="out" {% if status_filter == 'out' %}selected{% endif %}>Out of Stock Only</option>
+                <option value="healthy" {% if status_filter == 'healthy' %}selected{% endif %}>Healthy Levels Only</option>
+            </select>
+            <button type="submit" class="btn-sm btn-primary">Filter</button>
+            {% if q or status_filter %}
+            <a href="{% url 'admin_dashboard:inventory' %}" class="btn-sm">Reset</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Stock Table -->
+<div class="card" style="padding: 0; overflow: hidden; margin-bottom: 30px;">
+    <div class="card-header" style="padding: 20px 24px; margin-bottom: 0;">
+        <h3 class="card-title">Warehouse Inventory Status</h3>
+    </div>
+
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Commodity & SKU</th>
+                    <th>Category</th>
+                    <th>Current Stock</th>
+                    <th>Alert Threshold</th>
+                    <th>Status Badge</th>
+                    <th>Wholesale Rate</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 0.96rem;">{{ p.name }}</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted); font-family: monospace; margin-top: 2px;">SKU: {{ p.sku|default:"N/A" }}</div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: #f1f5f9; color: var(--text-body); font-size: 0.82rem;">{{ p.category.name }}</span>
+                    </td>
+                    <td style="font-size: 1.05rem; font-weight: 800; color: var(--text-heading);">
+                        {{ p.stock_quantity }} {{ p.unit_name }}
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-muted); font-weight: 600;">
+                        {{ p.low_stock_threshold }} {{ p.unit_name }}
+                    </td>
+                    <td>
+                        {% if p.stock_quantity <= 0 %}
+                        <span class="badge" style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 6px 12px;">OUT OF STOCK</span>
+                        {% elif p.stock_quantity <= p.low_stock_threshold %}
+                        <span class="badge" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; padding: 6px 12px;">LOW STOCK</span>
+                        {% else %}
+                        <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 6px 12px;">OPTIMAL</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-weight: 600;">
+                        ₹{{ p.unit_price|floatformat:2 }} / {{ p.unit_name }}
+                    </td>
+                    <td style="text-align: right;">
+                        <button class="btn-sm btn-primary" onclick="quickStockAdjust('{{ p.id }}')">
+                            Adjust &rarr;
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                        No commodities match current stock filter.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Recent Stock Movements Audit History -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="card-header" style="padding: 20px 24px; margin-bottom: 0;">
+        <h3 class="card-title">Recent Stock In/Out Log Movements</h3>
+    </div>
+
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Commodity</th>
+                    <th>Movement Type</th>
+                    <th>Quantity Change</th>
+                    <th>Before &rarr; After</th>
+                    <th>Admin User</th>
+                    <th>Reason / Reference</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in recent_movements %}
+                <tr>
+                    <td style="font-size: 0.84rem; color: var(--text-muted); white-space: nowrap;">
+                        {{ m.created_at|date:"d M Y H:i" }}
+                    </td>
+                    <td style="font-weight: 700; color: var(--text-heading); font-size: 0.94rem;">
+                        {{ m.product.name }}
+                    </td>
+                    <td>
+                        {% if m.movement_type == 'in' %}
+                        <span class="badge" style="background: #ecfdf5; color: #047857; padding: 5px 12px;">+ INBOUND</span>
+                        {% elif m.movement_type == 'out' %}
+                        <span class="badge" style="background: #fef2f2; color: #dc2626; padding: 5px 12px;">- OUTBOUND</span>
+                        {% else %}
+                        <span class="badge" style="background: #eff6ff; color: #1d4ed8; padding: 5px 12px;">ADJUSTMENT</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-weight: 800; font-size: 0.98rem;">
+                        {{ m.quantity }}
+                    </td>
+                    <td style="font-size: 0.88rem; font-family: monospace; font-weight: 600;">
+                        {{ m.previous_stock }} &rarr; {{ m.new_stock }}
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-muted); font-weight: 600;">
+                        {{ m.user.username|default:"System" }}
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-body);">
+                        {{ m.reason }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 0.95rem;">
+                        No stock adjustment events recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL: INVENTORY ADJUST -->
+<div id="inventoryAdjustModal" class="modal-backdrop">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'admin_dashboard:inventory_adjust' %}">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h3 class="modal-title">Record Warehouse Stock Movement</h3>
+                <button type="button" class="modal-close" onclick="closeModal('inventoryAdjustModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Commodity *</label>
+                    <select id="adjust_modal_select" name="product_id" class="form-select" required>
+                        <option value="">Choose Commodity</option>
+                        {% for p in products %}
+                        <option value="{{ p.id }}">{{ p.name }} (Current: {{ p.stock_quantity }} {{ p.unit_name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Movement Direction *</label>
+                    <select name="adjust_type" class="form-select" required>
+                        <option value="in">Inbound (Stock Received / Farm Purchase)</option>
+                        <option value="out">Outbound (Manual Dispatch / Wastage / Spoilage)</option>
+                        <option value="adjustment">Reset to Physical Audit Count</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Units Quantity *</label>
+                    <input type="number" step="0.01" name="quantity" class="form-input" required placeholder="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Reason / Batch Ref / Justification</label>
+                    <input type="text" name="reason" class="form-input" placeholder="e.g. Inbound shipment receipt #409 from Guntur AP">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-sm" onclick="closeModal('inventoryAdjustModal')">Cancel</button>
+                <button type="submit" class="btn-primary-action">Apply Stock Log</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function quickStockAdjust(productId) {
+        const select = document.getElementById('adjust_modal_select');
+        if (select) {
+            select.value = productId;
+        }
+        openModal('inventoryAdjustModal');
+    }
+</script>
+{% endblock %}

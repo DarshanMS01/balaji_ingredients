@@ -1,0 +1,165 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Payments & UPI Gateway — Balaji Ingredients Enterprise{% endblock %}
+
+{% block extra_head %}
+<style>
+    .payment-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        margin-bottom: 26px;
+    }
+
+    .config-split {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 26px;
+    }
+
+    @media (max-width: 1024px) {
+        .config-split {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Volume KPI Grid -->
+<div class="payment-stats-grid">
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #047857; letter-spacing: 0.6px;">Realized Settled Volume</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: #047857; margin-top: 8px; line-height: 1.1;">₹{{ total_paid_vol|floatformat:2 }}</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Verified UPI and paid transactions</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #b45309; letter-spacing: 0.6px;">Pending UTR Verification</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: #b45309; margin-top: 8px; line-height: 1.1;">₹{{ pending_verification_vol|floatformat:2 }}</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Submitted by buyers awaiting review</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--text-heading); letter-spacing: 0.6px;">Uncollected COD Pipeline</div>
+        <div style="font-size: 2.1rem; font-weight: 800; color: var(--text-heading); margin-top: 8px; line-height: 1.1;">₹{{ cod_pending_vol|floatformat:2 }}</div>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Cash receivables upon delivery</div>
+    </div>
+</div>
+
+<div class="config-split">
+    <!-- Business UPI QR Setup Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Corporate UPI QR Gateway</h3>
+        </div>
+
+        <form method="POST" action="{% url 'admin_dashboard:payments_config_update' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">Business UPI VPA ID *</label>
+                <input type="text" name="business_upi_id" class="form-input" value="{{ payment_config.business_upi_id }}" required placeholder="e.g. balajiingredients@icici">
+                <div class="form-help">Displayed directly to buyers for UPI instant transfer.</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Payee Legal Name *</label>
+                <input type="text" name="payee_name" class="form-input" value="{{ payment_config.payee_name }}" required placeholder="e.g. Balaji Ingredients Pvt Ltd">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Official Bank QR Code Image</label>
+                {% if payment_config.qr_image %}
+                <div style="margin-bottom: 14px; text-align: center; padding: 16px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                    <img src="{{ payment_config.qr_image.url }}" alt="Business UPI QR" style="max-width: 160px; border-radius: 8px;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; font-weight: 600;">Current Active Merchant QR</div>
+                </div>
+                {% endif %}
+                <input type="file" name="qr_image" class="form-input" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn-primary-action" style="width: 100%; justify-content: center; padding: 12px;">
+                Save Payment Settings
+            </button>
+        </form>
+    </div>
+
+    <!-- Recent Payment Transactions Table -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <div class="card-header" style="padding: 20px 24px; margin-bottom: 0;">
+            <h3 class="card-title">Recent Payment Records & UTR Verifications</h3>
+        </div>
+
+        <div class="table-responsive" style="border: none;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Buyer</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>UTR / Reference</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in orders %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" style="font-weight: 800; color: var(--primary); font-size: 0.96rem;">
+                                #{{ o.order_number }}
+                            </a>
+                        </td>
+                        <td>
+                            <div style="font-weight: 700;">{{ o.customer_name }}</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">{{ o.phone }}</div>
+                        </td>
+                        <td style="font-weight: 800; color: var(--text-heading); font-size: 1rem;">
+                            ₹{{ o.total_amount|floatformat:2 }}
+                        </td>
+                        <td>
+                            <span class="badge" style="background: #f1f5f9; color: var(--text-body); font-size: 0.82rem;">
+                                {{ o.get_payment_method_display|upper }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if o.upi_utr_number %}
+                            <span style="font-family: monospace; font-size: 0.92rem; font-weight: 800; color: #b45309; background: #fffbeb; padding: 4px 8px; border-radius: 4px; border: 1px dashed #fde68a;">
+                                {{ o.upi_utr_number }}
+                            </span>
+                            {% else %}
+                            <span style="color: var(--text-muted); font-size: 0.85rem;">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if o.payment_status == 'paid' %}
+                            <span class="badge badge-paid" style="padding: 6px 12px;">PAID</span>
+                            {% elif o.payment_status == 'verification_pending' %}
+                            <span class="badge badge-verification" style="padding: 6px 12px;">NEEDS VERIFICATION</span>
+                            {% elif o.payment_status == 'cod' %}
+                            <span class="badge badge-pending" style="padding: 6px 12px;">COD UNPAID</span>
+                            {% else %}
+                            <span class="badge badge-unpaid" style="padding: 6px 12px;">{{ o.get_payment_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" class="btn-sm btn-primary">
+                                Verify &rarr;
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                            No payment transactions recorded.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

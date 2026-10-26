@@ -331,3 +331,24 @@ class PaymentConfig(models.Model):
             )
         return config
 
+
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='password_reset_otps')
+    identifier = models.CharField(max_length=150, help_text="Email address or normalized phone number")
+    method = models.CharField(max_length=10, choices=[('email', 'Email'), ('mobile', 'Mobile')], default='email')
+    otp_hash = models.CharField(max_length=128, help_text="Secure hashed one-time password")
+    reset_token = models.CharField(max_length=64, blank=True, null=True, db_index=True)
+    attempts = models.PositiveIntegerField(default=0, help_text="Incorrect verification attempt count")
+    is_used = models.BooleanField(default=False, help_text="Invalidated after successful password reset")
+    expires_at = models.DateTimeField(help_text="Expiration timestamp (strictly 5 minutes from generation)")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Password Reset OTP'
+        verbose_name_plural = 'Password Reset OTPs'
+
+    def __str__(self):
+        return f"OTP for {self.identifier} ({self.method})"
+
+

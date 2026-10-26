@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'core',
     'products',
     'portal',
+    'admin_dashboard',
     'corsheaders',
 ]
 

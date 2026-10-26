@@ -1,0 +1,103 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Administrative Audit Trail — Balaji Ingredients Enterprise{% endblock %}
+
+{% block content %}
+<!-- Search Filter -->
+<div class="card" style="padding: 18px 24px; margin-bottom: 26px;">
+    <form method="GET" action="{% url 'admin_dashboard:audit_logs' %}" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1; max-width: 480px;">
+            <input type="text" name="action" class="form-input" placeholder="Filter by action name or keyword..." value="{{ action_filter }}">
+            <button type="submit" class="btn-sm btn-primary">Filter</button>
+            {% if action_filter %}
+            <a href="{% url 'admin_dashboard:audit_logs' %}" class="btn-sm">Reset</a>
+            {% endif %}
+        </div>
+        <div style="font-size: 0.88rem; color: var(--text-muted); font-weight: 600;">
+            Showing <strong style="color: var(--text-heading);">{{ page_obj.paginator.count }}</strong> audit record{{ page_obj.paginator.count|pluralize }}
+        </div>
+    </form>
+</div>
+
+<!-- Logs Table -->
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Administrator</th>
+                    <th>Action</th>
+                    <th>Target Model</th>
+                    <th>Object ID</th>
+                    <th>IP Address</th>
+                    <th>Event Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in page_obj %}
+                <tr>
+                    <td style="font-size: 0.84rem; color: var(--text-muted); white-space: nowrap;">
+                        {{ log.created_at|date:"d M Y H:i:s" }}
+                    </td>
+                    <td>
+                        <span style="font-weight: 800; color: var(--primary); font-size: 0.94rem;">
+                            {{ log.user.username|default:"System" }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: #f1f5f9; color: var(--text-heading); font-weight: 700; padding: 6px 12px; font-size: 0.82rem;">
+                            {{ log.action }}
+                        </span>
+                    </td>
+                    <td style="font-family: monospace; font-size: 0.86rem; color: var(--text-muted);">
+                        {{ log.model_name|default:"—" }}
+                    </td>
+                    <td style="font-family: monospace; font-size: 0.86rem; font-weight: 600;">
+                        {{ log.object_id|default:"—" }}
+                    </td>
+                    <td style="font-family: monospace; font-size: 0.82rem; color: var(--text-muted);">
+                        {{ log.ip_address|default:"127.0.0.1" }}
+                    </td>
+                    <td style="font-size: 0.88rem; color: var(--text-body); max-width: 360px; line-height: 1.4;">
+                        {{ log.details }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                        No administrative audit events recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div style="padding: 18px 24px; border-top: 1px solid var(--border-subtle); background: #ffffff;">
+        <div class="pagination-container" style="margin: 0;">
+            <div>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
+            <div class="pagination-nav">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if action_filter %}&action={{ action_filter }}{% endif %}" class="pagination-link">&laquo; Prev</a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <span class="pagination-link active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}{% if action_filter %}&action={{ action_filter }}{% endif %}" class="pagination-link">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if action_filter %}&action={{ action_filter }}{% endif %}" class="pagination-link">Next &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

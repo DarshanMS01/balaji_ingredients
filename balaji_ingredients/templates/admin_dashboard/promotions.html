@@ -1,0 +1,163 @@
+{% extends "admin_dashboard/base_admin.html" %}
+
+{% block title %}Coupons & Promotional Offers — Balaji Ingredients Enterprise{% endblock %}
+
+{% block header_actions %}
+<button class="btn-primary-action" onclick="openModal('addCouponModal')">
+    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    <span>Create Discount Coupon</span>
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-responsive" style="border: none;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Coupon Code</th>
+                    <th>Campaign Title</th>
+                    <th>Discount Rate</th>
+                    <th>Min. Order Basket</th>
+                    <th>Max Discount Cap</th>
+                    <th>Usage Redemptions</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in promotions %}
+                <tr>
+                    <td>
+                        <span style="font-family: monospace; font-size: 1rem; font-weight: 800; color: var(--primary); background: #ecfdf5; padding: 6px 14px; border-radius: var(--radius-sm); border: 1.5px dashed #10b981;">
+                            {{ p.code }}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 0.96rem;">{{ p.title }}</div>
+                        {% if p.description %}
+                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">{{ p.description }}</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="font-weight: 800; font-size: 0.98rem; color: #b45309;">
+                            {% if p.discount_type == 'percentage' %}
+                            {{ p.discount_value }}% OFF
+                            {% else %}
+                            ₹{{ p.discount_value|floatformat:2 }} FLAT
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td style="font-weight: 700;">
+                        ₹{{ p.min_order_value|floatformat:2 }}
+                    </td>
+                    <td>
+                        {% if p.max_discount_amount %}
+                        <span style="font-weight: 700;">₹{{ p.max_discount_amount|floatformat:2 }}</span>
+                        {% else %}
+                        <span style="color: var(--text-muted);">No Cap</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="font-size: 0.9rem; font-weight: 700;">{{ p.times_used }} / {{ p.usage_limit }}</div>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_dashboard:promotion_toggle' p.id %}" title="Toggle active status">
+                            {% if p.is_active %}
+                            <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; cursor: pointer; padding: 6px 12px;">Active</span>
+                            {% else %}
+                            <span class="badge" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; cursor: pointer; padding: 6px 12px;">Inactive</span>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td style="text-align: right;">
+                        <form method="POST" action="{% url 'admin_dashboard:promotion_delete' p.id %}" style="display: inline;" onsubmit="return confirm('Delete coupon \'{{ p.code|escapejs }}\'?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-sm btn-danger" title="Delete Coupon">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
+                        No promotional discount campaigns active.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL: ADD COUPON -->
+<div id="addCouponModal" class="modal-backdrop">
+    <div class="modal-dialog">
+        <form method="POST" action="{% url 'admin_dashboard:promotion_add' %}">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h3 class="modal-title">Create B2B Discount Coupon</h3>
+                <button type="button" class="modal-close" onclick="closeModal('addCouponModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">Coupon Code (Uppercase) *</label>
+                        <input type="text" name="code" class="form-input" required placeholder="e.g. HARVEST10" style="text-transform: uppercase; font-family: monospace; font-weight: 700;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Discount Scheme *</label>
+                        <select name="discount_type" class="form-select" required>
+                            <option value="percentage">Percentage Discount (%)</option>
+                            <option value="flat">Flat Value Discount (₹)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="form-label">Campaign Title *</label>
+                        <input type="text" name="title" class="form-input" required placeholder="e.g. Bulk Commodity Monsoon Offer">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Discount Value *</label>
+                        <input type="number" step="0.01" name="discount_value" class="form-input" required placeholder="e.g. 10 or 500">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Minimum Order Basket (₹)</label>
+                        <input type="number" step="0.01" name="min_order_value" class="form-input" value="1000.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Max Discount Cap (₹) (Optional)</label>
+                        <input type="number" step="0.01" name="max_discount_amount" class="form-input" placeholder="e.g. 5000">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Total Redemptions Allowed</label>
+                        <input type="number" name="usage_limit" class="form-input" value="100">
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="form-label">Internal Description</label>
+                        <textarea name="description" class="form-textarea" rows="2" placeholder="Campaign notes, commercial terms..."></textarea>
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.94rem; font-weight: 600;">
+                            <input type="checkbox" name="is_active" checked style="accent-color: var(--primary); width: 18px; height: 18px;">
+                            <span>Active (Available for checkout redemption)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-sm" onclick="closeModal('addCouponModal')">Cancel</button>
+                <button type="submit" class="btn-primary-action">Launch Promotion</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

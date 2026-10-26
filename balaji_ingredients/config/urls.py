@@ -7,6 +7,7 @@ from portal import views as portal_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin-dashboard/', include('admin_dashboard.urls')),
     
     # Direct Login page routes (serving luxury split-card login)
     path('login/', portal_views.login_page_view, name='login'),
