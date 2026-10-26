@@ -109,10 +109,15 @@
                         <span class="badge" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 6px 12px;">Suspended</span>
                         {% endif %}
                     </td>
-                    <td style="text-align: right;">
-                        <a href="{% url 'admin_dashboard:customer_toggle_status' u.id %}" class="btn-sm {% if u.is_active %}btn-danger{% else %}btn-primary{% endif %}" onclick="return confirm('Toggle access status for {{ u.username|escapejs }}?');">
+                    <td style="text-align: right; white-space:nowrap;">
+                        <a href="{% url 'admin_dashboard:customer_detail' u.id %}" class="btn-sm" style="margin-right:6px;">View</a>
+                        <form method="POST" action="{% url 'admin_dashboard:customer_toggle_status' u.id %}" class="d-inline"
+                              onsubmit="return confirm('Toggle access status for {{ u.username|escapejs }}?');">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-sm {% if u.is_active %}btn-danger{% else %}btn-primary{% endif %}">
                             {% if u.is_active %}Suspend{% else %}Activate{% endif %}
-                        </a>
+                          </button>
+                        </form>
                     </td>
                 </tr>
                 {% empty %}

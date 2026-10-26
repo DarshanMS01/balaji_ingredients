@@ -1,0 +1,188 @@
+{% extends "admin_dashboard/base_admin.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-heading">{{ customer.get_full_name|default:customer.username }}</h1>
+    <p class="page-sub">Customer ID #{{ customer.id }} &nbsp;·&nbsp; Joined {{ customer.date_joined|date:"d M Y" }}</p>
+  </div>
+  <div class="header-actions">
+    <a href="{% url 'admin_dashboard:customers' %}" class="btn-outline">← Back to Customers</a>
+    {% if user.is_superuser %}
+    <form method="POST" action="{% url 'admin_dashboard:customer_send_reset' customer.id %}" class="d-inline"
+          onsubmit="return confirm('Send password reset OTP to {{ customer.email }}?');">
+      {% csrf_token %}
+      <button type="submit" class="btn-secondary">📧 Send Reset OTP</button>
+    </form>
+    {% endif %}
+    <form method="POST" action="{% url 'admin_dashboard:customer_toggle_status' customer.id %}" class="d-inline"
+          onsubmit="return confirm('Toggle account status for {{ customer.username }}?');">
+      {% csrf_token %}
+      {% if customer.is_active %}
+      <button type="submit" class="btn-danger">⛔ Disable Account</button>
+      {% else %}
+      <button type="submit" class="btn-success">✅ Enable Account</button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+{% if messages %}
+<div class="messages-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="detail-grid">
+  <!-- Account Info Card -->
+  <div class="detail-card">
+    <div class="card-header-strip">
+      <h3>👤 Account Details</h3>
+      <span class="status-badge {% if customer.is_active %}badge-success{% else %}badge-danger{% endif %}">
+        {% if customer.is_active %}Active{% else %}Disabled{% endif %}
+      </span>
+    </div>
+    <div class="info-table">
+      <div class="info-row"><span>Username</span><strong>{{ customer.username }}</strong></div>
+      <div class="info-row"><span>Email</span><strong>{{ customer.email|default:"—" }}</strong></div>
+      <div class="info-row"><span>Full Name</span><strong>{{ customer.get_full_name|default:"—" }}</strong></div>
+      <div class="info-row"><span>Date Joined</span><strong>{{ customer.date_joined|date:"d M Y, H:i" }}</strong></div>
+      <div class="info-row"><span>Last Login</span><strong>{{ customer.last_login|date:"d M Y, H:i"|default:"Never" }}</strong></div>
+    </div>
+  </div>
+
+  <!-- Company Profile Card -->
+  <div class="detail-card">
+    <div class="card-header-strip"><h3>🏢 Company Profile</h3></div>
+    {% if profile %}
+    <div class="info-table">
+      <div class="info-row"><span>Company</span><strong>{{ profile.company_name }}</strong></div>
+      <div class="info-row"><span>Business Type</span><strong>{{ profile.get_business_type_display }}</strong></div>
+      <div class="info-row"><span>Phone</span><strong>{{ profile.phone|default:"—" }}</strong></div>
+      <div class="info-row"><span>GSTIN</span><strong>{{ profile.gstin|default:"—" }}</strong></div>
+      <div class="info-row"><span>PAN</span><strong>{{ profile.pan_number|default:"—" }}</strong></div>
+      <div class="info-row"><span>City / State</span><strong>{{ profile.city }}, {{ profile.state }} — {{ profile.pincode }}</strong></div>
+      <div class="info-row"><span>Address</span><strong>{{ profile.address_line1 }} {{ profile.address_line2 }}</strong></div>
+      <div class="info-row"><span>GST Verified</span>
+        <strong>{% if profile.is_verified %}✅ Verified{% else %}⏳ Pending{% endif %}</strong>
+      </div>
+    </div>
+    {% else %}
+    <p class="empty-state">No company profile linked to this account.</p>
+    {% endif %}
+  </div>
+
+  <!-- Revenue Summary Card -->
+  <div class="detail-card stat-card-highlight">
+    <div class="card-header-strip"><h3>💰 Lifetime Value</h3></div>
+    <div class="kpi-big">₹{{ cust_revenue|floatformat:2 }}</div>
+    <p class="kpi-label">Total Paid / Delivered Orders</p>
+    <div class="kpi-row-small">
+      <div><span>Total Orders</span><strong>{{ customer_orders|length }}</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- Order History -->
+<div class="section-card" style="margin-top:28px;">
+  <div class="card-header-strip"><h3>📦 Order History (Last 20)</h3></div>
+  {% if customer_orders %}
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead><tr>
+        <th>Order #</th><th>Date</th><th>Items</th>
+        <th>Total</th><th>Payment</th><th>Status</th><th>Action</th>
+      </tr></thead>
+      <tbody>
+      {% for order in customer_orders %}
+      <tr>
+        <td><strong>{{ order.order_number }}</strong></td>
+        <td>{{ order.created_at|date:"d M Y" }}</td>
+        <td>{{ order.items.count }}</td>
+        <td>₹{{ order.total_amount|floatformat:2 }}</td>
+        <td>
+          <span class="status-badge
+            {% if order.payment_status == 'paid' %}badge-success
+            {% elif order.payment_status == 'verification_pending' %}badge-warning
+            {% elif order.payment_status == 'failed' %}badge-danger
+            {% else %}badge-info{% endif %}">
+            {{ order.get_payment_status_display }}
+          </span>
+        </td>
+        <td>
+          <span class="status-badge
+            {% if order.status == 'delivered' %}badge-success
+            {% elif order.status == 'cancelled' %}badge-danger
+            {% elif order.status == 'shipped' %}badge-info
+            {% else %}badge-warning{% endif %}">
+            {{ order.get_status_display }}
+          </span>
+        </td>
+        <td><a href="{% url 'admin_dashboard:order_detail' order.order_number %}" class="tbl-link">View →</a></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty-state">No orders found for this customer.</p>
+  {% endif %}
+</div>
+
+<!-- Support Tickets -->
+{% if support_tickets %}
+<div class="section-card" style="margin-top:24px;">
+  <div class="card-header-strip"><h3>🎫 Support Tickets</h3></div>
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead><tr><th>Ticket ID</th><th>Subject</th><th>Type</th><th>Status</th><th>Created</th></tr></thead>
+      <tbody>
+      {% for ticket in support_tickets %}
+      <tr>
+        <td><strong>{{ ticket.ticket_id }}</strong></td>
+        <td>{{ ticket.subject }}</td>
+        <td>{{ ticket.get_support_type_display }}</td>
+        <td>
+          <span class="status-badge
+            {% if ticket.status == 'open' %}badge-warning
+            {% elif ticket.status == 'resolved' %}badge-success
+            {% elif ticket.status == 'closed' %}badge-info
+            {% else %}badge-primary{% endif %}">
+            {{ ticket.get_status_display }}
+          </span>
+        </td>
+        <td>{{ ticket.created_at|date:"d M Y" }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.detail-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:24px; }
+@media(max-width:900px){ .detail-grid{grid-template-columns:1fr 1fr;} }
+@media(max-width:600px){ .detail-grid{grid-template-columns:1fr;} }
+.detail-card { background:#fff; border-radius:12px; border:1px solid #e8ede9; padding:22px 24px; }
+.stat-card-highlight { background:linear-gradient(135deg,#17381b 0%,#2d5a31 100%); color:#fff; }
+.stat-card-highlight .card-header-strip h3 { color:#fff; }
+.kpi-big { font-size:2.4rem; font-weight:800; margin:12px 0 4px; color:#f5c842; }
+.kpi-label { font-size:0.85rem; opacity:0.8; margin:0; }
+.kpi-row-small { margin-top:18px; display:flex; gap:24px; }
+.kpi-row-small div span { display:block; font-size:0.8rem; opacity:0.75; }
+.kpi-row-small div strong { font-size:1.1rem; }
+.info-table { margin-top:12px; }
+.info-row { display:flex; justify-content:space-between; align-items:center;
+  padding:8px 0; border-bottom:1px solid #f0f3f1; font-size:0.9rem; gap:12px; }
+.info-row:last-child { border-bottom:none; }
+.info-row span { color:#6b7c72; white-space:nowrap; }
+.info-row strong { text-align:right; word-break:break-word; }
+.header-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.btn-success { background:#17381b; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:0.9rem; }
+.btn-danger { background:#dc2626; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:0.9rem; }
+.btn-secondary { background:#c59b27; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:0.9rem; }
+</style>
+{% endblock %}

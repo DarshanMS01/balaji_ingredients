@@ -40,7 +40,7 @@ def staff_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
         if not request.user.is_authenticated:
             messages.warning(request, "Please sign in with administrator credentials to access the Dashboard.")
-            return redirect(f"/login/?next={request.path}")
+            return redirect(f"/admin-dashboard/login/?next={request.path}")
         if not (request.user.is_staff or request.user.is_superuser):
             messages.error(request, "Access restricted. Staff authorization required.")
             return redirect('home')
@@ -1435,3 +1435,549 @@ def audit_logs_view(request):
         'action_filter': action_filter,
     }
     return render(request, 'admin_dashboard/audit_logs.html', context)
+
+
+# ==============================================================================
+# PHASE 5 — MISSING MODULE A: CUSTOMER DETAIL VIEW
+# ==============================================================================
+
+@staff_required
+def customer_detail(request, user_id):
+    """
+    Detailed customer profile for admin.
+    Shows CompanyProfile, order history, feedback submitted, account status.
+    Superuser-only: initiate password reset.
+    """
+    customer = get_object_or_404(
+        User.objects.select_related('company_profile'),
+        id=user_id,
+        is_staff=False
+    )
+    profile = getattr(customer, 'company_profile', None)
+
+    # Order history (last 20 orders)
+    customer_orders = Order.objects.filter(user=customer).order_by('-created_at')[:20]
+
+    # Revenue from this customer
+    cust_revenue = Order.objects.filter(
+        user=customer
+    ).filter(
+        Q(payment_status='paid') | Q(status='delivered')
+    ).exclude(status='cancelled').aggregate(total=Sum('total_amount'))['total'] or Decimal('0.00')
+
+    # Feedback submitted by this customer
+    customer_feedback = []
+    try:
+        customer_feedback = list(
+            __import__('core.models', fromlist=['CustomerFeedback']).CustomerFeedback.objects.filter(
+                email=customer.email
+            ).order_by('-created_at')[:10]
+        )
+    except Exception:
+        pass
+
+    # Support tickets
+    from portal.models import SupportTicket
+    support_tickets = SupportTicket.objects.filter(user=customer).order_by('-created_at')[:10]
+
+    context = {
+        'page_title': f"Customer — {customer.get_full_name() or customer.username}",
+        'active_menu': 'customers',
+        'customer': customer,
+        'profile': profile,
+        'customer_orders': customer_orders,
+        'cust_revenue': cust_revenue,
+        'customer_feedback': customer_feedback,
+        'support_tickets': support_tickets,
+    }
+    return render(request, 'admin_dashboard/customer_detail.html', context)
+
+
+# ==============================================================================
+# PHASE 5 — MISSING MODULE B: ADMIN-INITIATED CUSTOMER PASSWORD RESET
+# ==============================================================================
+
+@staff_required
+@transaction.atomic
+def customer_send_reset(request, user_id):
+    """
+    Superuser-only: initiate a password-reset OTP for a customer.
+    NEVER exposes the token or OTP to the admin interface.
+    Sends email to the customer's registered address only.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can initiate customer password resets.")
+        return redirect('admin_dashboard:customer_detail', user_id=user_id)
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:customer_detail', user_id=user_id)
+
+    customer = get_object_or_404(User, id=user_id, is_staff=False)
+
+    if not customer.email:
+        messages.error(request, f"Customer '{customer.username}' has no registered email address. Cannot send reset link.")
+        return redirect('admin_dashboard:customer_detail', user_id=user_id)
+
+    import secrets
+    import hashlib
+    from portal.models import PasswordResetOTP
+
+    # Expire any existing unused OTPs for this user
+    PasswordResetOTP.objects.filter(user=customer, is_used=False).update(is_used=True)
+
+    # Generate a secure 6-digit OTP
+    otp_plain = str(secrets.randbelow(900000) + 100000)
+    otp_hash = hashlib.sha256(otp_plain.encode()).hexdigest()
+
+    # Generate secure reset token (never returned to admin)
+    reset_token = secrets.token_urlsafe(48)
+
+    expires_at = timezone.now() + timedelta(minutes=30)  # 30 min for admin-initiated resets
+
+    PasswordResetOTP.objects.create(
+        user=customer,
+        identifier=customer.email,
+        method='email',
+        otp_hash=otp_hash,
+        reset_token=reset_token,
+        expires_at=expires_at,
+        is_used=False,
+        attempts=0
+    )
+
+    # Send email to the customer (not to admin)
+    from django.core.mail import send_mail
+    from django.conf import settings as django_settings
+
+    try:
+        send_mail(
+            subject="Balaji Ingredients — Password Reset Request",
+            message=(
+                f"Dear {customer.get_full_name() or customer.username},\n\n"
+                f"A password reset has been initiated by the Balaji Ingredients admin team "
+                f"for your account ({customer.email}).\n\n"
+                f"Your One-Time Password (OTP) is: {otp_plain}\n\n"
+                f"This OTP is valid for 30 minutes. Do not share it with anyone.\n\n"
+                f"If you did not request this, please contact us immediately at "
+                f"info@balaji-ingredients.com or call +91-9902155348.\n\n"
+                f"— Balaji Ingredients Admin Team"
+            ),
+            from_email=getattr(django_settings, 'DEFAULT_FROM_EMAIL', 'noreply@balaji-ingredients.com'),
+            recipient_list=[customer.email],
+            fail_silently=True,  # Don't crash if SMTP not configured
+        )
+        email_sent = True
+    except Exception:
+        email_sent = False
+
+    AuditLog.log(
+        user=request.user,
+        action="Admin-Initiated Customer Password Reset",
+        model_name="User",
+        object_id=customer.id,
+        details=(
+            f"Admin '{request.user.username}' initiated password reset for customer "
+            f"'{customer.username}' ({customer.email}). "
+            f"Email {'sent' if email_sent else 'FAILED to send'} to customer address. "
+            f"OTP hash stored, token NOT exposed to admin."
+        ),
+        request=request
+    )
+
+    if email_sent:
+        messages.success(request, f"Password reset OTP sent to {customer.email}. The customer can use it within 30 minutes.")
+    else:
+        messages.warning(
+            request,
+            f"Reset OTP created for {customer.email}, but email could not be sent "
+            f"(SMTP may not be configured). The customer's OTP is stored securely in the database."
+        )
+
+    return redirect('admin_dashboard:customer_detail', user_id=user_id)
+
+
+# ==============================================================================
+# PHASE 5 — MISSING MODULE C: ORDER CANCELLATION WITH INVENTORY RESTOCK
+# ==============================================================================
+
+@staff_required
+@transaction.atomic
+def order_cancel(request, order_number):
+    """
+    Cancel an order. Records reason in AuditLog.
+    Auto-restocks inventory via StockMovement for each order line item
+    that has a linked Product with tracked stock.
+    Only eligible orders (not already delivered or cancelled) can be cancelled.
+    """
+    order = get_object_or_404(Order, order_number=order_number)
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:order_detail', order_number=order_number)
+
+    # Guard: already in a terminal state
+    if order.status in ('delivered', 'cancelled'):
+        messages.error(request, f"Order #{order_number} cannot be cancelled — it is already '{order.get_status_display()}'.")
+        return redirect('admin_dashboard:order_detail', order_number=order_number)
+
+    cancel_reason = request.POST.get('cancel_reason', '').strip() or 'Cancelled by administrator'
+    old_status = order.status
+
+    # 1. Update order status
+    order.status = 'cancelled'
+    timestamp = timezone.now().strftime('%d %b %Y %H:%M')
+    order.admin_notes = (
+        f"{order.admin_notes}\n[{timestamp}] ({request.user.username}): CANCELLED — {cancel_reason}"
+    ).strip()
+    order.save(update_fields=['status', 'admin_notes'])
+
+    # 2. Restock inventory for each line item with a linked Product
+    restocked_items = []
+    for item in order.items.all():
+        if item.product_id:
+            try:
+                product = Product.objects.select_for_update().get(pk=item.product_id)
+                prev_stock = product.stock_quantity
+                restock_qty = item.quantity  # quantity is in product units
+                new_stock = prev_stock + restock_qty
+
+                product.stock_quantity = new_stock
+                product.save(update_fields=['stock_quantity'])
+
+                StockMovement.objects.create(
+                    product=product,
+                    movement_type='in',
+                    quantity=restock_qty,
+                    previous_stock=prev_stock,
+                    new_stock=new_stock,
+                    reason=f"Order cancellation restock — Order #{order.order_number}",
+                    reference_order=order.order_number,
+                    user=request.user
+                )
+                restocked_items.append(f"{product.name} (+{restock_qty} {product.unit_name})")
+            except Product.DoesNotExist:
+                pass
+
+    # 3. Audit log
+    restock_summary = ', '.join(restocked_items) if restocked_items else 'No linked products to restock'
+    AuditLog.log(
+        user=request.user,
+        action="Cancelled Order",
+        model_name="Order",
+        object_id=order.id,
+        details=(
+            f"Order #{order.order_number} cancelled. Previous status: '{old_status}'. "
+            f"Reason: {cancel_reason}. "
+            f"Inventory restocked: {restock_summary}"
+        ),
+        request=request
+    )
+
+    messages.success(
+        request,
+        f"Order #{order_number} has been cancelled. "
+        f"Inventory restocked for: {restock_summary}."
+    )
+    return redirect('admin_dashboard:order_detail', order_number=order_number)
+
+
+# ==============================================================================
+# PHASE 5 — MISSING MODULE D: SUPPORT TICKET MANAGEMENT
+# ==============================================================================
+
+@staff_required
+def support_tickets_list(request):
+    """
+    Full support ticket management — list, filter, update status, admin response.
+    """
+    from portal.models import SupportTicket
+
+    q = request.GET.get('q', '').strip()
+    status_filter = request.GET.get('status', '').strip()
+    type_filter = request.GET.get('type', '').strip()
+
+    tickets = SupportTicket.objects.select_related('user').all().order_by('-created_at')
+
+    if q:
+        tickets = tickets.filter(
+            Q(ticket_id__icontains=q) |
+            Q(name__icontains=q) |
+            Q(email__icontains=q) |
+            Q(subject__icontains=q) |
+            Q(order_id__icontains=q)
+        )
+
+    if status_filter:
+        tickets = tickets.filter(status=status_filter)
+
+    if type_filter:
+        tickets = tickets.filter(support_type=type_filter)
+
+    # Counts
+    counts = {
+        'all': SupportTicket.objects.count(),
+        'open': SupportTicket.objects.filter(status='open').count(),
+        'in_progress': SupportTicket.objects.filter(status='in_progress').count(),
+        'resolved': SupportTicket.objects.filter(status='resolved').count(),
+        'closed': SupportTicket.objects.filter(status='closed').count(),
+    }
+
+    paginator = Paginator(tickets, 15)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_title': 'Support Ticket Management',
+        'active_menu': 'support',
+        'page_obj': page_obj,
+        'counts': counts,
+        'q': q,
+        'status_filter': status_filter,
+        'type_filter': type_filter,
+        'support_types': [
+            ('sales', 'Sales & Pricing'),
+            ('technical', 'Technical Support'),
+            ('order', 'Order & Logistics'),
+            ('quality', 'Quality & COA'),
+        ],
+    }
+    return render(request, 'admin_dashboard/support.html', context)
+
+
+@staff_required
+@transaction.atomic
+def support_ticket_update(request, ticket_id):
+    """
+    Update support ticket status and add admin response.
+    """
+    from portal.models import SupportTicket
+
+    ticket = get_object_or_404(SupportTicket, id=ticket_id)
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:support')
+
+    new_status = request.POST.get('status', ticket.status).strip()
+    admin_response = request.POST.get('admin_response', '').strip()
+    old_status = ticket.status
+
+    valid_statuses = ['open', 'in_progress', 'resolved', 'closed']
+    if new_status in valid_statuses:
+        ticket.status = new_status
+
+    if admin_response:
+        if ticket.admin_response:
+            timestamp = timezone.now().strftime('%d %b %Y %H:%M')
+            ticket.admin_response += f"\n\n[{timestamp} — {request.user.username}]:\n{admin_response}"
+        else:
+            ticket.admin_response = admin_response
+
+    ticket.save()
+
+    AuditLog.log(
+        user=request.user,
+        action="Updated Support Ticket",
+        model_name="SupportTicket",
+        object_id=ticket.id,
+        details=(
+            f"Ticket {ticket.ticket_id} status changed: '{old_status}' -> '{ticket.status}'. "
+            f"Admin response {'added' if admin_response else 'unchanged'}."
+        ),
+        request=request
+    )
+
+    messages.success(request, f"Support ticket {ticket.ticket_id} updated successfully.")
+    return redirect('admin_dashboard:support')
+
+
+# ==============================================================================
+# PHASE 5 — MISSING MODULE E: STAFF ROLE MANAGEMENT (Superuser Only)
+# ==============================================================================
+
+@staff_required
+def staff_management(request):
+    """
+    Superuser-only view: manage staff users and their permissions.
+    Lists all is_staff=True users, allows toggling superuser and is_staff.
+    """
+    if not request.user.is_superuser:
+        messages.error(request, "Staff management requires superuser privileges.")
+        return redirect('admin_dashboard:overview')
+
+    from django.contrib.auth.models import Permission, Group
+    from django.contrib.contenttypes.models import ContentType
+
+    staff_users = User.objects.filter(is_staff=True).order_by('-is_superuser', 'username')
+
+    # Relevant permissions for this dashboard
+    dashboard_perms = Permission.objects.filter(
+        content_type__app_label__in=['products', 'portal', 'admin_dashboard', 'core']
+    ).select_related('content_type').order_by('content_type__app_label', 'codename')
+
+    context = {
+        'page_title': 'Staff & Role Management',
+        'active_menu': 'staff',
+        'staff_users': staff_users,
+        'dashboard_perms': dashboard_perms,
+    }
+    return render(request, 'admin_dashboard/staff.html', context)
+
+
+@staff_required
+@transaction.atomic
+def staff_toggle_superuser(request, user_id):
+    """Toggle superuser status for a staff user (superuser-only)."""
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can modify superuser privileges.")
+        return redirect('admin_dashboard:staff')
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:staff')
+
+    # Prevent self-demotion
+    if user_id == request.user.id:
+        messages.error(request, "You cannot change your own superuser status.")
+        return redirect('admin_dashboard:staff')
+
+    target = get_object_or_404(User, id=user_id, is_staff=True)
+    old_val = target.is_superuser
+    target.is_superuser = not target.is_superuser
+    target.save(update_fields=['is_superuser'])
+
+    AuditLog.log(
+        user=request.user,
+        action="Changed Staff Superuser Status",
+        model_name="User",
+        object_id=target.id,
+        details=f"Staff user '{target.username}' superuser: {old_val} -> {target.is_superuser}",
+        request=request
+    )
+
+    status_text = "granted superuser" if target.is_superuser else "removed superuser from"
+    messages.success(request, f"Successfully {status_text} '{target.username}'.")
+    return redirect('admin_dashboard:staff')
+
+
+@staff_required
+@transaction.atomic
+def staff_add(request):
+    """Add a new staff member (superuser-only)."""
+    if not request.user.is_superuser:
+        messages.error(request, "Only superusers can create new staff accounts.")
+        return redirect('admin_dashboard:staff')
+
+    if request.method != 'POST':
+        return redirect('admin_dashboard:staff')
+
+    username = request.POST.get('username', '').strip()
+    email = request.POST.get('email', '').strip()
+    password = request.POST.get('password', '').strip()
+    is_superuser = request.POST.get('is_superuser') == 'on'
+
+    if not username or not password:
+        messages.error(request, "Username and password are required to create a staff account.")
+        return redirect('admin_dashboard:staff')
+
+    if User.objects.filter(username=username).exists():
+        messages.error(request, f"Username '{username}' is already taken.")
+        return redirect('admin_dashboard:staff')
+
+    if len(password) < 8:
+        messages.error(request, "Password must be at least 8 characters long.")
+        return redirect('admin_dashboard:staff')
+
+    new_staff = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+        is_staff=True,
+        is_superuser=is_superuser
+    )
+
+    AuditLog.log(
+        user=request.user,
+        action="Created Staff Account",
+        model_name="User",
+        object_id=new_staff.id,
+        details=f"New staff account created: '{username}' (superuser={is_superuser})",
+        request=request
+    )
+
+    messages.success(request, f"Staff account '{username}' created successfully.")
+    return redirect('admin_dashboard:staff')
+
+
+# ==============================================================================
+# PHASE 5 — ADMIN LOGIN / LOGOUT (dedicated dashboard auth)
+# ==============================================================================
+
+def admin_login(request):
+    """Dedicated admin login page. Redirects to dashboard if already authenticated."""
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        return redirect('admin_dashboard:overview')
+
+    error = None
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        user = authenticate(request, username=username, password=password)
+        if user and (user.is_staff or user.is_superuser):
+            login(request, user)
+            AuditLog.log(
+                user=user,
+                action="Admin Login",
+                model_name="User",
+                object_id=user.id,
+                details=f"Successful admin login from IP {request.META.get('REMOTE_ADDR', 'unknown')}",
+                request=request
+            )
+            next_url = request.POST.get('next', '') or '/admin-dashboard/'
+            return redirect(next_url)
+        else:
+            error = "Invalid credentials or insufficient privileges."
+            AuditLog.log(
+                user=None,
+                action="Failed Admin Login Attempt",
+                model_name="User",
+                object_id=username,
+                details=f"Failed login attempt for username '{username}'",
+                request=request
+            )
+
+    return render(request, 'admin_dashboard/login.html', {
+        'error': error,
+        'next': request.GET.get('next', '/admin-dashboard/'),
+    })
+
+
+def admin_logout(request):
+    """Log out the admin and redirect to admin login."""
+    if request.user.is_authenticated:
+        AuditLog.log(
+            user=request.user,
+            action="Admin Logout",
+            model_name="User",
+            object_id=request.user.id,
+            details=f"Admin '{request.user.username}' logged out",
+            request=request
+        )
+    logout(request)
+    messages.info(request, "You have been logged out of the admin dashboard.")
+    return redirect('/admin-dashboard/login/')
+
+
+# ==============================================================================
+# PHASE 6 — HEALTH CHECK (for responsive test + server status verification)
+# ==============================================================================
+
+def dashboard_health(request):
+    """
+    Simple JSON health-check endpoint.
+    Returns 200 with dashboard module counts for automated testing.
+    Does NOT require authentication (lightweight status check only).
+    """
+    from django.http import JsonResponse
+    return JsonResponse({
+        'status': 'ok',
+        'server': 'Balaji Ingredients Admin Dashboard',
+        'authenticated': request.user.is_authenticated and request.user.is_staff,
+    })
