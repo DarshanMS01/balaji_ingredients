@@ -1068,23 +1068,30 @@ def contact_mark_read(request, message_id):
 @staff_required
 def payments_overview(request):
     payment_config = PaymentConfig.get_active_config()
+    from portal.models import PaymentTransaction
+
+    # Verified transactions from PaymentTransaction
+    transactions = PaymentTransaction.objects.select_related('order', 'order__user').all().order_by('-created_at')
 
     orders_with_payments = Order.objects.filter(
-        Q(payment_method='upi') | Q(payment_status='paid') | Q(upi_utr_number__gt='')
+        Q(payment_method='upi') | Q(payment_status__in=['paid', 'partial', 'verification_pending']) | Q(upi_utr_number__gt='')
     ).order_by('-created_at')
 
-    # Financial stats
-    total_paid_vol = Order.objects.filter(payment_status='paid').aggregate(s=Sum('total_amount'))['s'] or 0
-    pending_verification_vol = Order.objects.filter(payment_status='verification_pending').aggregate(s=Sum('total_amount'))['s'] or 0
-    cod_pending_vol = Order.objects.filter(payment_method='cod', status__in=['pending', 'confirmed', 'processing', 'shipped']).aggregate(s=Sum('total_amount'))['s'] or 0
+    # Financial stats using Decimal-safe aggregations
+    verified_paid_vol = PaymentTransaction.objects.filter(status='success').aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
+    pending_verification_vol = Order.objects.filter(payment_status='verification_pending').aggregate(s=Sum('total_amount'))['s'] or Decimal('0.00')
+    partial_balance_due = sum([o.outstanding_balance for o in Order.objects.filter(payment_status='partial')])
+    cod_pending_vol = Order.objects.filter(payment_method='cod', status__in=['pending', 'confirmed', 'processing', 'shipped']).aggregate(s=Sum('total_amount'))['s'] or Decimal('0.00')
 
     context = {
         'page_title': 'Payments & Transactions',
         'active_menu': 'payments',
         'payment_config': payment_config,
         'orders': orders_with_payments[:25],
-        'total_paid_vol': total_paid_vol,
+        'transactions': transactions[:35],
+        'total_paid_vol': verified_paid_vol,
         'pending_verification_vol': pending_verification_vol,
+        'partial_balance_due': partial_balance_due,
         'cod_pending_vol': cod_pending_vol,
     }
     return render(request, 'admin_dashboard/payments.html', context)
@@ -1117,6 +1124,96 @@ def payments_config_update(request):
 
         messages.success(request, "Business UPI payment configuration updated successfully.")
     return redirect('admin_dashboard:payments')
+
+
+@staff_required
+@transaction.atomic
+def order_reconcile_payment(request, order_number):
+    """
+    Manual administrator reconciliation workflow for exceptional transactions.
+    Requires staff authorization, explicit reason, verified amount, and audit logging.
+    Never bypasses calculation logic.
+    """
+    import uuid
+    from portal.models import PaymentTransaction
+
+    order = get_object_or_404(Order, order_number=order_number)
+
+    if request.method == 'POST':
+        action = request.POST.get('action', 'reconcile_manual')  # 'reconcile_manual', 'mark_failed'
+        amount_raw = request.POST.get('amount')
+        evidence_ref = request.POST.get('evidence_ref', '').strip()
+        reason = request.POST.get('reason', '').strip()
+
+        if not reason or not evidence_ref:
+            messages.error(request, "Reconciliation requires an independent bank reference and mandatory justification reason.")
+            return redirect('admin_dashboard:order_detail', order_number=order.order_number)
+
+        if action == 'reconcile_manual':
+            try:
+                rec_amount = Decimal(str(amount_raw or order.outstanding_balance))
+                if rec_amount <= Decimal('0.00'):
+                    messages.error(request, "Reconciliation amount must be greater than zero.")
+                    return redirect('admin_dashboard:order_detail', order_number=order.order_number)
+            except (InvalidOperation, ValueError):
+                messages.error(request, "Invalid numeric reconciliation amount.")
+                return redirect('admin_dashboard:order_detail', order_number=order.order_number)
+
+            # Record PaymentTransaction
+            txn = PaymentTransaction.objects.create(
+                order=order,
+                transaction_id=f"REC-{uuid.uuid4().hex[:10].upper()}",
+                provider='upi_manual',
+                amount=rec_amount,
+                status='success',
+                provider_payment_id=evidence_ref,
+                signature_verified=True,
+                verified_at=timezone.now(),
+                notes=f"Reconciled by {request.user.username}. Ref: {evidence_ref}. Reason: {reason}"
+            )
+
+            total_verified = order.verified_paid_amount
+            if total_verified >= order.total_amount:
+                order.payment_status = 'paid'
+                if order.status == 'pending':
+                    order.status = 'confirmed'
+                if total_verified > order.total_amount:
+                    excess = total_verified - order.total_amount
+                    order.admin_notes = (
+                        f"{order.admin_notes}\n[{timezone.now().strftime('%d %b %Y %H:%M')}] "
+                        f"EXCESS PAYMENT RECONCILED: ₹{excess:.2f} beyond invoice total."
+                    ).strip()
+            elif total_verified > Decimal('0.00'):
+                order.payment_status = 'partial'
+
+            order.save()
+
+            AuditLog.log(
+                user=request.user,
+                action="Manual Payment Reconciliation",
+                model_name="Order",
+                object_id=order.id,
+                details=(
+                    f"Admin '{request.user.username}' reconciled ₹{rec_amount:.2f} for Order #{order.order_number}. "
+                    f"Ref: {evidence_ref}. Reason: {reason}. Status: {order.get_payment_status_display()}."
+                ),
+                request=request
+            )
+            messages.success(request, f"Successfully reconciled ₹{rec_amount:.2f} for Order #{order.order_number}.")
+        else:
+            order.payment_status = 'failed'
+            order.save(update_fields=['payment_status'])
+            AuditLog.log(
+                user=request.user,
+                action="Payment Marked Failed",
+                model_name="Order",
+                object_id=order.id,
+                details=f"Admin '{request.user.username}' marked payment failed. Ref: {evidence_ref}. Reason: {reason}.",
+                request=request
+            )
+            messages.warning(request, f"Payment for Order #{order.order_number} marked as failed.")
+
+    return redirect('admin_dashboard:order_detail', order_number=order.order_number)
 
 
 # ==============================================================================

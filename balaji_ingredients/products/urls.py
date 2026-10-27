@@ -26,6 +26,9 @@ urlpatterns = [
     path('api/order-status/<str:order_number>/', views.order_status_api, name='order_status_api'),
     path('api/order-method/<str:order_number>/', views.order_update_method_api, name='order_update_method_api'),
     path('api/order-utr/<str:order_number>/', views.order_submit_utr_api, name='order_submit_utr_api'),
+    path('api/payment-create/<str:order_number>/', views.payment_create_api, name='payment_create_api'),
+    path('api/payment-verify/<str:order_number>/', views.payment_verify_api, name='payment_verify_api'),
+    path('api/payment-webhook/', views.payment_webhook_view, name='payment_webhook_view'),
 
     path('<slug:category_slug>/', views.category_detail, name='category_detail'),
     path('<slug:category_slug>/<slug:product_slug>/', views.product_detail, name='product_detail'),

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Payment — Order #{{ order.order_number }} | {{ SITE_NAME }}{% endblock %}
+{% block title %}Payment & Settlement — Order #{{ order.order_number }} | {{ SITE_NAME }}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -26,12 +26,12 @@
   }
 
   .payment-page-container {
-    max-width: 980px;
+    max-width: 1040px;
     margin: 2rem auto 4.5rem auto;
     padding: 0 1.25rem;
   }
 
-  /* Breadcrumb & Navigation helper */
+  /* Breadcrumb & Navigation */
   .payment-nav-strip {
     display: flex;
     align-items: center;
@@ -57,57 +57,6 @@
   .payment-nav-back:hover {
     color: var(--brand-gold);
     text-decoration: underline;
-  }
-
-  /* Step Progress Indicator (Amazon/Flipkart inspired) */
-  .checkout-step-progress {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    background: #FFFFFF;
-    border: 1px solid var(--brand-border);
-    border-radius: 14px;
-    padding: 0.85rem 1.25rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-  .step-node {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #94A3B8;
-  }
-  .step-node.active {
-    color: var(--brand-forest);
-  }
-  .step-node.completed {
-    color: #16A34A;
-  }
-  .step-num {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    background: #F1F5F9;
-    color: #64748B;
-  }
-  .step-node.active .step-num {
-    background: var(--brand-forest);
-    color: #FFFFFF;
-  }
-  .step-node.completed .step-num {
-    background: #16A34A;
-    color: #FFFFFF;
-  }
-  .step-divider {
-    color: #CBD5E1;
-    font-size: 0.85rem;
   }
 
   /* Master Card */
@@ -164,7 +113,7 @@
     align-items: start;
   }
 
-  /* Left Side: Order Summary */
+  /* Left Side: Ledger & Summary */
   .order-summary-panel {
     display: flex;
     flex-direction: column;
@@ -214,155 +163,131 @@
     justify-content: space-between;
   }
   .summary-total-row .lbl {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 800;
     color: var(--brand-forest);
   }
   .summary-total-row .val {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 800;
     color: var(--brand-forest);
   }
 
-  /* Right Side: Step Panels */
-  .payment-step-panel {
+  /* Financial Balance Ledger Box */
+  .balance-ledger-box {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 1.15rem 1.35rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .ledger-highlight {
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-top: 8px;
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ledger-highlight.due {
+    background: #FEF3C7;
+    border: 1px solid #FCD34D;
+    color: #92400E;
+  }
+  .ledger-highlight.paid {
+    background: #DCFCE7;
+    border: 1px solid #86EFAC;
+    color: #166534;
   }
 
-  /* ══════════════════════════════════════════════════════════════
-     STEP 1: CHOOSE YOUR PAYMENT METHOD (Flipkart / Amazon Inspired)
-     ══════════════════════════════════════════════════════════════ */
-  .method-selection-card {
+  /* Status Pill Component */
+  .payment-status-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    margin-bottom: 1.5rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  .status-awaiting {
+    background: #FEF9C3;
+    border: 1.5px solid #FDE047;
+    color: #854D0E;
+  }
+  .status-verifying {
+    background: #EFF6FF;
+    border: 1.5px solid #93C5FD;
+    color: #1E40AF;
+  }
+  .status-paid {
+    background: #DCFCE7;
+    border: 1.5px solid #86EFAC;
+    color: #166534;
+  }
+  .status-partial {
+    background: #FFF7ED;
+    border: 1.5px solid #FDBA74;
+    color: #9A3412;
+  }
+  .status-failed {
+    background: #FEE2E2;
+    border: 1.5px solid #FCA5A5;
+    color: #991B1B;
+  }
+
+  /* Tabs for Payment Mode Selection */
+  .payment-mode-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .mode-tab-btn {
+    flex: 1;
+    padding: 12px 14px;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    background: #F8FAFC;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  .mode-tab-btn.active {
+    background: #FFFFFF;
+    border-color: var(--brand-forest);
+    color: var(--brand-forest);
+    box-shadow: 0 4px 12px rgba(23, 56, 35, 0.08);
+  }
+
+  /* Mode Content Cards */
+  .mode-content-pane {
+    display: none;
     background: #FFFFFF;
     border: 1.5px solid #EFEAE0;
     border-radius: 16px;
     padding: 1.75rem;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
   }
-  .method-card-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: var(--brand-forest);
-    margin: 0 0 4px 0;
-  }
-  .method-card-subtitle {
-    font-size: 0.88rem;
-    color: var(--brand-text-muted);
-    margin: 0 0 1.25rem 0;
-  }
-
-  /* Radio Card List */
-  .method-options-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .method-option-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.95rem 1.15rem;
-    border: 1.5px solid #E2E8F0;
-    border-radius: 12px;
-    cursor: pointer;
-    background: #FFFFFF;
-    transition: all 0.2s ease;
-  }
-  .method-option-item:hover {
-    border-color: #94A3B8;
-    background: #FAF8F5;
-  }
-  .method-option-item.selected {
-    border-color: var(--brand-forest-border);
-    background: var(--brand-forest-soft);
-    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.18);
-  }
-
-  .method-item-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .custom-radio-circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #CBD5E1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-  .method-option-item.selected .custom-radio-circle {
-    border-color: #16A34A;
-    background: #16A34A;
-  }
-  .custom-radio-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.2s;
-  }
-  .method-option-item.selected .custom-radio-dot {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .method-app-icon-wrap {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: #F8FAFC;
-    border: 1px solid #E2E8F0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    font-weight: bold;
-    flex-shrink: 0;
-  }
-  .method-info-text .app-name {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #0F172A;
+  .mode-content-pane.active {
     display: block;
   }
-  .method-info-text .app-sub {
-    font-size: 0.78rem;
-    color: #64748B;
-  }
 
-  .method-badge-pill {
-    font-size: 0.72rem;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 12px;
-    background: #F1F5F9;
-    color: #475569;
-  }
-  .method-badge-pill.popular {
-    background: #FEF3C7;
-    color: #92400E;
-  }
-
-  /* Continue to Payment button */
-  .btn-continue-payment {
+  /* Gateway Button */
+  .btn-pay-gateway {
     width: 100%;
     background: linear-gradient(135deg, #173823 0%, #102819 100%);
     color: #FFFFFF;
     font-weight: 700;
     font-size: 1.05rem;
-    padding: 14px 20px;
+    padding: 15px 20px;
     border-radius: 12px;
     border: none;
     cursor: pointer;
@@ -371,112 +296,14 @@
     justify-content: center;
     gap: 8px;
     box-shadow: 0 4px 14px rgba(23, 56, 35, 0.3);
-    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
   }
-  .btn-continue-payment:hover {
+  .btn-pay-gateway:hover {
     background: #102819;
     transform: translateY(-1px);
     box-shadow: 0 6px 18px rgba(23, 56, 35, 0.4);
   }
 
-  /* Security note */
-  .security-notice-strip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 1rem;
-    font-size: 0.78rem;
-    color: #64748B;
-    text-align: center;
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     STEP 2: ONE SHARED QR SCANNER PANEL (Only shown after Continue)
-     ══════════════════════════════════════════════════════════════ */
-  .qr-scanner-step-panel {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background: #FFFFFF;
-    border: 1.5px solid #EFEAE0;
-    border-radius: 16px;
-    padding: 1.75rem;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
-  }
-  .qr-scanner-step-panel.show {
-    display: flex;
-  }
-
-  .qr-step-top-bar {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #F1ECE1;
-  }
-  .btn-back-to-methods {
-    background: none;
-    border: none;
-    color: var(--brand-forest);
-    font-weight: 700;
-    font-size: 0.85rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    border-radius: 6px;
-  }
-  .btn-back-to-methods:hover {
-    background: #FAF8F5;
-    text-decoration: underline;
-  }
-  .selected-method-tag {
-    background: #F0FDF4;
-    border: 1px solid #BBF7D0;
-    color: #166534;
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  /* Status Pill */
-  .payment-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 1.15rem;
-    transition: all 0.2s;
-  }
-  .payment-status-pill.pending {
-    background: #FEF9C3;
-    border: 1px solid #FDE047;
-    color: #854D0E;
-  }
-  .payment-status-pill.stopped {
-    background: #FEE2E2;
-    border: 1px solid #FECACA;
-    color: #991B1B;
-  }
-  .payment-status-pill.paid {
-    background: #DCFCE7;
-    border: 1px solid #86EFAC;
-    color: #166534;
-  }
-
-  /* Exactly ONE Shared QR Card with White Background */
   .single-qr-card-wrap {
     background: #FFFFFF;
     border: 2px solid #EFE8DC;
@@ -488,175 +315,48 @@
     align-items: center;
     width: 100%;
     max-width: 320px;
+    margin: 0 auto;
     box-sizing: border-box;
-    transition: opacity 0.2s, filter 0.2s;
   }
-  .single-qr-card-wrap.inactive {
-    opacity: 0.45;
-    filter: grayscale(80%);
-    pointer-events: none;
-  }
-
   .phonepe-qr-image {
     width: 100%;
-    max-width: 270px;
+    max-width: 260px;
     height: auto;
     object-fit: contain;
     border-radius: 10px;
-    display: block;
   }
 
-  .qr-meta-box {
-    margin-top: 0.85rem;
+  /* Transaction History mini table */
+  .tx-history-table {
     width: 100%;
-    background: #FAF8F5;
-    border: 1px solid #EFEAE0;
-    border-radius: 10px;
-    padding: 0.65rem 0.85rem;
-    text-align: left;
-    font-size: 0.82rem;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
   }
-  .qr-meta-line {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 3px;
-  }
-  .qr-meta-line:last-child {
-    margin-bottom: 0;
-  }
-
-  .qr-scan-instruction {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #173823;
-    margin: 0.85rem 0 4px 0;
-  }
-  .qr-scan-subnote {
-    font-size: 0.78rem;
+  .tx-history-table th {
+    background: #F8FAFC;
     color: #64748B;
-    margin-bottom: 1rem;
-    max-width: 320px;
-  }
-
-  /* Controls: Start Payment & Stop Payment */
-  .payment-controls-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .btn-start-payment {
-    background: linear-gradient(135deg, #173823 0%, #204B30 100%);
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 14px;
     font-weight: 700;
-    font-size: 0.92rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    box-shadow: 0 4px 12px rgba(23, 56, 35, 0.2);
-    transition: background 0.15s, transform 0.15s;
-  }
-  .btn-start-payment:hover {
-    background: #102819;
-    transform: translateY(-1px);
-  }
-
-  .btn-stop-payment {
-    background: #FFFFFF;
-    color: #DC2626;
-    border: 1.5px solid #FCA5A5;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-weight: 700;
-    font-size: 0.92rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    transition: background 0.15s, color 0.15s;
-  }
-  .btn-stop-payment:hover {
-    background: #FEF2F2;
-    border-color: #DC2626;
-  }
-
-  /* Cancelled Notice Box */
-  .cancelled-notice-box {
-    display: none;
-    background: #FEF2F2;
-    border: 1.5px solid #FECACA;
-    border-radius: 12px;
-    padding: 0.95rem 1.15rem;
-    color: #991B1B;
-    font-size: 0.88rem;
-    width: 100%;
-    max-width: 320px;
-    margin-top: 1rem;
-    box-sizing: border-box;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    padding: 8px 12px;
+    border-bottom: 1.5px solid #E2E8F0;
     text-align: left;
   }
-  .cancelled-notice-box.show {
-    display: block;
+  .tx-history-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #F1F5F9;
+    color: #1E293B;
   }
 
-  /* Optional UTR Submission Strip */
-  .utr-submit-card {
-    margin-top: 1rem;
-    width: 100%;
-    max-width: 320px;
-    background: #FAF8F5;
-    border: 1.5px solid #EFEAE0;
-    border-radius: 10px;
-    padding: 0.85rem;
-    box-sizing: border-box;
-    text-align: left;
-  }
-  .utr-submit-card label {
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--brand-forest);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .utr-input-row {
-    display: flex;
-    gap: 6px;
-  }
-  .utr-input-row input {
-    flex: 1;
-    border: 1.5px solid #CBD5E1;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 0.82rem;
-  }
-  .utr-input-row button {
-    background: var(--brand-forest);
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     STEP 4: PAYMENT SUCCESSFUL & CONFIRMED VIEW
-     ══════════════════════════════════════════════════════════════ */
+  /* Success View Card */
   .success-view-card {
     display: none;
     background: #F0FDF4;
     border: 2px solid #86EFAC;
     border-radius: 18px;
-    padding: 2.25rem 2rem;
+    padding: 2.5rem 2rem;
     text-align: center;
     width: 100%;
     box-sizing: border-box;
@@ -665,15 +365,10 @@
     display: block;
   }
 
-  @media (max-width: 840px) {
+  @media (max-width: 860px) {
     .payment-body-grid {
       grid-template-columns: 1fr;
       padding: 1.5rem;
-    }
-    .checkout-step-progress {
-      font-size: 0.78rem;
-      gap: 0.35rem;
-      flex-wrap: wrap;
     }
   }
 </style>
@@ -684,35 +379,12 @@
 
   <!-- Top Navigation & Return -->
   <div class="payment-nav-strip">
-    <a href="{{ return_url }}" class="payment-nav-back">
-      ← Return to Product Booking
+    <a href="{{ return_url|default:'/' }}" class="payment-nav-back">
+      ← Return to Order Details / Shopping
     </a>
     <span style="font-size: 0.85rem; color: #64748B;">
       Balaji Ingredients • Trusted Agricultural Ingredients
     </span>
-  </div>
-
-  <!-- Step Progress Indicator -->
-  <div class="checkout-step-progress">
-    <div class="step-node active" id="stepNode1">
-      <span class="step-num">1</span>
-      <span>Payment Method</span>
-    </div>
-    <span class="step-divider">›</span>
-    <div class="step-node" id="stepNode2">
-      <span class="step-num">2</span>
-      <span>UPI QR Scanner</span>
-    </div>
-    <span class="step-divider">›</span>
-    <div class="step-node" id="stepNode3">
-      <span class="step-num">3</span>
-      <span>Admin Verification</span>
-    </div>
-    <span class="step-divider">›</span>
-    <div class="step-node" id="stepNode4">
-      <span class="step-num">4</span>
-      <span>Order Confirmed</span>
-    </div>
   </div>
 
   <!-- Master Card -->
@@ -721,70 +393,61 @@
     <!-- Card Header -->
     <div class="payment-card-header">
       <div class="payment-header-left">
-        <h1 id="paymentHeaderTitle">Choose Your Payment Method</h1>
-        <p>Order Reference: <strong>#{{ order.order_number }}</strong> • Total Payable: <strong>₹{{ order.total_amount|floatformat:2 }}</strong></p>
+        <h1 id="paymentHeaderTitle">Settlement & Payment</h1>
+        <p>Order Reference: <strong>#{{ order.order_number }}</strong> • Invoice Total: <strong>₹{{ order.total_amount|floatformat:2 }}</strong></p>
       </div>
       <div class="payment-header-badge">
-        <span>🔒</span> Secure 256-Bit UPI Settlement
+        <span>🔒</span> Verified Server-Side Settlement
       </div>
     </div>
 
     <!-- Active Two-Column Grid -->
-    <div class="payment-body-grid" id="paymentMainGrid">
+    <div class="payment-body-grid" id="paymentMainGrid" {% if order.payment_status == 'paid' %}style="display: none;"{% endif %}>
 
-      <!-- LEFT COLUMN: Order Summary (Amazon/Flipkart inspired) -->
+      <!-- LEFT COLUMN: Order Summary & Financial Ledger -->
       <div class="order-summary-panel">
         
-        <!-- Summary Box 1: Product -->
+        <!-- Financial Ledger Box -->
+        <div class="balance-ledger-box">
+          <div class="summary-title">
+            <span>⚖️</span> Financial Balance Ledger
+          </div>
+          <div class="summary-row">
+            <span class="label">Invoice Total</span>
+            <span class="value" style="font-size: 1rem;">₹{{ order.total_amount|floatformat:2 }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Verified Amount Received</span>
+            <span class="value" style="color: #16A34A; font-weight: 700;">₹{{ order.verified_paid_amount|floatformat:2 }}</span>
+          </div>
+          {% if order.excess_amount > 0 %}
+          <div class="summary-row">
+            <span class="label">Excess Under Review</span>
+            <span class="value" style="color: #2563EB; font-weight: 700;">+₹{{ order.excess_amount|floatformat:2 }}</span>
+          </div>
+          {% endif %}
+          <div class="ledger-highlight {% if order.outstanding_balance > 0 %}due{% else %}paid{% endif %}">
+            <span style="font-size: 0.88rem; font-weight: 700;">Outstanding Balance Due</span>
+            <strong style="font-size: 1.25rem;">₹{{ order.outstanding_balance|floatformat:2 }}</strong>
+          </div>
+        </div>
+
+        <!-- Order Items Summary Box -->
         <div class="summary-section-box">
           <div class="summary-title">
-            <span>📦</span> Order Summary
+            <span>📦</span> Order Particulars
           </div>
           <div class="summary-row">
             <span class="label">Ingredient</span>
-            <span class="value">{{ primary_item.product_name }}</span>
+            <span class="value">{{ primary_item.product_name|default:"Agricultural Commodity" }}</span>
           </div>
           <div class="summary-row">
             <span class="label">Quality Grade</span>
-            <span class="value">{{ order.quality|default:"Premium Grade" }}</span>
+            <span class="value">{{ order.quality|default:"Commercial Grade" }}</span>
           </div>
           <div class="summary-row">
             <span class="label">Total Quantity</span>
-            <span class="value">{{ primary_item.quantity }} kg</span>
-          </div>
-          <div class="summary-row">
-            <span class="label">Unit Rate</span>
-            <span class="value">₹{{ primary_item.unit_price|floatformat:2 }} / kg</span>
-          </div>
-        </div>
-
-        <!-- Summary Box 2: Consignee & Shipping -->
-        <div class="summary-section-box">
-          <div class="summary-title">
-            <span>📍</span> Delivery Details
-          </div>
-          <div class="summary-row">
-            <span class="label">Customer</span>
-            <span class="value">{{ order.customer_name }}</span>
-          </div>
-          <div class="summary-row">
-            <span class="label">Mobile</span>
-            <span class="value">{{ order.phone }}</span>
-          </div>
-          <div class="summary-row">
-            <span class="label">Email</span>
-            <span class="value">{{ order.email }}</span>
-          </div>
-          <div class="summary-row">
-            <span class="label">Delivery Address</span>
-            <span class="value" style="max-width: 200px; text-align: right;">{{ order.delivery_address }}</span>
-          </div>
-        </div>
-
-        <!-- Summary Box 3: Financials -->
-        <div class="summary-section-box">
-          <div class="summary-title">
-            <span>💳</span> Payment Breakdown
+            <span class="value">{{ primary_item.quantity|default:1 }} kg</span>
           </div>
           <div class="summary-row">
             <span class="label">Subtotal</span>
@@ -794,265 +457,260 @@
             <span class="label">GST (5% Agricultural Goods)</span>
             <span class="value">₹{{ order.tax_amount|floatformat:2 }}</span>
           </div>
-          <div class="summary-total-row">
-            <span class="lbl">Amount to Pay</span>
-            <span class="val">₹{{ order.total_amount|floatformat:2 }}</span>
+        </div>
+
+        <!-- Consignee Details -->
+        <div class="summary-section-box">
+          <div class="summary-title">
+            <span>📍</span> Billing & Consignee
+          </div>
+          <div class="summary-row">
+            <span class="label">Customer</span>
+            <span class="value">{{ order.customer_name }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Phone</span>
+            <span class="value">{{ order.phone }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Delivery City</span>
+            <span class="value">{{ order.city|default:order.delivery_address|truncatechars:24 }}</span>
           </div>
         </div>
 
       </div>
 
-      <!-- RIGHT COLUMN: Interactive Step Panels -->
+      <!-- RIGHT COLUMN: Interactive Payment Controls -->
       <div class="payment-step-panel">
 
-        <!-- ══════════════════════════════════════════════════════════
-             STEP 1: SELECT PAYMENT METHOD (Default View)
-             ══════════════════════════════════════════════════════════ -->
-        <div id="stepMethodSelection" class="method-selection-card">
-          <h2 class="method-card-title">Choose Your Payment Method</h2>
-          <p class="method-card-subtitle">Select your preferred UPI app or payment option to proceed.</p>
-
-          <div class="method-options-list">
-
-            <!-- Option 1: Google Pay -->
-            <div class="method-option-item selected" onclick="selectPaymentMethod('Google Pay', this)">
-              <div class="method-item-left">
-                <div class="custom-radio-circle">
-                  <div class="custom-radio-dot"></div>
-                </div>
-                <div class="method-app-icon-wrap" style="color: #4285F4;">
-                  G
-                </div>
-                <div class="method-info-text">
-                  <span class="app-name">Google Pay</span>
-                  <span class="app-sub">Pay directly with Google Pay UPI</span>
-                </div>
+        <!-- Real-Time Status Banner -->
+        <div id="paymentStatusBanner" class="payment-status-banner {% if order.payment_status == 'paid' %}status-paid{% elif order.payment_status == 'partial' %}status-partial{% elif order.payment_status == 'verification_pending' %}status-verifying{% elif order.payment_status == 'failed' %}status-failed{% else %}status-awaiting{% endif %}">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="statusIcon">
+              {% if order.payment_status == 'paid' %}✓{% elif order.payment_status == 'partial' %}🟠{% elif order.payment_status == 'verification_pending' %}⏳{% elif order.payment_status == 'failed' %}✗{% else %}🟡{% endif %}
+            </span>
+            <div>
+              <span id="statusTitle">
+                {% if order.payment_status == 'paid' %}
+                  Payment Successful &amp; Fully Settled
+                {% elif order.payment_status == 'partial' %}
+                  Partially Paid — Balance Due: ₹{{ order.outstanding_balance|floatformat:2 }}
+                {% elif order.payment_status == 'verification_pending' %}
+                  Payment Verification in Progress
+                {% elif order.payment_status == 'failed' %}
+                  Payment Failed — Please Retry
+                {% else %}
+                  Awaiting Payment
+                {% endif %}
+              </span>
+              <div id="statusSubtext" style="font-size: 0.78rem; font-weight: 500; opacity: 0.9; margin-top: 2px;">
+                {% if order.payment_status == 'verification_pending' %}
+                  Our accounts desk is verifying your transaction against merchant bank records.
+                {% elif order.payment_status == 'partial' %}
+                  ₹{{ order.verified_paid_amount|floatformat:2 }} verified. Pay remainder to complete order.
+                {% else %}
+                  Select your preferred settlement method below.
+                {% endif %}
               </div>
-              <span class="method-badge-pill popular">Fast</span>
             </div>
-
-            <!-- Option 2: PhonePe -->
-            <div class="method-option-item" onclick="selectPaymentMethod('PhonePe', this)">
-              <div class="method-item-left">
-                <div class="custom-radio-circle">
-                  <div class="custom-radio-dot"></div>
-                </div>
-                <div class="method-app-icon-wrap" style="background: #5F259F; color: #FFFFFF;">
-                  पे
-                </div>
-                <div class="method-info-text">
-                  <span class="app-name">PhonePe</span>
-                  <span class="app-sub">Pay via PhonePe UPI or Wallet</span>
-                </div>
-              </div>
-              <span class="method-badge-pill popular">Verified QR</span>
-            </div>
-
-            <!-- Option 3: Paytm -->
-            <div class="method-option-item" onclick="selectPaymentMethod('Paytm', this)">
-              <div class="method-item-left">
-                <div class="custom-radio-circle">
-                  <div class="custom-radio-dot"></div>
-                </div>
-                <div class="method-app-icon-wrap" style="background: #00BAF2; color: #FFFFFF; font-size: 0.95rem;">
-                  Pay
-                </div>
-                <div class="method-info-text">
-                  <span class="app-name">Paytm</span>
-                  <span class="app-sub">Pay via Paytm UPI or Wallet</span>
-                </div>
-              </div>
-              <span class="method-badge-pill">UPI</span>
-            </div>
-
-            <!-- Option 4: Other UPI Apps -->
-            <div class="method-option-item" onclick="selectPaymentMethod('Other UPI apps', this)">
-              <div class="method-item-left">
-                <div class="custom-radio-circle">
-                  <div class="custom-radio-dot"></div>
-                </div>
-                <div class="method-app-icon-wrap" style="color: #EA580C;">
-                  ⚡
-                </div>
-                <div class="method-info-text">
-                  <span class="app-name">Other UPI apps</span>
-                  <span class="app-sub">BHIM, Cred, Amazon Pay, Any Bank App</span>
-                </div>
-              </div>
-              <span class="method-badge-pill">Any App</span>
-            </div>
-
-            <!-- Option 5: Scan and Pay -->
-            <div class="method-option-item" onclick="selectPaymentMethod('Scan and Pay', this)">
-              <div class="method-item-left">
-                <div class="custom-radio-circle">
-                  <div class="custom-radio-dot"></div>
-                </div>
-                <div class="method-app-icon-wrap" style="color: #173823;">
-                  📷
-                </div>
-                <div class="method-info-text">
-                  <span class="app-name">Scan and Pay</span>
-                  <span class="app-sub">Open camera or QR scanner in any UPI app</span>
-                </div>
-              </div>
-              <span class="method-badge-pill">Instant QR</span>
-            </div>
-
           </div>
-
-          <!-- Continue to Payment Button -->
-          <button type="button" class="btn-continue-payment" onclick="continueToQrScanner()">
-            Continue to Payment — Pay ₹{{ order.total_amount|floatformat:2 }} →
+          <button type="button" onclick="refreshStatus()" style="background: none; border: none; cursor: pointer; font-size: 0.82rem; font-weight: 700; color: inherit; text-decoration: underline;">
+            ↻ Refresh Status
           </button>
+        </div>
 
-          <div class="security-notice-strip">
-            <span>🔒</span>
-            <span>Order ID: <strong>#{{ order.order_number }}</strong> • Safe &amp; verified settlement</span>
+        <!-- Mode Selection Tabs -->
+        <div class="payment-mode-tabs">
+          <button type="button" class="mode-tab-btn active" id="tabGateway" onclick="switchTab('gateway')">
+            <span>⚡</span> Instant Verified Gateway
+          </button>
+          <button type="button" class="mode-tab-btn" id="tabManual" onclick="switchTab('manual')">
+            <span>🏛️</span> Offline UPI / Bank Wire (UTR)
+          </button>
+        </div>
+
+        <!-- TAB 1: Instant Gateway Pane -->
+        <div id="paneGateway" class="mode-content-pane active">
+          <div style="margin-bottom: 1.25rem;">
+            <h3 style="margin: 0 0 6px 0; font-size: 1.25rem; color: var(--brand-forest); font-family: 'Playfair Display', Georgia, serif;">
+              Instant Server-Verified Payment
+            </h3>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--brand-text-muted);">
+              Instant automated verification via UPI, QR, or Net Banking with 256-bit cryptographic validation.
+            </p>
+          </div>
+
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.9rem; color: #475569;">Payable Amount for this Session:</span>
+              <strong style="font-size: 1.25rem; color: var(--brand-forest);">₹{{ order.outstanding_balance|floatformat:2 }}</strong>
+            </div>
+            <div style="font-size: 0.78rem; color: #64748B;">
+              ✓ Real-time automated verification • No screenshot or UTR submission required.
+            </div>
+          </div>
+
+          <div id="gatewayActionArea">
+            <button type="button" class="btn-pay-gateway" id="btnInitiateGateway" onclick="initiateGatewayPayment()">
+              ⚡ Pay ₹{{ order.outstanding_balance|floatformat:2 }} Now →
+            </button>
+          </div>
+
+          <div id="gatewayActiveBox" style="display: none; margin-top: 1.25rem; text-align: center; border: 1.5px dashed #CBD5E1; border-radius: 12px; padding: 1.5rem; background: #FAF8F5;">
+            <div style="font-weight: 700; color: var(--brand-forest); font-size: 1rem; margin-bottom: 4px;">
+              Verification Session Active
+            </div>
+            <div style="font-size: 0.82rem; color: #64748B; margin-bottom: 1rem;">
+              Transaction Reference: <code id="activeTxnId" style="font-weight: 800; color: #0F172A;">—</code>
+            </div>
+
+            <!-- Dynamic QR Display -->
+            <div id="dynamicQrContainer" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+              <img id="dynamicQrImg" src="{{ qr_image_url }}" alt="UPI QR" style="max-width: 220px; border-radius: 10px; border: 1px solid #E2E8F0;">
+            </div>
+
+            <div style="font-size: 0.85rem; color: #334155; margin-bottom: 1rem;">
+              Scan and complete payment in any UPI app (GPay, PhonePe, Paytm, Cred, BHIM).
+            </div>
+
+            <!-- Instant Verification Trigger for Demo/Customer Confirmation -->
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+              <button type="button" onclick="verifyActiveTransaction()" style="background: #16A34A; color: #FFF; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+                ✓ I have completed payment (Verify Now)
+              </button>
+              <button type="button" onclick="cancelGatewayPayment()" style="background: #FFFFFF; color: #DC2626; border: 1px solid #FCA5A5; padding: 10px 14px; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+                Cancel
+              </button>
+            </div>
+            <div id="verifyFeedback" style="font-size: 0.85rem; margin-top: 10px; font-weight: 600;"></div>
           </div>
         </div>
 
-        <!-- ══════════════════════════════════════════════════════════
-             STEP 2: ONE SHARED QR SCANNER (Displayed after Continue)
-             ══════════════════════════════════════════════════════════ -->
-        <div id="stepQrScanner" class="qr-scanner-step-panel">
-
-          <!-- Top Action Strip: Back to Methods & Method Badge -->
-          <div class="qr-step-top-bar">
-            <button type="button" class="btn-back-to-methods" onclick="backToMethodSelection()">
-              ← Back to Payment Methods
-            </button>
-            <span id="selectedMethodBadge" class="selected-method-tag">
-              <span>📱</span> <strong id="selectedMethodName">Google Pay</strong>
-            </span>
+        <!-- TAB 2: Manual UPI / Bank Wire (UTR) Pane -->
+        <div id="paneManual" class="mode-content-pane">
+          <div style="margin-bottom: 1.25rem;">
+            <h3 style="margin: 0 0 6px 0; font-size: 1.25rem; color: var(--brand-forest); font-family: 'Playfair Display', Georgia, serif;">
+              Manual Bank Wire / Direct UPI Transfer
+            </h3>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--brand-text-muted);">
+              Transfer directly to our official corporate account and submit your 12-digit UTR reference for manual verification.
+            </p>
           </div>
 
-          <!-- Live Payment State Pill -->
-          <div id="paymentStatusPill" class="payment-status-pill {% if order.payment_status == 'paid' %}paid{% else %}pending{% endif %}">
-            <span id="paymentStatusIcon">{% if order.payment_status == 'paid' %}✓{% else %}⏳{% endif %}</span>
-            <span id="paymentStatusText">{% if order.payment_status == 'paid' %}Payment Successful{% else %}Payment Pending{% endif %}</span>
+          <!-- Official Disclaimer Alert -->
+          <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 12px; padding: 1rem 1.15rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: #92400E; line-height: 1.5;">
+            <strong>⚠️ Manual Verification Policy:</strong> Direct UPI and bank wire transfers are manually reviewed by our accounts desk against corporate bank statements during banking hours. Submitting a UTR registers your order in <em>Verification Pending</em> status and does NOT automatically mark it as paid.
           </div>
 
-          <!-- Exact ONE Shared Uploaded QR Code Container -->
-          <div id="singleQrCard" class="single-qr-card-wrap">
-            <img src="{{ qr_image_url }}" alt="PhonePe QR Code - Darshan M S" class="phonepe-qr-image" id="phonepeQrImg">
-
-            <div class="qr-meta-box">
-              <div class="qr-meta-line">
-                <span style="color: #64748B;">Merchant / Payee:</span>
-                <strong style="color: #173823;">Darshan M S</strong>
-              </div>
-              <div class="qr-meta-line">
-                <span style="color: #64748B;">Order Reference:</span>
-                <strong style="color: #173823;">#{{ order.order_number }}</strong>
-              </div>
-              <div class="qr-meta-line">
-                <span style="color: #64748B;">Exact Payable Amount:</span>
-                <strong style="color: #173823; font-size: 0.95rem;">₹{{ order.total_amount|floatformat:2 }}</strong>
-              </div>
+          <!-- Shared Static Bank QR -->
+          <div class="single-qr-card-wrap">
+            <img src="{{ qr_image_url }}" alt="Official Bank QR Code" class="phonepe-qr-image">
+            <div style="width: 100%; margin-top: 10px; font-size: 0.82rem; text-align: left; background: #FAF8F5; padding: 8px 10px; border-radius: 8px;">
+              <div><strong>Merchant:</strong> {{ payment_config.payee_name|default:"Balaji Ingredients" }}</div>
+              <div><strong>UPI VPA:</strong> <code>{{ payment_config.business_upi_id|default:"9902155348@axl" }}</code></div>
+              <div><strong>Payable:</strong> ₹{{ order.outstanding_balance|floatformat:2 }}</div>
             </div>
           </div>
 
-          <div class="qr-scan-instruction">
-            Open your UPI app and scan this QR code to pay.
-          </div>
-          <div class="qr-scan-subnote">
-            Please enter or verify the exact payable amount of <strong>₹{{ order.total_amount|floatformat:2 }}</strong> in your UPI app before completing payment.
-          </div>
-
-          <!-- Controls: Start Payment & Stop Payment -->
-          <div class="payment-controls-row">
-            <button type="button" id="btnStartPayment" class="btn-start-payment" onclick="startPayment()">
-              ▶ Start Payment
-            </button>
-            <button type="button" id="btnStopPayment" class="btn-stop-payment" onclick="stopPayment()">
-              ⏹ Stop Payment
-            </button>
-          </div>
-
-          <!-- Cancelled Notice Box -->
-          <div id="cancelledNotice" class="cancelled-notice-box">
-            <strong style="display: block; margin-bottom: 4px;">⚠️ Payment Cancelled — No payment confirmation received</strong>
-            <span style="font-size: 0.82rem; color: #7F1D1D;">
-              Your order remains safely preserved in our database. You can retry paying now, choose another payment method, or return to the product booking page.
-            </span>
-            <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" onclick="startPayment()" style="background: #991B1B; color: #FFF; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
-                ↺ Retry Payment
-              </button>
-              <button type="button" onclick="backToMethodSelection()" style="background: #FFF; color: #991B1B; border: 1px solid #FCA5A5; padding: 6px 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
-                ← Change Method
+          <!-- UTR Submission Box -->
+          <div style="margin-top: 1.25rem; background: #FAF8F5; border: 1.5px solid #EFEAE0; border-radius: 12px; padding: 1.15rem;">
+            <label for="utrInput" style="font-size: 0.85rem; font-weight: 700; color: var(--brand-forest); display: block; margin-bottom: 4px;">
+              Enter 12-Digit Bank Reference / UTR Number
+            </label>
+            <div style="font-size: 0.78rem; color: #64748B; margin-bottom: 8px;">
+              Found in your UPI app payment receipt (e.g. UPI Ref ID / Bank RRN).
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="utrInput" placeholder="e.g. 328109841234" value="{{ order.upi_utr_number }}" style="flex: 1; border: 1.5px solid #CBD5E1; border-radius: 8px; padding: 8px 12px; font-size: 0.9rem; font-family: monospace;">
+              <button type="button" onclick="submitUtr()" style="background: var(--brand-forest); color: #FFFFFF; border: none; border-radius: 8px; padding: 8px 16px; font-weight: 700; cursor: pointer;">
+                Submit Reference
               </button>
             </div>
+            <div id="utrFeedback" style="font-size: 0.82rem; margin-top: 8px; display: none;"></div>
           </div>
-
-          <!-- Optional Transaction Reference / UTR Input -->
-          <div class="utr-submit-card" id="utrCard">
-            <label for="utrInput">Optional: Enter 12-Digit UPI Reference / UTR Number</label>
-            <div style="font-size: 0.74rem; color: #64748B; margin-bottom: 5px;">
-              Submit your bank reference number to expedite administrator verification.
-            </div>
-            <div class="utr-input-row">
-              <input type="text" id="utrInput" placeholder="e.g. 328109841234" value="{{ order.upi_utr_number }}">
-              <button type="button" onclick="submitUtr()">Submit</button>
-            </div>
-            <div id="utrFeedback" style="font-size: 0.78rem; margin-top: 6px; display: none;"></div>
-          </div>
-
-          <div style="margin-top: 12px; font-size: 0.76rem; color: #64748B; max-width: 320px; text-align: center;">
-            🔒 Payments remain <strong>Payment Pending</strong> until verified against merchant bank records by our accounts desk.
-          </div>
-
         </div>
+
+        <!-- Recorded Transactions Mini Ledger -->
+        {% if transactions %}
+        <div style="margin-top: 2rem;">
+          <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--brand-forest); margin-bottom: 0.5rem;">
+            📜 Payment Transaction Records
+          </div>
+          <table class="tx-history-table">
+            <thead>
+              <tr>
+                <th>Txn ID</th>
+                <th>Provider</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tx in transactions %}
+              <tr>
+                <td style="font-family: monospace; font-weight: 700;">{{ tx.transaction_id }}</td>
+                <td>{{ tx.get_provider_display }}</td>
+                <td style="font-weight: 700;">₹{{ tx.amount|floatformat:2 }}</td>
+                <td>
+                  {% if tx.status == 'success' %}
+                    <span style="color: #16A34A; font-weight: 700;">✓ Verified</span>
+                  {% elif tx.status == 'pending' %}
+                    <span style="color: #D97706; font-weight: 700;">⏳ Desk Review</span>
+                  {% elif tx.status == 'failed' %}
+                    <span style="color: #DC2626; font-weight: 700;">✗ Failed</span>
+                  {% else %}
+                    <span style="color: #64748B;">{{ tx.status|title }}</span>
+                  {% endif %}
+                </td>
+                <td style="color: #64748B; font-size: 0.78rem;">{{ tx.created_at|date:"d M H:i" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% endif %}
 
       </div>
 
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════
-         STEP 4: PAYMENT SUCCESSFUL CARD (Displayed upon Verified Success)
+         PAYMENT SUCCESSFUL CONFIRMATION VIEW (Shown when order is PAID)
          ══════════════════════════════════════════════════════════════ -->
     <div id="paymentSuccessCard" class="success-view-card {% if order.payment_status == 'paid' %}show{% endif %}">
-      <div style="font-size: 3rem; color: #16A34A; margin-bottom: 8px;">✓</div>
-      <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: 2rem; color: #14532D; margin: 0 0 8px 0;">
-        Payment Successful &amp; Order Confirmed
+      <div style="font-size: 3.5rem; color: #16A34A; margin-bottom: 8px;">✓</div>
+      <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: 2.2rem; color: #14532D; margin: 0 0 8px 0;">
+        Payment Verified &amp; Order Confirmed
       </h2>
-      <p style="color: #166534; font-size: 0.96rem; margin: 0 0 20px 0;">
-        Your payment of <strong>₹{{ order.total_amount|floatformat:2 }}</strong> for <strong>{{ primary_item.product_name }}</strong> has been verified and confirmed.
+      <p style="color: #166534; font-size: 1rem; margin: 0 0 24px 0;">
+        Your order <strong>#{{ order.order_number }}</strong> has been fully settled and scheduled for dispatch.
       </p>
 
-      <div style="background: #FFFFFF; border: 1.5px solid #BBF7D0; border-radius: 14px; max-width: 520px; margin: 0 auto 20px auto; padding: 1.35rem; text-align: left;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.92rem;">
+      <div style="background: #FFFFFF; border: 1.5px solid #BBF7D0; border-radius: 14px; max-width: 520px; margin: 0 auto 24px auto; padding: 1.5rem; text-align: left; box-shadow: 0 4px 16px rgba(22, 163, 74, 0.08);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.92rem;">
           <span style="color: #64748B;">Order Reference:</span>
           <strong>#{{ order.order_number }}</strong>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.92rem;">
-          <span style="color: #64748B;">Product Name:</span>
-          <strong>{{ primary_item.product_name }}</strong>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.92rem;">
+          <span style="color: #64748B;">Product:</span>
+          <strong>{{ primary_item.product_name|default:"Agricultural Goods" }} ({{ primary_item.quantity|default:1 }} kg)</strong>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.92rem;">
-          <span style="color: #64748B;">Quantity &amp; Grade:</span>
-          <strong>{{ primary_item.quantity }} kg ({{ order.quality }})</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.92rem;">
-          <span style="color: #64748B;">Total Amount Paid:</span>
-          <strong style="color: #15803D; font-size: 1.05rem;">₹{{ order.total_amount|floatformat:2 }}</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.92rem;">
-          <span style="color: #64748B;">Payment Method:</span>
-          <strong id="confirmedMethodName">UPI</strong>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.92rem;">
+          <span style="color: #64748B;">Total Settled:</span>
+          <strong style="color: #15803D; font-size: 1.15rem;">₹{{ order.total_amount|floatformat:2 }}</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 0.92rem;">
-          <span style="color: #64748B;">Payment Status:</span>
-          <span style="color: #15803D; font-weight: 700;">Paid (Verified by Accounts Desk)</span>
+          <span style="color: #64748B;">Settlement Status:</span>
+          <span style="color: #15803D; font-weight: 700;">✓ Fully Paid &amp; Cryptographically Verified</span>
         </div>
       </div>
 
       <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-        <a href="{% url 'portal:orders' %}" style="background: #173823; color: #FFF; padding: 10px 22px; border-radius: 10px; font-weight: 700; text-decoration: none;">
+        <a href="{% url 'portal:orders' %}" style="background: #173823; color: #FFF; padding: 12px 24px; border-radius: 10px; font-weight: 700; text-decoration: none;">
           View Orders in Client Portal
         </a>
-        <a href="/" style="background: #FFF; color: #173823; border: 1.5px solid #173823; padding: 10px 22px; border-radius: 10px; font-weight: 700; text-decoration: none;">
+        <a href="/" style="background: #FFF; color: #173823; border: 1.5px solid #173823; padding: 12px 24px; border-radius: 10px; font-weight: 700; text-decoration: none;">
           Continue Shopping
         </a>
       </div>
@@ -1065,104 +723,111 @@
 <script>
   const ORDER_NUMBER = "{{ order.order_number }}";
   const CSRF_TOKEN = "{{ csrf_token }}";
-  let selectedMethod = "Google Pay";
-  let isPaymentActive = false;
+  let activeTransaction = null;
   let statusPollTimer = null;
 
-  // 1. Select Payment Method (Step 1)
-  function selectPaymentMethod(methodName, element) {
-    selectedMethod = methodName;
-    document.querySelectorAll('.method-option-item').forEach(el => el.classList.remove('selected'));
-    element.classList.add('selected');
+  function switchTab(tab) {
+    document.getElementById('tabGateway').classList.remove('active');
+    document.getElementById('tabManual').classList.remove('active');
+    document.getElementById('paneGateway').classList.remove('active');
+    document.getElementById('paneManual').classList.remove('active');
 
-    // Notify backend of selected method without creating a new order
-    fetch(`/products/api/order-method/${ORDER_NUMBER}/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': CSRF_TOKEN,
-      },
-      body: JSON.stringify({ method: methodName })
-    }).catch(err => console.warn('Method record:', err));
+    if (tab === 'gateway') {
+      document.getElementById('tabGateway').classList.add('active');
+      document.getElementById('paneGateway').classList.add('active');
+    } else {
+      document.getElementById('tabManual').classList.add('active');
+      document.getElementById('paneManual').classList.add('active');
+    }
   }
 
-  // 2. Transition from Step 1 to Step 2 (Single QR Scanner)
-  function continueToQrScanner() {
-    document.getElementById('stepMethodSelection').style.display = 'none';
-    const qrPanel = document.getElementById('stepQrScanner');
-    qrPanel.classList.add('show');
+  // 1. Initiate Gateway Payment
+  async function initiateGatewayPayment() {
+    const btn = document.getElementById('btnInitiateGateway');
+    btn.disabled = true;
+    btn.textContent = 'Generating Transaction...';
 
-    // Update Step nodes
-    document.getElementById('stepNode1').className = 'step-node completed';
-    document.getElementById('stepNode2').className = 'step-node active';
+    try {
+      const resp = await fetch(`/products/api/payment-create/${ORDER_NUMBER}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': CSRF_TOKEN,
+        },
+        body: JSON.stringify({ provider: 'razorpay' })
+      });
+      const data = await resp.json();
 
-    // Update selected method label
-    document.getElementById('selectedMethodName').textContent = selectedMethod;
-    document.getElementById('confirmedMethodName').textContent = selectedMethod;
-    document.getElementById('paymentHeaderTitle').textContent = `Pay via ${selectedMethod}`;
-
-    // Start payment state
-    startPayment();
+      if (data.success) {
+        activeTransaction = data;
+        document.getElementById('gatewayActionArea').style.display = 'none';
+        document.getElementById('gatewayActiveBox').style.display = 'block';
+        document.getElementById('activeTxnId').textContent = data.transaction_id;
+        
+        // Start polling for async webhook / callback
+        startPolling();
+      } else {
+        alert(data.message || 'Unable to initiate payment transaction.');
+        btn.disabled = false;
+        btn.textContent = '⚡ Pay Outstanding Balance Now →';
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Network error connecting to payment gateway.');
+      btn.disabled = false;
+      btn.textContent = '⚡ Pay Outstanding Balance Now →';
+    }
   }
 
-  // 3. Return from Step 2 to Step 1 (Back to Payment Methods)
-  function backToMethodSelection() {
+  function cancelGatewayPayment() {
     stopPolling();
-    document.getElementById('stepQrScanner').classList.remove('show');
-    document.getElementById('stepMethodSelection').style.display = 'block';
-
-    // Reset step nodes
-    document.getElementById('stepNode1').className = 'step-node active';
-    document.getElementById('stepNode2').className = 'step-node';
-    document.getElementById('paymentHeaderTitle').textContent = 'Choose Your Payment Method';
-
-    // Reset cancelled notice
-    document.getElementById('cancelledNotice').classList.remove('show');
+    document.getElementById('gatewayActiveBox').style.display = 'none';
+    document.getElementById('gatewayActionArea').style.display = 'block';
+    const btn = document.getElementById('btnInitiateGateway');
+    btn.disabled = false;
+    btn.textContent = '⚡ Pay Outstanding Balance Now →';
   }
 
-  // 4. Start Payment Action
-  function startPayment() {
-    isPaymentActive = true;
-    
-    // UI state updates
-    const pill = document.getElementById('paymentStatusPill');
-    const pillIcon = document.getElementById('paymentStatusIcon');
-    const pillText = document.getElementById('paymentStatusText');
-    const qrCard = document.getElementById('singleQrCard');
-    const notice = document.getElementById('cancelledNotice');
+  // 2. Verify Active Gateway Transaction
+  async function verifyActiveTransaction() {
+    if (!activeTransaction) return;
 
-    pill.className = 'payment-status-pill pending';
-    pillIcon.textContent = '⏳';
-    pillText.textContent = 'Payment Pending';
+    const feedback = document.getElementById('verifyFeedback');
+    feedback.style.color = '#1E40AF';
+    feedback.textContent = 'Verifying cryptographic signature with payment provider...';
 
-    qrCard.classList.remove('inactive');
-    notice.classList.remove('show');
+    try {
+      const resp = await fetch(`/products/api/payment-verify/${ORDER_NUMBER}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': CSRF_TOKEN,
+        },
+        body: JSON.stringify({
+          transaction_id: activeTransaction.transaction_id,
+          provider_payment_id: activeTransaction.provider_order_id ? 'pay_' + activeTransaction.provider_order_id.replace('order_', '') : 'pay_simulated',
+          provider_signature: activeTransaction.signature || '',
+        })
+      });
+      const res = await resp.json();
 
-    // Begin status polling
-    startPolling();
+      if (res.success) {
+        feedback.style.color = '#15803D';
+        feedback.textContent = '✓ Payment verified successfully!';
+        setTimeout(() => {
+          location.reload();
+        }, 1200);
+      } else {
+        feedback.style.color = '#DC2626';
+        feedback.textContent = 'Verification error: ' + (res.message || 'Payment not verified.');
+      }
+    } catch (e) {
+      feedback.style.color = '#DC2626';
+      feedback.textContent = 'Error connecting to verification service.';
+    }
   }
 
-  // 5. Stop Payment Action
-  function stopPayment() {
-    isPaymentActive = false;
-    stopPolling();
-
-    // UI state updates: Does NOT mark as paid, preserves order
-    const pill = document.getElementById('paymentStatusPill');
-    const pillIcon = document.getElementById('paymentStatusIcon');
-    const pillText = document.getElementById('paymentStatusText');
-    const qrCard = document.getElementById('singleQrCard');
-    const notice = document.getElementById('cancelledNotice');
-
-    pill.className = 'payment-status-pill stopped';
-    pillIcon.textContent = '⏹';
-    pillText.textContent = 'Payment Stopped';
-
-    qrCard.classList.add('inactive');
-    notice.classList.add('show');
-  }
-
-  // 6. Optional UTR reference submission
+  // 3. Manual UTR submission
   async function submitUtr() {
     const utrInput = document.getElementById('utrInput');
     const utrFeedback = document.getElementById('utrFeedback');
@@ -1171,7 +836,7 @@
     if (!utrVal || utrVal.length < 6) {
       utrFeedback.style.display = 'block';
       utrFeedback.style.color = '#DC2626';
-      utrFeedback.textContent = 'Please enter a valid 12-digit UPI UTR reference.';
+      utrFeedback.textContent = 'Please enter a valid 12-digit UPI reference number.';
       return;
     }
 
@@ -1188,7 +853,8 @@
       utrFeedback.style.display = 'block';
       if (data.success) {
         utrFeedback.style.color = '#15803D';
-        utrFeedback.textContent = '✓ UTR reference recorded. Payment is pending manual verification by our accounts desk.';
+        utrFeedback.textContent = '✓ Bank reference recorded! Payment status updated to Verification Pending.';
+        setTimeout(() => location.reload(), 1500);
       } else {
         utrFeedback.style.color = '#DC2626';
         utrFeedback.textContent = data.message || 'Submission failed.';
@@ -1200,10 +866,10 @@
     }
   }
 
-  // 7. Real-time Status Polling
+  // 4. Polling & Status Refresh
   function startPolling() {
     stopPolling();
-    statusPollTimer = setInterval(checkOrderStatus, 4000);
+    statusPollTimer = setInterval(refreshStatus, 4000);
   }
 
   function stopPolling() {
@@ -1213,31 +879,19 @@
     }
   }
 
-  async function checkOrderStatus() {
-    if (!isPaymentActive) return;
-
+  async function refreshStatus() {
     try {
       const resp = await fetch(`/products/api/order-status/${ORDER_NUMBER}/`);
       const data = await resp.json();
-      if (data.success && data.is_paid) {
-        stopPolling();
-        // Transition to Step 4: Payment Successful screen
-        document.getElementById('paymentMainGrid').style.display = 'none';
-        document.querySelector('.checkout-step-progress').style.display = 'none';
-        document.getElementById('paymentSuccessCard').classList.add('show');
+      if (data.success) {
+        if (data.is_paid) {
+          stopPolling();
+          location.reload();
+        }
       }
     } catch (e) {
       console.warn('Status poll warning:', e);
     }
   }
-
-  // If already marked as paid on initial load, show success immediately
-  document.addEventListener('DOMContentLoaded', () => {
-    {% if order.payment_status == 'paid' %}
-      document.getElementById('paymentMainGrid').style.display = 'none';
-      document.querySelector('.checkout-step-progress').style.display = 'none';
-      document.getElementById('paymentSuccessCard').classList.add('show');
-    {% endif %}
-  });
 </script>
 {% endblock %}

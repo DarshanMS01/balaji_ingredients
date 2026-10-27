@@ -34,6 +34,7 @@ urlpatterns = [
     path('orders/<str:order_number>/', views.order_detail, name='order_detail'),
     path('orders/<str:order_number>/update-status/', views.order_update_status, name='order_update_status'),
     path('orders/<str:order_number>/verify-payment/', views.order_verify_payment, name='order_verify_payment'),
+    path('orders/<str:order_number>/reconcile-payment/', views.order_reconcile_payment, name='order_reconcile_payment'),
     path('orders/<str:order_number>/cancel/', views.order_cancel, name='order_cancel'),          # Phase 5
     path('orders/<str:order_number>/invoice/', views.order_invoice_view, name='order_invoice'),
 

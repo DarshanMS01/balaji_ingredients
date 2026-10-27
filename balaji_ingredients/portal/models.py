@@ -63,6 +63,7 @@ class Order(models.Model):
         ('cod', 'COD'),
         ('verification_pending', 'Verification Pending'),
         ('paid', 'Paid'),
+        ('partial', 'Partially Paid — Balance Due'),
         ('failed', 'Failed'),
     ]
 
@@ -161,6 +162,26 @@ class Order(models.Model):
         }
         return steps.get(self.status, 15)
 
+    @property
+    def verified_paid_amount(self):
+        """Calculates total verified successful payments allocated to this order using Decimal."""
+        total = self.transactions.filter(status='success').aggregate(total=models.Sum('amount'))['total']
+        return total or Decimal('0.00')
+
+    @property
+    def outstanding_balance(self):
+        """Outstanding balance = invoice total - verified successful payments."""
+        bal = self.total_amount - self.verified_paid_amount
+        return max(Decimal('0.00'), bal)
+
+    @property
+    def excess_amount(self):
+        """Amount paid in excess of invoice total, if any."""
+        paid = self.verified_paid_amount
+        if paid > self.total_amount:
+            return paid - self.total_amount
+        return Decimal('0.00')
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -188,6 +209,51 @@ class OrderItem(models.Model):
         if not self.total_price:
             self.total_price = Decimal(str(self.quantity)) * Decimal(str(self.unit_price))
         super().save(*args, **kwargs)
+
+
+class PaymentTransaction(models.Model):
+    PROVIDER_CHOICES = [
+        ('razorpay', 'Razorpay Payment Gateway'),
+        ('upi_gateway', 'Dynamic UPI Gateway'),
+        ('upi_manual', 'Manual UPI Transfer'),
+        ('cod', 'Cash on Delivery'),
+    ]
+
+    STATUS_CHOICES = [
+        ('initiated', 'Initiated'),
+        ('pending', 'Pending Verification'),
+        ('success', 'Verified Successful'),
+        ('failed', 'Payment Failed'),
+        ('refunded', 'Refunded'),
+    ]
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='transactions')
+    transaction_id = models.CharField(max_length=120, unique=True, db_index=True)
+    provider = models.CharField(max_length=40, choices=PROVIDER_CHOICES, default='razorpay')
+    amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
+    currency = models.CharField(max_length=10, default='INR')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='initiated', db_index=True)
+
+    provider_order_id = models.CharField(max_length=120, blank=True, db_index=True)
+    provider_payment_id = models.CharField(max_length=120, blank=True, db_index=True)
+    provider_signature = models.CharField(max_length=255, blank=True)
+    signature_verified = models.BooleanField(default=False)
+
+    idempotency_key = models.CharField(max_length=120, blank=True, db_index=True)
+    raw_response = models.JSONField(default=dict, blank=True)
+    notes = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    verified_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Payment Transaction'
+        verbose_name_plural = 'Payment Transactions'
+
+    def __str__(self):
+        return f"{self.transaction_id} — {self.order.order_number} (₹{self.amount} | {self.get_status_display()})"
 
 
 class B2BDocument(models.Model):

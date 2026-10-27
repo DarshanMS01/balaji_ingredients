@@ -1,23 +1,58 @@
 {% extends "admin_dashboard/base_admin.html" %}
 
-{% block title %}Payments & UPI Gateway — Balaji Ingredients Enterprise{% endblock %}
+{% block title %}Payments & Settlement Reconciliation — Balaji Ingredients Enterprise{% endblock %}
 
 {% block extra_head %}
 <style>
     .payment-stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 18px;
         margin-bottom: 26px;
     }
 
     .config-split {
         display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 26px;
+        grid-template-columns: 1fr 2.3fr;
+        gap: 24px;
+        align-items: start;
     }
 
-    @media (max-width: 1024px) {
+    .tx-tab-nav {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 0 20px;
+        background: #f8fafc;
+    }
+
+    .tx-tab-btn {
+        padding: 12px 16px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .tx-tab-btn.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+        background: #ffffff;
+    }
+
+    .tx-tab-pane {
+        display: none;
+    }
+
+    .tx-tab-pane.active {
+        display: block;
+    }
+
+    @media (max-width: 1100px) {
         .config-split {
             grid-template-columns: 1fr;
         }
@@ -29,26 +64,32 @@
 <!-- Volume KPI Grid -->
 <div class="payment-stats-grid">
     <div class="card" style="margin-bottom: 0;">
-        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #047857; letter-spacing: 0.6px;">Realized Settled Volume</div>
-        <div style="font-size: 2.1rem; font-weight: 800; color: #047857; margin-top: 8px; line-height: 1.1;">₹{{ total_paid_vol|floatformat:2 }}</div>
-        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Verified UPI and paid transactions</div>
+        <div style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; color: #047857; letter-spacing: 0.6px;">Realized Settled Volume</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #047857; margin-top: 6px; line-height: 1.1;">₹{{ total_paid_vol|floatformat:2 }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Cryptographically verified settlements</div>
     </div>
 
     <div class="card" style="margin-bottom: 0;">
-        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: #b45309; letter-spacing: 0.6px;">Pending UTR Verification</div>
-        <div style="font-size: 2.1rem; font-weight: 800; color: #b45309; margin-top: 8px; line-height: 1.1;">₹{{ pending_verification_vol|floatformat:2 }}</div>
-        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Submitted by buyers awaiting review</div>
+        <div style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; color: #b45309; letter-spacing: 0.6px;">Pending Desk Review (UTR)</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #b45309; margin-top: 6px; line-height: 1.1;">₹{{ pending_verification_vol|floatformat:2 }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Submitted UTRs awaiting bank match</div>
     </div>
 
     <div class="card" style="margin-bottom: 0;">
-        <div style="font-size: 0.88rem; text-transform: uppercase; font-weight: 700; color: var(--text-heading); letter-spacing: 0.6px;">Uncollected COD Pipeline</div>
-        <div style="font-size: 2.1rem; font-weight: 800; color: var(--text-heading); margin-top: 8px; line-height: 1.1;">₹{{ cod_pending_vol|floatformat:2 }}</div>
-        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">Cash receivables upon delivery</div>
+        <div style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; color: #c2410c; letter-spacing: 0.6px;">Partial Balance Due</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #c2410c; margin-top: 6px; line-height: 1.1;">₹{{ partial_balance_due|floatformat:2 }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Outstanding from partial payments</div>
+    </div>
+
+    <div class="card" style="margin-bottom: 0;">
+        <div style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; color: var(--text-heading); letter-spacing: 0.6px;">Uncollected COD Pipeline</div>
+        <div style="font-size: 2rem; font-weight: 800; color: var(--text-heading); margin-top: 6px; line-height: 1.1;">₹{{ cod_pending_vol|floatformat:2 }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">Cash receivables upon delivery</div>
     </div>
 </div>
 
 <div class="config-split">
-    <!-- Business UPI QR Setup Card -->
+    <!-- Merchant UPI QR Setup Card -->
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Corporate UPI QR Gateway</h3>
@@ -59,21 +100,21 @@
 
             <div class="form-group">
                 <label class="form-label">Business UPI VPA ID *</label>
-                <input type="text" name="business_upi_id" class="form-input" value="{{ payment_config.business_upi_id }}" required placeholder="e.g. balajiingredients@icici">
+                <input type="text" name="business_upi_id" class="form-input" value="{{ payment_config.business_upi_id }}" required placeholder="e.g. balajiingredients@axl">
                 <div class="form-help">Displayed directly to buyers for UPI instant transfer.</div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Payee Legal Name *</label>
-                <input type="text" name="payee_name" class="form-input" value="{{ payment_config.payee_name }}" required placeholder="e.g. Balaji Ingredients Pvt Ltd">
+                <input type="text" name="payee_name" class="form-input" value="{{ payment_config.payee_name }}" required placeholder="e.g. Balaji Ingredients">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Official Bank QR Code Image</label>
                 {% if payment_config.qr_image %}
-                <div style="margin-bottom: 14px; text-align: center; padding: 16px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
-                    <img src="{{ payment_config.qr_image.url }}" alt="Business UPI QR" style="max-width: 160px; border-radius: 8px;">
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; font-weight: 600;">Current Active Merchant QR</div>
+                <div style="margin-bottom: 14px; text-align: center; padding: 14px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                    <img src="{{ payment_config.qr_image.url }}" alt="Business UPI QR" style="max-width: 140px; border-radius: 8px;">
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; font-weight: 600;">Current Active Merchant QR</div>
                 </div>
                 {% endif %}
                 <input type="file" name="qr_image" class="form-input" accept="image/*">
@@ -85,81 +126,188 @@
         </form>
     </div>
 
-    <!-- Recent Payment Transactions Table -->
+    <!-- Payment Records & Settlement Ledger -->
     <div class="card" style="padding: 0; overflow: hidden;">
-        <div class="card-header" style="padding: 20px 24px; margin-bottom: 0;">
-            <h3 class="card-title">Recent Payment Records & UTR Verifications</h3>
+        <div class="card-header" style="padding: 20px 24px 14px 24px; margin-bottom: 0;">
+            <h3 class="card-title">Reconciliation &amp; Transaction Ledger</h3>
         </div>
 
-        <div class="table-responsive" style="border: none;">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Order #</th>
-                        <th>Buyer</th>
-                        <th>Amount</th>
-                        <th>Method</th>
-                        <th>UTR / Reference</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for o in orders %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" style="font-weight: 800; color: var(--primary); font-size: 0.96rem;">
-                                #{{ o.order_number }}
-                            </a>
-                        </td>
-                        <td>
-                            <div style="font-weight: 700;">{{ o.customer_name }}</div>
-                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">{{ o.phone }}</div>
-                        </td>
-                        <td style="font-weight: 800; color: var(--text-heading); font-size: 1rem;">
-                            ₹{{ o.total_amount|floatformat:2 }}
-                        </td>
-                        <td>
-                            <span class="badge" style="background: #f1f5f9; color: var(--text-body); font-size: 0.82rem;">
-                                {{ o.get_payment_method_display|upper }}
-                            </span>
-                        </td>
-                        <td>
-                            {% if o.upi_utr_number %}
-                            <span style="font-family: monospace; font-size: 0.92rem; font-weight: 800; color: #b45309; background: #fffbeb; padding: 4px 8px; border-radius: 4px; border: 1px dashed #fde68a;">
-                                {{ o.upi_utr_number }}
-                            </span>
-                            {% else %}
-                            <span style="color: var(--text-muted); font-size: 0.85rem;">—</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if o.payment_status == 'paid' %}
-                            <span class="badge badge-paid" style="padding: 6px 12px;">PAID</span>
-                            {% elif o.payment_status == 'verification_pending' %}
-                            <span class="badge badge-verification" style="padding: 6px 12px;">NEEDS VERIFICATION</span>
-                            {% elif o.payment_status == 'cod' %}
-                            <span class="badge badge-pending" style="padding: 6px 12px;">COD UNPAID</span>
-                            {% else %}
-                            <span class="badge badge-unpaid" style="padding: 6px 12px;">{{ o.get_payment_status_display }}</span>
-                            {% endif %}
-                        </td>
-                        <td style="text-align: right;">
-                            <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" class="btn-sm btn-primary">
-                                Verify &rarr;
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 54px; color: var(--text-muted); font-size: 0.95rem;">
-                            No payment transactions recorded.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="tx-tab-nav">
+            <button type="button" class="tx-tab-btn active" id="tabTransactionsBtn" onclick="switchAdminTxTab('transactions')">
+                Verified Gateway Transactions ({{ transactions|length }})
+            </button>
+            <button type="button" class="tx-tab-btn" id="tabOrdersBtn" onclick="switchAdminTxTab('orders')">
+                Order Payment Statuses ({{ orders|length }})
+            </button>
         </div>
+
+        <!-- TAB 1: PaymentTransaction Models -->
+        <div id="paneTransactions" class="tx-tab-pane active">
+            <div class="table-responsive" style="border: none;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Order #</th>
+                            <th>Provider</th>
+                            <th>Amount</th>
+                            <th>Signature</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tx in transactions %}
+                        <tr>
+                            <td>
+                                <div style="font-family: monospace; font-weight: 700; color: #0F172A; font-size: 0.88rem;">
+                                    {{ tx.transaction_id }}
+                                </div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                    {{ tx.created_at|date:"d M Y, H:i" }}
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{% url 'admin_dashboard:order_detail' tx.order.order_number %}" style="font-weight: 800; color: var(--primary);">
+                                    #{{ tx.order.order_number }}
+                                </a>
+                                <div style="font-size: 0.76rem; color: var(--text-muted);">{{ tx.order.customer_name|truncatechars:18 }}</div>
+                            </td>
+                            <td>
+                                <span class="badge" style="background: #F1F5F9; color: #334155; font-size: 0.78rem;">
+                                    {{ tx.get_provider_display }}
+                                </span>
+                            </td>
+                            <td style="font-weight: 800; color: var(--text-heading); font-size: 0.96rem;">
+                                ₹{{ tx.amount|floatformat:2 }}
+                            </td>
+                            <td>
+                                {% if tx.signature_verified %}
+                                <span class="badge" style="background: #DCFCE7; color: #166534; font-size: 0.76rem;">✓ Verified</span>
+                                {% else %}
+                                <span class="badge" style="background: #FEF3C7; color: #92400E; font-size: 0.76rem;">⚠️ Unverified</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if tx.status == 'success' %}
+                                <span class="badge badge-paid" style="padding: 4px 10px; font-size: 0.76rem;">SUCCESS</span>
+                                {% elif tx.status == 'pending' %}
+                                <span class="badge badge-verification" style="padding: 4px 10px; font-size: 0.76rem;">PENDING</span>
+                                {% elif tx.status == 'failed' %}
+                                <span class="badge badge-unpaid" style="padding: 4px 10px; font-size: 0.76rem;">FAILED</span>
+                                {% else %}
+                                <span class="badge" style="padding: 4px 10px; font-size: 0.76rem;">{{ tx.status|upper }}</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="{% url 'admin_dashboard:order_detail' tx.order.order_number %}" class="btn-sm btn-primary">
+                                    Reconcile &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 0.92rem;">
+                                No transactions recorded yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: Orders Summary Table -->
+        <div id="paneOrders" class="tx-tab-pane">
+            <div class="table-responsive" style="border: none;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Buyer</th>
+                            <th>Total</th>
+                            <th>Paid / Outstanding</th>
+                            <th>UTR / Ref</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in orders %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" style="font-weight: 800; color: var(--primary);">
+                                    #{{ o.order_number }}
+                                </a>
+                            </td>
+                            <td>
+                                <div style="font-weight: 700;">{{ o.customer_name }}</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted);">{{ o.phone }}</div>
+                            </td>
+                            <td style="font-weight: 800; color: var(--text-heading);">
+                                ₹{{ o.total_amount|floatformat:2 }}
+                            </td>
+                            <td>
+                                <div style="font-size: 0.85rem; color: #16A34A; font-weight: 700;">Paid: ₹{{ o.verified_paid_amount|floatformat:2 }}</div>
+                                <div style="font-size: 0.78rem; color: #DC2626; font-weight: 600;">Due: ₹{{ o.outstanding_balance|floatformat:2 }}</div>
+                            </td>
+                            <td>
+                                {% if o.upi_utr_number %}
+                                <span style="font-family: monospace; font-size: 0.88rem; font-weight: 800; color: #b45309; background: #fffbeb; padding: 3px 6px; border-radius: 4px; border: 1px dashed #fde68a;">
+                                    {{ o.upi_utr_number }}
+                                </span>
+                                {% else %}
+                                <span style="color: var(--text-muted); font-size: 0.85rem;">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if o.payment_status == 'paid' %}
+                                <span class="badge badge-paid" style="padding: 4px 10px;">PAID</span>
+                                {% elif o.payment_status == 'partial' %}
+                                <span class="badge" style="background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; padding: 4px 10px; font-weight: 700; font-size: 0.76rem;">PARTIAL</span>
+                                {% elif o.payment_status == 'verification_pending' %}
+                                <span class="badge badge-verification" style="padding: 4px 10px;">NEEDS VERIFICATION</span>
+                                {% elif o.payment_status == 'cod' %}
+                                <span class="badge badge-pending" style="padding: 4px 10px;">COD UNPAID</span>
+                                {% else %}
+                                <span class="badge badge-unpaid" style="padding: 4px 10px;">{{ o.get_payment_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="{% url 'admin_dashboard:order_detail' o.order_number %}" class="btn-sm btn-primary">
+                                    Reconcile &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 0.92rem;">
+                                No orders matching filter.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
+
+<script>
+    function switchAdminTxTab(tab) {
+        document.getElementById('tabTransactionsBtn').classList.remove('active');
+        document.getElementById('tabOrdersBtn').classList.remove('active');
+        document.getElementById('paneTransactions').classList.remove('active');
+        document.getElementById('paneOrders').classList.remove('active');
+
+        if (tab === 'transactions') {
+            document.getElementById('tabTransactionsBtn').classList.add('active');
+            document.getElementById('paneTransactions').classList.add('active');
+        } else {
+            document.getElementById('tabOrdersBtn').classList.add('active');
+            document.getElementById('paneOrders').classList.add('active');
+        }
+    }
+</script>
 {% endblock %}

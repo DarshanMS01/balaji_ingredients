@@ -1235,10 +1235,12 @@ def payment_config_api(request):
 
 def order_payment_view(request, order_number):
     """
-    Renders the dedicated Online Payment interface with the user's uploaded PhonePe QR code,
-    order ID, payable amount, and Start / Stop controls.
+    Renders the dedicated Online Payment interface with automatic verification gateway integration,
+    order ID, payable amount, and partial balance support.
     """
     from portal.models import Order
+    from portal.services import get_payment_credentials
+
     order = get_object_or_404(Order, order_number=order_number)
     items = order.items.select_related('product').all()
     primary_item = items.first()
@@ -1246,6 +1248,9 @@ def order_payment_view(request, order_number):
 
     return_url = product.get_absolute_url() if product else '/'
     qr_image_url = '/images/phonepe_payment_qr.jpg'
+
+    creds = get_payment_credentials()
+    transactions = order.transactions.all().order_by('-created_at')
 
     context = {
         'order': order,
@@ -1255,14 +1260,18 @@ def order_payment_view(request, order_number):
         'return_url': return_url,
         'qr_image_url': qr_image_url,
         'page_title': f"Complete Payment — Order #{order.order_number}",
+        'creds': creds,
+        'transactions': transactions,
+        'outstanding_balance': order.outstanding_balance,
+        'verified_paid_amount': order.verified_paid_amount,
+        'excess_amount': order.excess_amount,
     }
     return render(request, 'products/order_payment.html', context)
 
 
 def order_status_api(request, order_number):
     """
-    Returns real-time payment and order status for polling.
-    Admins can verify and mark as 'paid' in Django Admin.
+    Returns real-time trusted payment status and decimal-safe balance calculations.
     """
     from portal.models import Order
     try:
@@ -1270,24 +1279,151 @@ def order_status_api(request, order_number):
     except Order.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
 
+    txns_data = []
+    for t in order.transactions.all().order_by('-created_at')[:5]:
+        txns_data.append({
+            'transaction_id': t.transaction_id,
+            'provider': t.provider,
+            'amount': float(t.amount),
+            'status': t.status,
+            'provider_payment_id': t.provider_payment_id or '',
+            'created_at': t.created_at.strftime('%Y-%m-%d %H:%M'),
+        })
+
     return JsonResponse({
         'success': True,
         'order_number': order.order_number,
         'payment_status': order.payment_status,
+        'status_display': order.get_payment_status_display(),
         'is_paid': (order.payment_status == 'paid'),
-        'status': order.status,
+        'is_partial': (order.payment_status == 'partial'),
+        'is_pending': (order.payment_status == 'verification_pending'),
+        'order_workflow_status': order.status,
         'total_amount': float(order.total_amount),
+        'verified_paid_amount': float(order.verified_paid_amount),
+        'outstanding_balance': float(order.outstanding_balance),
+        'excess_amount': float(order.excess_amount),
         'upi_utr_number': order.upi_utr_number or '',
+        'transactions': txns_data,
     })
+
+
+@csrf_exempt
+def payment_create_api(request, order_number):
+    """
+    Initiates a verified server-side payment transaction for the given order.
+    Calculates exact payable amount with Decimal.
+    """
+    from portal.models import Order
+    from portal.services import create_payment_transaction, get_payment_credentials
+
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'POST required'}, status=405)
+
+    try:
+        order = Order.objects.get(order_number=order_number)
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
+
+    if order.outstanding_balance <= Decimal('0.00'):
+        return JsonResponse({
+            'success': False,
+            'message': 'This invoice has already been fully settled.',
+            'is_paid': True
+        }, status=400)
+
+    # Optional partial amount requested
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    data = json.loads(request.body) if is_json else request.POST
+    req_amount = data.get('amount')
+
+    try:
+        txn = create_payment_transaction(order, amount=req_amount)
+    except ValueError as ve:
+        return JsonResponse({'success': False, 'message': str(ve)}, status=400)
+
+    creds = get_payment_credentials()
+
+    return JsonResponse({
+        'success': True,
+        'order_number': order.order_number,
+        'transaction_id': txn.transaction_id,
+        'provider_order_id': txn.provider_order_id,
+        'amount': float(txn.amount),
+        'amount_paise': int(txn.amount * 100),
+        'currency': txn.currency,
+        'key_id': creds['key_id'],
+        'customer_name': order.customer_name or (order.user.username if order.user else 'Customer'),
+        'customer_email': order.email,
+        'customer_phone': order.phone,
+        'outstanding_balance': float(order.outstanding_balance),
+    })
+
+
+@csrf_exempt
+def payment_verify_api(request, order_number):
+    """
+    Receives provider callback payload, verifies cryptographic signature,
+    and updates order atomically.
+    """
+    from portal.services import verify_payment_callback
+
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'POST required'}, status=405)
+
+    is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
+    data = json.loads(request.body) if is_json else request.POST
+
+    provider_order_id = str(data.get('razorpay_order_id') or data.get('provider_order_id') or '').strip()
+    provider_payment_id = str(data.get('razorpay_payment_id') or data.get('provider_payment_id') or '').strip()
+    signature = str(data.get('razorpay_signature') or data.get('signature') or '').strip()
+    verified_amount = data.get('amount')
+
+    if not provider_order_id or not provider_payment_id or not signature:
+        return JsonResponse({
+            'success': False,
+            'message': 'Missing payment verification tokens (provider_order_id, provider_payment_id, signature).'
+        }, status=400)
+
+    result = verify_payment_callback(
+        order_number=order_number,
+        provider_order_id=provider_order_id,
+        provider_payment_id=provider_payment_id,
+        signature=signature,
+        verified_amount=verified_amount,
+        raw_payload=data
+    )
+
+    status_code = result.get('status_code', 200 if result.get('success') else 400)
+    return JsonResponse(result, status=status_code)
+
+
+@csrf_exempt
+def payment_webhook_view(request):
+    """
+    Asynchronous server-side webhook endpoint for merchant gateway.
+    Verifies HMAC signature and idempotently reconciles payment.
+    """
+    from portal.services import handle_payment_webhook
+
+    if request.method != 'POST':
+        return HttpResponse('Method Not Allowed', status=405)
+
+    signature_header = request.headers.get('X-Razorpay-Signature') or request.headers.get('x-razorpay-signature', '')
+    result = handle_payment_webhook(request.body, signature_header)
+
+    status_code = result.get('status_code', 200 if result.get('success') else 400)
+    return JsonResponse(result, status=status_code)
 
 
 @csrf_exempt
 def order_submit_utr_api(request, order_number):
     """
-    Allows the customer to submit their UPI UTR / Transaction reference.
-    Keeps status as Payment Pending until manually verified by the administrator.
+    Allows the customer to submit an offline UPI UTR / Transaction reference.
+    Explicitly marks status as pending manual desk review.
+    Does NOT automatically confirm bank credit.
     """
-    from portal.models import Order
+    from portal.models import Order, PaymentTransaction
     if request.method != 'POST':
         return JsonResponse({'success': False, 'message': 'Only POST method is allowed.'}, status=405)
 
@@ -1297,34 +1433,44 @@ def order_submit_utr_api(request, order_number):
         return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
 
     is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
-    if is_json:
-        try:
-            data = json.loads(request.body)
-        except Exception:
-            data = {}
-    else:
-        data = request.POST
+    data = json.loads(request.body) if is_json else request.POST
 
     utr = str(data.get('utr', '')).strip()
-    if not utr:
-        return JsonResponse({'success': False, 'message': 'Please enter a valid Transaction / UTR number.'}, status=400)
+    if not utr or len(utr) < 6:
+        return JsonResponse({'success': False, 'message': 'Please enter a valid Transaction / UTR number (min 6 characters).'}, status=400)
 
     order.upi_utr_number = utr
-    order.save(update_fields=['upi_utr_number'])
+    if order.payment_status != 'paid':
+        order.payment_status = 'verification_pending'
+    order.save(update_fields=['upi_utr_number', 'payment_status'])
+
+    # Record PaymentTransaction for manual review
+    PaymentTransaction.objects.get_or_create(
+        order=order,
+        transaction_id=f"UTR-{utr}",
+        defaults={
+            'provider': 'upi_manual',
+            'amount': order.outstanding_balance,
+            'status': 'pending',
+            'notes': f"Manual UTR reference {utr} submitted by buyer; awaiting bank credit check by accounts."
+        }
+    )
 
     return JsonResponse({
         'success': True,
-        'message': f"Reference {utr} submitted. Payment is pending manual verification by our accounts desk.",
+        'message': f"Reference {utr} recorded for manual verification. Automatic verification is not confirmed until approved by our accounts desk.",
         'upi_utr': utr,
         'payment_status': order.payment_status,
+        'verified_paid_amount': float(order.verified_paid_amount),
+        'outstanding_balance': float(order.outstanding_balance),
     })
 
 
 @csrf_exempt
 def order_update_method_api(request, order_number):
     """
-    Updates the selected payment option (e.g. Google Pay, PhonePe, Paytm, Other UPI, Scan & Pay)
-    for the specified order without creating duplicate orders.
+    Updates the selected payment option (e.g. UPI, NetBanking, Card, COD)
+    without creating duplicate orders.
     """
     from portal.models import Order
     if request.method != 'POST':
@@ -1336,13 +1482,7 @@ def order_update_method_api(request, order_number):
         return JsonResponse({'success': False, 'message': 'Order not found'}, status=404)
 
     is_json = request.content_type == 'application/json' or (request.body and request.body.strip().startswith(b'{'))
-    if is_json:
-        try:
-            data = json.loads(request.body)
-        except Exception:
-            data = {}
-    else:
-        data = request.POST
+    data = json.loads(request.body) if is_json else request.POST
 
     method = str(data.get('method', 'UPI')).strip()
     order.payment_method = 'upi'
