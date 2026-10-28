@@ -105,6 +105,13 @@ def register_view(request):
             msg = 'Full Name, Email Address, and Password are required.'
             return JsonResponse({'success': False, 'message': msg}, status=400) if is_ajax else render_err(request, msg)
 
+        try:
+            from django.core.validators import validate_email, ValidationError
+            validate_email(email)
+        except ValidationError:
+            msg = 'Please enter a valid email address.'
+            return JsonResponse({'success': False, 'message': msg}, status=400) if is_ajax else render_err(request, msg)
+
         if password != confirm_password:
             msg = 'Passwords do not match. Please re-enter.'
             return JsonResponse({'success': False, 'message': msg}, status=400) if is_ajax else render_err(request, msg)
@@ -596,6 +603,11 @@ def api_login(request):
             
             user = None
             if '@' in identifier:
+                try:
+                    from django.core.validators import validate_email, ValidationError
+                    validate_email(identifier)
+                except ValidationError:
+                    return JsonResponse({'success': False, 'message': 'Please enter a valid email address.'}, status=400)
                 user_obj = User.objects.filter(email__iexact=identifier).first()
                 if user_obj:
                     user = authenticate(request, username=user_obj.username, password=password)
@@ -663,6 +675,15 @@ def api_register(request):
             phone = data.get('phone', '').strip()
             password = data.get('password', '').strip()
             
+            if not email:
+                return JsonResponse({'success': False, 'message': 'Email address is required.'}, status=400)
+
+            try:
+                from django.core.validators import validate_email, ValidationError
+                validate_email(email)
+            except ValidationError:
+                return JsonResponse({'success': False, 'message': 'Please enter a valid email address.'}, status=400)
+
             if User.objects.filter(email=email).exists():
                 return JsonResponse({'success': False, 'message': 'Email already registered. Please sign in.'}, status=400)
                 
@@ -940,6 +961,13 @@ def api_forgot_password(request):
             if user and user.email:
                 target_identifier = user.email
 
+            if '@' in email_or_phone:
+                try:
+                    from django.core.validators import validate_email, ValidationError
+                    validate_email(email_or_phone)
+                except ValidationError:
+                    return JsonResponse({'success': False, 'message': 'Please enter a valid email address.'}, status=400)
+
             secret = pyotp.random_base32()
             request.session['otp_secret'] = secret
             request.session['otp_email'] = target_identifier
@@ -947,10 +975,28 @@ def api_forgot_password(request):
             totp = pyotp.TOTP(secret, interval=300)
             otp_code = totp.now()
             
+            # Dispatch OTP securely via Django email backend
+            from django.core.mail import send_mail
+            email_sent = False
+            try:
+                send_mail(
+                    subject='Balaji Ingredients — Your Verification OTP',
+                    message=f'Hello,\n\nYour 6-digit verification code is: {otp_code}\n\nThis code is valid for 5 minutes. Please do not share it with anyone.\n\n— Balaji Ingredients Support',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[target_identifier],
+                    fail_silently=False
+                )
+                email_sent = True
+            except Exception as mail_err:
+                import logging
+                logging.getLogger(__name__).warning(f"OTP dispatch failed: {mail_err}")
+                if settings.EMAIL_BACKEND == 'django.core.mail.backends.console.EmailBackend':
+                    email_sent = True
+
+            # SECURITY: Never expose plaintext OTP in JSON response
             return JsonResponse({
                 'success': True,
-                'message': 'Real-time 6-digit OTP code generated successfully!',
-                'otp': otp_code,
+                'message': f'A 6-digit verification code has been dispatched to {target_identifier}.',
                 'target': target_identifier
             })
         except Exception as e:

@@ -898,6 +898,12 @@ def checkout_view(request):
         errors = []
         if not full_name:
             errors.append('Contact / Full name is required.')
+        if email:
+            try:
+                from django.core.validators import validate_email, ValidationError
+                validate_email(email)
+            except ValidationError:
+                errors.append('Please enter a valid email address.')
         if not phone:
             errors.append('Commercial phone number is required.')
         if not address_line1 or not city or not state or not pincode:
@@ -1060,6 +1066,17 @@ def buy_product_view(request, product_id):
         full_name = request.POST.get('full_name', '').strip()
         company_name = request.POST.get('company_name', '').strip() or full_name
         email = request.POST.get('email', '').strip()
+
+        if email:
+            try:
+                from django.core.validators import validate_email, ValidationError
+                validate_email(email)
+            except ValidationError:
+                msg = 'Please enter a valid email address.'
+                return JsonResponse({'success': False, 'message': msg}, status=400) if is_ajax else render(
+                    request, 'products/buy_product.html', {'product': product, 'error_message': msg}
+                )
+
         phone = request.POST.get('phone', '').strip()
         address_line1 = request.POST.get('address_line1', '').strip() or request.POST.get('address', '').strip()
         address_line2 = request.POST.get('address_line2', '').strip()
