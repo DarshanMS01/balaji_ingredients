@@ -43,32 +43,44 @@
 
   /* Main Wrapper */
   .booking-page-wrap {
-    padding: 2.25rem 1.5rem 4rem 1.5rem;
+    height: 100vh;
+    min-height: 100vh;
+    background-color: var(--brand-ivory-bg);
+    padding: 1.25rem 1.75rem;
     box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    overflow: hidden;
   }
 
   .booking-grid-container {
-    max-width: 1240px;
+    max-width: 1320px;
+    width: 100%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 500px 1fr;
-    gap: 2.25rem;
-    align-items: start;
+    grid-template-columns: 480px 1fr;
+    gap: 1.75rem;
+    align-items: stretch;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
   }
 
   /* -------------------------------------------------------------
-     LEFT COLUMN: Fixed / Sticky Product Image & Information Panel
+     LEFT COLUMN: Fixed / Stationary Product Image & Information Panel
      ------------------------------------------------------------- */
   .booking-left-showcase {
-    position: sticky;
-    top: 1.5rem;
-    height: 760px;
-    max-height: calc(100vh - 3rem);
+    height: 100%;
+    max-height: 100%;
     border-radius: 22px;
     overflow: hidden;
     position: relative;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
     background-color: #122416;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
 
   .booking-main-img {
@@ -266,10 +278,33 @@
     border-radius: 22px;
     border: 1px solid var(--brand-border);
     box-shadow: 0 10px 36px rgba(27, 56, 30, 0.04);
-    padding: 2.25rem 2.25rem 2rem 2.25rem;
+    padding: 2rem 2.25rem 2.25rem 2.25rem;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    max-height: 100%;
     box-sizing: border-box;
+  }
+
+  /* Independent scrollbar styling for the right reservation form */
+  .booking-right-card::-webkit-scrollbar {
+    width: 6px;
+  }
+  .booking-right-card::-webkit-scrollbar-track {
+    background: #FAF8F5;
+    border-radius: 8px;
+  }
+  .booking-right-card::-webkit-scrollbar-thumb {
+    background: #C88E2B;
+    border-radius: 8px;
+  }
+  .booking-right-card::-webkit-scrollbar-thumb:hover {
+    background: #173823;
+  }
+  .booking-right-card {
+    scrollbar-width: thin;
+    scrollbar-color: #C88E2B #FAF8F5;
   }
 
   /* Faint Leaf Illustration in Top-Right */
@@ -677,27 +712,63 @@
   }
 
   /* Responsive Behavior */
-  @media (max-width: 1024px) {
+  @media (min-width: 769px) and (max-width: 1099px) {
+    .booking-page-wrap {
+      padding: 1.25rem 1rem;
+      height: 100vh;
+      overflow: hidden;
+    }
     .booking-grid-container {
-      grid-template-columns: 1fr;
-      gap: 2rem;
+      grid-template-columns: 380px 1fr;
+      gap: 1.25rem;
+      height: 100%;
     }
     .booking-left-showcase {
-      position: relative;
-      top: 0;
-      height: 520px;
+      height: 100%;
+    }
+    .booking-right-card {
+      height: 100%;
+      overflow-y: auto;
+      padding: 1.75rem 1.75rem;
+    }
+    .booking-prod-name {
+      font-size: 1.95rem;
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .booking-page-wrap {
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
       padding: 1rem 0.75rem 2.5rem 0.75rem;
+      display: block;
+    }
+    .booking-grid-container {
+      grid-template-columns: 1fr;
+      height: auto;
+      max-height: none;
+      gap: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .booking-left-showcase {
+      height: 440px;
+      position: relative;
     }
     .booking-right-card {
+      height: auto;
+      max-height: none;
+      overflow-y: visible;
       padding: 1.5rem 1.25rem;
     }
     .booking-form-grid {
       grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    .structured-address-grid {
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
     }
     .booking-actions-row {
       grid-template-columns: 1fr;
@@ -712,14 +783,329 @@
     }
     .booking-trust-row {
       grid-template-columns: 1fr;
-      gap: 12px;
-    }
-    .booking-left-showcase {
-      height: 480px;
+      gap: 10px;
     }
     .booking-prod-name {
       font-size: 1.85rem;
     }
+  }
+
+  /* Delivery Address & Structured Indian Fields */
+  .delivery-address-section-wrapper {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+  }
+  .btn-choose-maps-row {
+    width: 100%;
+    height: 44px;
+    background: #FAF7F0;
+    color: #173823;
+    border: 1.5px solid #C88E2B;
+    border-radius: 12px;
+    padding: 0 16px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  .btn-choose-maps-row:hover {
+    background: #173823;
+    color: #FFFFFF;
+    border-color: #173823;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(23, 56, 35, 0.15);
+  }
+  .structured-address-container {
+    background: #FAF9F6;
+    border: 1.5px solid #EAE3D5;
+    border-radius: 16px;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 10px rgba(23, 56, 35, 0.03);
+  }
+  .address-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #E2D9C8;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .address-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .addr-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #C88E2B;
+    display: inline-block;
+  }
+  .addr-badge-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #173823;
+    letter-spacing: 0.02em;
+  }
+  .addr-badge-sub {
+    font-size: 0.74rem;
+    color: #64748B;
+    font-style: italic;
+  }
+  .structured-address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+  }
+
+  /* Interactive Google Maps Modal */
+  .gmaps-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  .gmaps-modal-overlay.open {
+    display: flex;
+  }
+  .gmaps-modal-content {
+    background: #FFFFFF;
+    border-radius: 18px;
+    width: 100%;
+    max-width: 680px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+    animation: gmapsModalIn 0.25s ease-out;
+  }
+  @keyframes gmapsModalIn {
+    from { opacity: 0; transform: scale(0.96) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .gmaps-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 22px;
+    border-bottom: 1.5px solid #F1EFEA;
+    background: #FAF8F5;
+  }
+  .gmaps-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .gmaps-title-icon {
+    font-size: 1.5rem;
+  }
+  .gmaps-modal-title h3 {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.25rem;
+    color: #173823;
+    font-weight: 700;
+  }
+  .gmaps-modal-title p {
+    margin: 2px 0 0;
+    font-size: 0.82rem;
+    color: #64748B;
+  }
+  .gmaps-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: #64748B;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .gmaps-close-btn:hover {
+    background: #E2E8F0;
+    color: #1E293B;
+  }
+  .gmaps-modal-body {
+    padding: 18px 22px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .gmaps-search-bar {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-gmaps-currloc {
+    background: #FAF7F0;
+    color: #173823;
+    border: 1.5px solid #2D5A43;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-gmaps-currloc:hover {
+    background: #2D5A43;
+    color: #FFFFFF;
+  }
+  .gmaps-canvas {
+    width: 100%;
+    height: 320px;
+    border-radius: 12px;
+    border: 1.5px solid #E2E8F0;
+    background: #E5E7EB;
+  }
+  .gmaps-details-card {
+    background: #FAF8F5;
+    border: 1px solid #EFEAE0;
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .gmaps-details-title {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #173823;
+    margin-bottom: 8px;
+  }
+  .gmaps-components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .comp-lbl {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #475569;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .comp-input {
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.84rem !important;
+    border-radius: 8px !important;
+    background: #FFFFFF !important;
+  }
+  .gmaps-hint {
+    font-size: 0.75rem;
+    color: #64748B;
+    margin: 8px 0 0;
+    font-style: italic;
+  }
+  .gmaps-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 6px;
+  }
+  .btn-modal-cancel {
+    background: #F1F5F9;
+    color: #475569;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-modal-cancel:hover {
+    background: #E2E8F0;
+  }
+  .btn-modal-confirm {
+    background: #173823;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-modal-confirm:hover {
+    background: #2D5A43;
+    box-shadow: 0 4px 12px rgba(23, 56, 35, 0.2);
+  }
+  .gmaps-missing-key-banner {
+    padding: 18px;
+    text-align: center;
+  }
+  .gmaps-missing-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+  }
+  .gmaps-missing-key-banner h4 {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+    color: #173823;
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+  .gmaps-missing-key-banner p {
+    font-size: 0.88rem;
+    color: #475569;
+    margin: 0 0 12px;
+  }
+  .gmaps-setup-instructions {
+    background: #FAF8F5;
+    border: 1px solid #EFEAE0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 0.84rem;
+    color: #334155;
+    margin-bottom: 12px;
+  }
+  .gmaps-setup-instructions ol {
+    margin: 8px 0 0;
+    padding-left: 20px;
+  }
+  .gmaps-setup-instructions li {
+    margin-bottom: 6px;
+  }
+  .gmaps-setup-instructions pre {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin: 4px 0;
+    font-family: monospace;
+    font-size: 0.82rem;
+    color: #0F172A;
+  }
+  .gmaps-manual-note {
+    font-size: 0.84rem !important;
+    color: #173823 !important;
+    font-weight: 500;
+  }
   }
 </style>
 {% endblock %}
@@ -810,7 +1196,7 @@
         <input type="hidden" name="product_id" id="bookingProductId" value="{{ product.id }}">
 
         <div class="booking-form-grid">
-          <!-- 1. Full Name -->
+          <!-- Row 1, Col 1: Full Name -->
           <div class="form-group">
             <label class="form-label" for="bookingFullName">
               <span>👤</span> Full Name <span class="req-star">*</span>
@@ -821,7 +1207,7 @@
             </div>
           </div>
 
-          <!-- 2. Mobile Number -->
+          <!-- Row 1, Col 2: Mobile Number -->
           <div class="form-group">
             <label class="form-label" for="bookingPhone">
               <span>📞</span> Mobile Number <span class="req-star">*</span>
@@ -832,7 +1218,7 @@
             </div>
           </div>
 
-          <!-- 3. Email Address -->
+          <!-- Row 2, Col 1: Email Address -->
           <div class="form-group">
             <label class="form-label" for="bookingEmail">
               <span>✉️</span> Email Address <span class="req-star">*</span>
@@ -843,14 +1229,104 @@
             </div>
           </div>
 
-          <!-- 4. Delivery Address -->
+          <!-- Row 2, Col 2: Delivery Address Heading & Location Controls -->
           <div class="form-group">
-            <label class="form-label" for="bookingAddress">
+            <label class="form-label" for="btnChooseMaps">
               <span>📍</span> Delivery Address <span class="req-star">*</span>
             </label>
-            <div class="input-icon-wrap">
-              <span class="field-icon">📍</span>
-              <input type="text" id="bookingAddress" name="delivery_address" class="form-control form-textarea" placeholder="Enter complete delivery address" required>
+            <button type="button" class="btn-choose-maps-row" id="btnChooseMaps" onclick="openGoogleMapsModal()">
+              <span>📍</span> Choose Location on Google Maps
+            </button>
+          </div>
+
+          <!-- Delivery Address Details Section: Spans full width of the form -->
+          <div class="form-group delivery-address-section-wrapper">
+            <div class="structured-address-container" id="structuredAddressContainer">
+              <div class="address-section-header">
+                <div class="address-header-badge">
+                  <span class="addr-badge-dot"></span>
+                  <span class="addr-badge-text">Structured Delivery Address</span>
+                </div>
+                <span class="addr-badge-sub">Auto-filled via Google Maps or enter details manually</span>
+              </div>
+
+              <div class="structured-address-grid">
+                <!-- Village | Taluk / Taluka -->
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrVillage">Village <span class="req-star">*</span></label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🌾</span>
+                    <input type="text" id="addrVillage" name="village" class="form-control sub-form-control" placeholder="Village name" required oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrTaluk">Taluk / Taluka <span class="req-star">*</span></label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🏛️</span>
+                    <input type="text" id="addrTaluk" name="taluk" class="form-control sub-form-control" placeholder="Taluk / Taluka" required oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+
+                <!-- District | State -->
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrDistrict">District <span class="req-star">*</span></label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🗺️</span>
+                    <input type="text" id="addrDistrict" name="district" class="form-control sub-form-control" placeholder="District" required oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrState">State <span class="req-star">*</span></label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🇮🇳</span>
+                    <input type="text" id="addrState" name="state" class="form-control sub-form-control" placeholder="State" required oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+
+                <!-- PIN Code | Landmark -->
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrPincode">PIN Code <span class="req-star">*</span> (6 digits)</label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">📮</span>
+                    <input type="text" id="addrPincode" name="pincode" class="form-control sub-form-control" placeholder="6-digit PIN code (e.g. 562160)" maxlength="6" pattern="[1-9][0-9]{5}" required oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrLandmark">Landmark (optional)</label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🚩</span>
+                    <input type="text" id="addrLandmark" name="landmark" class="form-control sub-form-control" placeholder="Nearby landmark, temple, school..." oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+
+                <!-- House Number / Building Name | Street / Area -->
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrHouseStreet">House Number / Building Name (optional)</label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🏠</span>
+                    <input type="text" id="addrHouseStreet" name="house_no" class="form-control sub-form-control" placeholder="House / Flat / Building No." oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+                <div class="sub-field-group">
+                  <label class="sub-form-label" for="addrStreetArea">Street / Area (optional)</label>
+                  <div class="input-icon-wrap">
+                    <span class="field-icon">🛣️</span>
+                    <input type="text" id="addrStreetArea" name="street_area" class="form-control sub-form-control" placeholder="Street name, cross, layout, area" oninput="syncStructuredAddress()">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Auto-populated Complete Address Summary -->
+              <div class="sub-field-group" style="margin-top: 10px;">
+                <label class="sub-form-label" for="bookingAddress">Complete Delivery Address Summary</label>
+                <div class="input-icon-wrap">
+                  <span class="field-icon">📍</span>
+                  <input type="text" id="bookingAddress" name="delivery_address" class="form-control sub-form-control" placeholder="Auto-populated complete delivery address" required>
+                </div>
+              </div>
+
+              <input type="hidden" id="addrLat" name="latitude" value="">
+              <input type="hidden" id="addrLng" name="longitude" value="">
             </div>
           </div>
 
@@ -969,6 +1445,80 @@
       </form>
     </div>
 
+  </div>
+</div>
+
+<!-- Interactive Google Maps Location Picker Modal -->
+<div id="gmapsModal" class="gmaps-modal-overlay" onclick="closeGoogleMapsModal(event)">
+  <div class="gmaps-modal-content">
+    <div class="gmaps-modal-header">
+      <div class="gmaps-modal-title">
+        <span class="gmaps-title-icon">📍</span>
+        <div>
+          <h3>Choose Location on Google Maps</h3>
+          <p>Search, drag the pin, or use current location to set your delivery address</p>
+        </div>
+      </div>
+      <button type="button" class="gmaps-close-btn" onclick="closeGoogleMapsModal()" aria-label="Close">&times;</button>
+    </div>
+
+    <div class="gmaps-modal-body">
+      {% if google_maps_api_key %}
+      <!-- Search & Controls Bar -->
+      <div class="gmaps-search-bar">
+        <div class="input-icon-wrap" style="flex:1;">
+          <span class="field-icon">🔍</span>
+          <input type="text" id="gmapsSearchInput" class="form-control" placeholder="Search address, village, landmark, or PIN code...">
+        </div>
+        <button type="button" class="btn-gmaps-currloc" onclick="useCurrentLocation()">
+          <span>🎯</span> Current Location
+        </button>
+      </div>
+
+      <!-- Map Canvas -->
+      <div id="gmapCanvas" class="gmaps-canvas"></div>
+
+      <!-- Live Location Details & Confirmation -->
+      <div class="gmaps-details-card">
+        <div class="gmaps-details-title">Selected Address Components</div>
+        <div class="gmaps-components-grid">
+          <div><span class="comp-lbl">Village:</span> <input type="text" id="gmapVillage" class="form-control comp-input" placeholder="Village"></div>
+          <div><span class="comp-lbl">Taluk / Taluka:</span> <input type="text" id="gmapTaluk" class="form-control comp-input" placeholder="Taluk"></div>
+          <div><span class="comp-lbl">District:</span> <input type="text" id="gmapDistrict" class="form-control comp-input" placeholder="District"></div>
+          <div><span class="comp-lbl">State:</span> <input type="text" id="gmapState" class="form-control comp-input" placeholder="State"></div>
+          <div><span class="comp-lbl">PIN Code:</span> <input type="text" id="gmapPincode" class="form-control comp-input" placeholder="PIN Code" maxlength="6"></div>
+          <div><span class="comp-lbl">Coordinates:</span> <input type="text" id="gmapCoords" class="form-control comp-input" placeholder="Lat, Lng" readonly></div>
+        </div>
+        <p class="gmaps-hint">Tip: If Google Maps cannot identify your exact village or taluk, you can adjust it in the fields above or directly on the form.</p>
+      </div>
+
+      <div class="gmaps-modal-footer">
+        <button type="button" class="btn-modal-cancel" onclick="closeGoogleMapsModal()">Cancel</button>
+        <button type="button" class="btn-modal-confirm" onclick="confirmGoogleMapsLocation()">✓ Confirm & Use This Location</button>
+      </div>
+      {% else %}
+      <!-- Configuration Required Notice (Strict Rule 9) -->
+      <div class="gmaps-missing-key-banner">
+        <div class="gmaps-missing-icon">🗺️</div>
+        <h4>Google Maps API Key Configuration Required</h4>
+        <p>Google Maps location picker requires a valid Google Maps API Key with <strong>Maps JavaScript API</strong>, <strong>Places API</strong>, and <strong>Geocoding API</strong> enabled.</p>
+        <div class="gmaps-setup-instructions">
+          <strong>How to enable:</strong>
+          <ol>
+            <li>Open or create a project in Google Cloud Console.</li>
+            <li>Enable <em>Maps JavaScript API</em>, <em>Places API</em>, and <em>Geocoding API</em>.</li>
+            <li>Create an API Key and add it to your <code>.env</code> file:
+              <pre>GOOGLE_MAPS_API_KEY=your_actual_api_key_here</pre>
+            </li>
+          </ol>
+        </div>
+        <p class="gmaps-manual-note">In the meantime, you can enter your <strong>Village, Taluk, District, State, and PIN Code</strong> manually using the structured fields in the form.</p>
+        <div style="margin-top:16px; display:flex; justify-content:flex-end;">
+          <button type="button" class="btn-modal-confirm" onclick="closeGoogleMapsModal(); focusStructuredAddress();">✏️ Enter Address Manually</button>
+        </div>
+      </div>
+      {% endif %}
+    </div>
   </div>
 </div>
 
@@ -1143,10 +1693,21 @@
     const phone = document.getElementById('bookingPhone').value.trim();
     const email = document.getElementById('bookingEmail').value.trim();
     const address = document.getElementById('bookingAddress').value.trim();
-    const grade = document.getElementById('bookingGrade').value;
+    const village = document.getElementById('addrVillage') ? document.getElementById('addrVillage').value.trim() : '';
+    const taluk = document.getElementById('addrTaluk') ? document.getElementById('addrTaluk').value.trim() : '';
+    const district = document.getElementById('addrDistrict') ? document.getElementById('addrDistrict').value.trim() : '';
+    const state = document.getElementById('addrState') ? document.getElementById('addrState').value.trim() : '';
+    const pincode = document.getElementById('addrPincode') ? document.getElementById('addrPincode').value.trim() : '';
+    const houseNo = document.getElementById('addrHouseStreet') ? document.getElementById('addrHouseStreet').value.trim() : '';
+    const streetArea = document.getElementById('addrStreetArea') ? document.getElementById('addrStreetArea').value.trim() : '';
+    const houseStreet = houseNo + (streetArea ? (houseNo ? ', ' : '') + streetArea : '');
+    const landmark = document.getElementById('addrLandmark') ? document.getElementById('addrLandmark').value.trim() : '';
+    const latitude = document.getElementById('addrLat') ? document.getElementById('addrLat').value.trim() : '';
+    const longitude = document.getElementById('addrLng') ? document.getElementById('addrLng').value.trim() : '';
+    const grade = document.getElementById('bookingGrade') ? document.getElementById('bookingGrade').value : 'Premium Grade';
     const qty = document.getElementById('bookingQty').value;
     const unit = document.getElementById('bookingUnit').value;
-    const deliveryDate = document.getElementById('bookingDeliveryDate').value;
+    const deliveryDate = document.getElementById('bookingDeliveryDate') ? document.getElementById('bookingDeliveryDate').value : '';
     const notes = document.getElementById('bookingNotes').value.trim();
     const productId = document.getElementById('bookingProductId').value;
 
@@ -1172,6 +1733,31 @@
       if (!email || !email.includes('@') || !email.includes('.')) {
         showAlert('Please enter a valid Email Address.', false);
         document.getElementById('bookingEmail').focus();
+        return;
+      }
+      if (!village) {
+        showAlert('Please enter your Village.', false);
+        document.getElementById('addrVillage').focus();
+        return;
+      }
+      if (!taluk) {
+        showAlert('Please enter your Taluk / Taluka.', false);
+        document.getElementById('addrTaluk').focus();
+        return;
+      }
+      if (!district) {
+        showAlert('Please enter your District.', false);
+        document.getElementById('addrDistrict').focus();
+        return;
+      }
+      if (!state) {
+        showAlert('Please enter your State.', false);
+        document.getElementById('addrState').focus();
+        return;
+      }
+      if (!pincode || !/^[1-9][0-9]{5}$/.test(pincode)) {
+        showAlert('Please enter a valid 6-digit Indian PIN Code (e.g. 562160).', false);
+        document.getElementById('addrPincode').focus();
         return;
       }
       if (!address) {
@@ -1200,6 +1786,15 @@
           phone: phone,
           email: email,
           delivery_address: address,
+          village: village,
+          taluk: taluk,
+          district: district,
+          state: state,
+          pincode: pincode,
+          house_street: houseStreet,
+          landmark: landmark,
+          latitude: latitude,
+          longitude: longitude,
           grade: grade,
           qty: qty,
           unit: unit,
@@ -1319,6 +1914,249 @@
       btn.disabled = false;
       btn.innerHTML = 'Submit Wholesale Enquiry →';
     }
+  }
+
+  // Synchronize structured address fields to primary delivery address input
+  function syncStructuredAddress() {
+    const houseNo = document.getElementById('addrHouseStreet') ? document.getElementById('addrHouseStreet').value.trim() : '';
+    const streetArea = document.getElementById('addrStreetArea') ? document.getElementById('addrStreetArea').value.trim() : '';
+    const landmark = document.getElementById('addrLandmark') ? document.getElementById('addrLandmark').value.trim() : '';
+    const village = document.getElementById('addrVillage') ? document.getElementById('addrVillage').value.trim() : '';
+    const taluk = document.getElementById('addrTaluk') ? document.getElementById('addrTaluk').value.trim() : '';
+    const district = document.getElementById('addrDistrict') ? document.getElementById('addrDistrict').value.trim() : '';
+    const state = document.getElementById('addrState') ? document.getElementById('addrState').value.trim() : '';
+    const pincode = document.getElementById('addrPincode') ? document.getElementById('addrPincode').value.trim() : '';
+    const lat = document.getElementById('addrLat') ? document.getElementById('addrLat').value.trim() : '';
+    const lng = document.getElementById('addrLng') ? document.getElementById('addrLng').value.trim() : '';
+
+    const parts = [];
+    if (houseNo) parts.push(houseNo);
+    if (streetArea) parts.push(streetArea);
+    if (landmark) parts.push(`Near ${landmark}`);
+    if (village) parts.push(`Village: ${village}`);
+    if (taluk) parts.push(`Taluk: ${taluk}`);
+    if (district) parts.push(`District: ${district}`);
+    if (state) parts.push(state);
+    if (pincode) parts.push(`PIN: ${pincode}`);
+    if (lat && lng) parts.push(`[GPS: ${lat}, ${lng}]`);
+
+    if (parts.length > 0) {
+      document.getElementById('bookingAddress').value = parts.join(', ');
+    }
+  }
+
+  function focusStructuredAddress() {
+    const el = document.getElementById('addrVillage') || document.getElementById('bookingAddress');
+    if (el) {
+      el.focus();
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  // Google Maps Logic
+  let gmapInstance = null;
+  let gmapMarker = null;
+  let gmapGeocoder = null;
+  let gmapAutocomplete = null;
+  const GMAPS_KEY = "{{ google_maps_api_key }}";
+
+  function openGoogleMapsModal() {
+    const modal = document.getElementById('gmapsModal');
+    if (!modal) return;
+    modal.classList.add('open');
+    if (GMAPS_KEY) {
+      loadGoogleMapsAPI();
+    }
+  }
+
+  function closeGoogleMapsModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('gmaps-close-btn') && !e.target.classList.contains('btn-modal-cancel')) return;
+    const modal = document.getElementById('gmapsModal');
+    if (modal) modal.classList.remove('open');
+  }
+
+  function loadGoogleMapsAPI() {
+    if (window.google && window.google.maps) {
+      initGoogleMaps();
+      return;
+    }
+    if (document.getElementById('gmapsScriptTag')) return;
+    const script = document.createElement('script');
+    script.id = 'gmapsScriptTag';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&libraries=places,geometry&callback=initGoogleMaps`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
+  window.initGoogleMaps = function() {
+    const canvas = document.getElementById('gmapCanvas');
+    if (!canvas || !window.google || !window.google.maps) return;
+
+    // Default center: Karnataka, India
+    const defaultCenter = { lat: 12.9716, lng: 77.5946 };
+    gmapGeocoder = new google.maps.Geocoder();
+
+    gmapInstance = new google.maps.Map(canvas, {
+      center: defaultCenter,
+      zoom: 12,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true,
+      zoomControl: true,
+    });
+
+    gmapMarker = new google.maps.Marker({
+      position: defaultCenter,
+      map: gmapInstance,
+      draggable: true,
+      title: "Drag to set exact delivery location",
+      animation: google.maps.Animation.DROP
+    });
+
+    // Reverse geocode on marker drag
+    gmapMarker.addListener('dragend', () => {
+      const pos = gmapMarker.getPosition();
+      reverseGeocodeLatLng(pos);
+    });
+
+    // Move marker on map click
+    gmapInstance.addListener('click', (e) => {
+      gmapMarker.setPosition(e.latLng);
+      reverseGeocodeLatLng(e.latLng);
+    });
+
+    // Places Autocomplete
+    const searchInput = document.getElementById('gmapsSearchInput');
+    if (searchInput) {
+      gmapAutocomplete = new google.maps.places.Autocomplete(searchInput, {
+        componentRestrictions: { country: 'in' },
+        fields: ['address_components', 'geometry', 'formatted_address', 'name']
+      });
+
+      gmapAutocomplete.addListener('place_changed', () => {
+        const place = gmapAutocomplete.getPlace();
+        if (!place.geometry || !place.geometry.location) {
+          showAlert('No location details available for selected place.', false);
+          return;
+        }
+        gmapInstance.setCenter(place.geometry.location);
+        gmapInstance.setZoom(16);
+        gmapMarker.setPosition(place.geometry.location);
+        parseGoogleAddressComponents(place.address_components, place.geometry.location);
+      });
+    }
+
+    // Try prefilling with existing lat/lng or reverse geocode default
+    const existingLat = document.getElementById('addrLat') ? parseFloat(document.getElementById('addrLat').value) : NaN;
+    const existingLng = document.getElementById('addrLng') ? parseFloat(document.getElementById('addrLng').value) : NaN;
+    if (!isNaN(existingLat) && !isNaN(existingLng)) {
+      const pos = { lat: existingLat, lng: existingLng };
+      gmapInstance.setCenter(pos);
+      gmapMarker.setPosition(pos);
+      reverseGeocodeLatLng(pos);
+    } else {
+      reverseGeocodeLatLng(defaultCenter);
+    }
+  };
+
+  function useCurrentLocation() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        if (gmapInstance && gmapMarker) {
+          gmapInstance.setCenter(pos);
+          gmapInstance.setZoom(16);
+          gmapMarker.setPosition(pos);
+          reverseGeocodeLatLng(pos);
+        }
+      },
+      (err) => {
+        alert('Unable to retrieve current location. Please verify browser location permissions.');
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  }
+
+  function reverseGeocodeLatLng(latLng) {
+    if (!gmapGeocoder) return;
+    gmapGeocoder.geocode({ location: latLng }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        parseGoogleAddressComponents(results[0].address_components, latLng);
+      } else {
+        const coordsStr = `${latLng.lat().toFixed(6)}, ${latLng.lng().toFixed(6)}`;
+        const coordsEl = document.getElementById('gmapCoords');
+        if (coordsEl) coordsEl.value = coordsStr;
+      }
+    });
+  }
+
+  function parseGoogleAddressComponents(components, latLng) {
+    let village = '';
+    let taluk = '';
+    let district = '';
+    let state = '';
+    let pincode = '';
+
+    if (components && Array.isArray(components)) {
+      components.forEach(comp => {
+        const types = comp.types || [];
+        if (types.includes('postal_code')) {
+          pincode = comp.long_name;
+        } else if (types.includes('administrative_area_level_1')) {
+          state = comp.long_name;
+        } else if (types.includes('administrative_area_level_2')) {
+          district = comp.long_name;
+        } else if (types.includes('administrative_area_level_3')) {
+          taluk = comp.long_name;
+        } else if (types.includes('sublocality_level_1') || types.includes('sublocality') || types.includes('locality')) {
+          if (!village) village = comp.long_name;
+        }
+      });
+    }
+
+    if (document.getElementById('gmapVillage')) document.getElementById('gmapVillage').value = village;
+    if (document.getElementById('gmapTaluk')) document.getElementById('gmapTaluk').value = taluk;
+    if (document.getElementById('gmapDistrict')) document.getElementById('gmapDistrict').value = district;
+    if (document.getElementById('gmapState')) document.getElementById('gmapState').value = state;
+    if (document.getElementById('gmapPincode')) document.getElementById('gmapPincode').value = pincode;
+    if (document.getElementById('gmapCoords') && latLng) {
+      const latVal = typeof latLng.lat === 'function' ? latLng.lat() : latLng.lat;
+      const lngVal = typeof latLng.lng === 'function' ? latLng.lng() : latLng.lng;
+      document.getElementById('gmapCoords').value = `${Number(latVal).toFixed(6)}, ${Number(lngVal).toFixed(6)}`;
+    }
+  }
+
+  function confirmGoogleMapsLocation() {
+    const village = document.getElementById('gmapVillage') ? document.getElementById('gmapVillage').value.trim() : '';
+    const taluk = document.getElementById('gmapTaluk') ? document.getElementById('gmapTaluk').value.trim() : '';
+    const district = document.getElementById('gmapDistrict') ? document.getElementById('gmapDistrict').value.trim() : '';
+    const state = document.getElementById('gmapState') ? document.getElementById('gmapState').value.trim() : '';
+    const pincode = document.getElementById('gmapPincode') ? document.getElementById('gmapPincode').value.trim() : '';
+    const coords = document.getElementById('gmapCoords') ? document.getElementById('gmapCoords').value.trim() : '';
+
+    if (village && document.getElementById('addrVillage')) document.getElementById('addrVillage').value = village;
+    if (taluk && document.getElementById('addrTaluk')) document.getElementById('addrTaluk').value = taluk;
+    if (district && document.getElementById('addrDistrict')) document.getElementById('addrDistrict').value = district;
+    if (state && document.getElementById('addrState')) document.getElementById('addrState').value = state;
+    if (pincode && document.getElementById('addrPincode')) document.getElementById('addrPincode').value = pincode;
+
+    if (coords && coords.includes(',')) {
+      const parts = coords.split(',');
+      if (document.getElementById('addrLat')) document.getElementById('addrLat').value = parts[0].trim();
+      if (document.getElementById('addrLng')) document.getElementById('addrLng').value = parts[1].trim();
+    }
+
+    syncStructuredAddress();
+    const modal = document.getElementById('gmapsModal');
+    if (modal) modal.classList.remove('open');
   }
 
   // Initialize on load

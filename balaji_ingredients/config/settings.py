@@ -184,3 +184,6 @@ CORS_ALLOW_CREDENTIALS = True
 GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com')
 GOOGLE_CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET', default='YOUR_GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = config('GOOGLE_REDIRECT_URI', default='http://localhost:8000/auth/google/callback/')
+
+# Google Maps API Key for location selection and geocoding
+GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')

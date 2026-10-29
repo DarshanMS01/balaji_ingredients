@@ -458,6 +458,7 @@ def product_detail(request, category_slug, product_slug):
         'page_title': display_name,
         'packaging_sizes': packaging_sizes,
         'gallery': gallery,
+        'google_maps_api_key': getattr(settings, 'GOOGLE_MAPS_API_KEY', ''),
     }
     return render(request, 'products/product_detail.html', context)
 
@@ -495,6 +496,15 @@ def booking_action_api(request):
     phone = str(data.get('phone', '')).strip()
     email = str(data.get('email', '')).strip().lower()
     delivery_address = str(data.get('delivery_address', '')).strip()
+    village = str(data.get('village', '')).strip()
+    taluk = str(data.get('taluk', '')).strip()
+    district = str(data.get('district', '')).strip()
+    state = str(data.get('state', '')).strip()
+    pincode = str(data.get('pincode', '')).strip()
+    house_street = str(data.get('house_street', '')).strip()
+    landmark = str(data.get('landmark', '')).strip()
+    latitude = str(data.get('latitude', '')).strip()
+    longitude = str(data.get('longitude', '')).strip()
     grade = str(data.get('grade', '')).strip() or 'Premium Grade'
     qty_raw = str(data.get('qty', '1')).strip()
     unit = str(data.get('unit', 'kg')).strip().lower()
@@ -542,6 +552,16 @@ def booking_action_api(request):
             validate_email(email)
         except Exception:
             return JsonResponse({'success': False, 'message': 'Please enter a valid email address.'}, status=400)
+        if not village:
+            return JsonResponse({'success': False, 'message': 'Village is mandatory for delivery address.'}, status=400)
+        if not taluk:
+            return JsonResponse({'success': False, 'message': 'Taluk / Taluka is mandatory for delivery address.'}, status=400)
+        if not district:
+            return JsonResponse({'success': False, 'message': 'District is mandatory for delivery address.'}, status=400)
+        if not state:
+            return JsonResponse({'success': False, 'message': 'State is mandatory for delivery address.'}, status=400)
+        if not pincode or not re.match(r'^[1-9]\d{5}$', pincode):
+            return JsonResponse({'success': False, 'message': 'A valid 6-digit Indian PIN Code is required.'}, status=400)
         if not delivery_address:
             return JsonResponse({'success': False, 'message': 'Complete Delivery Address is required for Buy Now.'}, status=400)
 
@@ -576,6 +596,26 @@ def booking_action_api(request):
         today_str = timezone.now().strftime('%Y%m%d')
         order_number = f"BI-{today_str}-{order_seq:04d}"
 
+        formatted_address_parts = []
+        if house_street:
+            formatted_address_parts.append(house_street)
+        if landmark:
+            formatted_address_parts.append(f"Near {landmark}")
+        if village:
+            formatted_address_parts.append(f"Village: {village}")
+        if taluk:
+            formatted_address_parts.append(f"Taluk: {taluk}")
+        if district:
+            formatted_address_parts.append(f"District: {district}")
+        if state:
+            formatted_address_parts.append(state)
+        if pincode:
+            formatted_address_parts.append(f"PIN: {pincode}")
+        if latitude and longitude:
+            formatted_address_parts.append(f"[GPS: {latitude}, {longitude}]")
+
+        full_delivery_address = ', '.join(formatted_address_parts) if formatted_address_parts else delivery_address
+
         order = Order.objects.create(
             user=request.user if request.user.is_authenticated else None,
             order_number=order_number,
@@ -583,7 +623,10 @@ def booking_action_api(request):
             company_name=full_name,
             email=email,
             phone=phone,
-            delivery_address=delivery_address,
+            delivery_address=full_delivery_address,
+            city=district,
+            state=state,
+            pincode=pincode,
             quality=grade,
             payment_method='upi',
             payment_status='verification_pending',
@@ -610,7 +653,16 @@ def booking_action_api(request):
             'full_name': full_name,
             'phone': phone,
             'email': email,
-            'delivery_address': delivery_address,
+            'delivery_address': full_delivery_address,
+            'village': village,
+            'taluk': taluk,
+            'district': district,
+            'state': state,
+            'pincode': pincode,
+            'house_street': house_street,
+            'landmark': landmark,
+            'latitude': latitude,
+            'longitude': longitude,
             'grade': grade,
             'qty': str(qty_num),
             'unit': unit,
