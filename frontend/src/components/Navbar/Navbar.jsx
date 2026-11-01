@@ -37,9 +37,9 @@ const Navbar = () => {
 
         {/* Right: Phone & CTA */}
         <div className="navbar-actions">
-          <a href="tel:+916360635801" className="navbar-phone">
+          <a href="tel:+919902155348" className="navbar-phone">
             <Phone size={18} />
-            <span>+91 63606 35801</span>
+            <span>+91 99021 55348</span>
           </a>
           <a href="#/login" className="navbar-login">
             <User size={18} />

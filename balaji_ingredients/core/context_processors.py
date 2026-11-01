@@ -34,7 +34,7 @@ def global_context(request):
             'SITE_NAME': 'Balaji Ingredients',
             'SITE_TAGLINE': "Let's craft what's next, together.",
             'SITE_EMAIL': 'yadavdarshanms@gmail.com',
-            'SITE_PHONE': '+91 98450 11223',
+            'SITE_PHONE': '+91 99021 55348',
             'SITE_ADDRESS': 'APMC Yard & Industrial Processing Facility, Kalaburagi / Bengaluru, Karnataka, India',
             'SITE_HOURS': 'Mon - Sat: 9:00 AM – 7:00 PM IST',
             'site_settings': None,

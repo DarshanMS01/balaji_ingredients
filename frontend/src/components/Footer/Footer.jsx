@@ -44,7 +44,7 @@ const Footer = () => {
           <div className="footer-col contact-col">
             <h3 className="footer-col-title">Contact Us</h3>
             <div className="footer-contact-info">
-              <p>+91 63606 35801</p>
+              <p>+91 99021 55348</p>
               <p>+91 79962 60020</p>
               <p>info@balajiingredients.in</p>
               <p>Peenya Industrial Area,<br />Bengaluru, Karnataka 560058</p>

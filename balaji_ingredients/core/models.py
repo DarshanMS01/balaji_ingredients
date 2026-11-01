@@ -39,7 +39,7 @@ class SiteSettings(models.Model):
     about_text = models.TextField(
         default="From traditional grains and pulses to carefully processed spice ingredients, Balaji Ingredients works with trusted sourcing networks and controlled processing practices to provide consistent ingredients for commercial applications."
     )
-    phone = models.CharField(max_length=50, default="+91 98450 11223")
+    phone = models.CharField(max_length=50, default="+91 99021 55348")
     email = models.EmailField(default="yadavdarshanms@gmail.com")
     office_address = models.TextField(
         default="APMC Yard & Industrial Processing Facility, Kalaburagi / Bengaluru, Karnataka, India"
