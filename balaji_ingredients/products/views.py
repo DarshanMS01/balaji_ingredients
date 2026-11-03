@@ -892,19 +892,28 @@ def checkout_view(request):
     cart = get_cart_items(request)
     lines, subtotal, tax_amount, total_amount = build_cart_lines(cart)
 
-    # Prefill from the buyer's existing profile if logged in
+    # Prefill from the buyer's existing profile & saved addresses if logged in
     profile = getattr(request.user, 'company_profile', None) if request.user.is_authenticated else None
     booking_data = request.session.get('booking_checkout_data') or {}
+    saved_addresses = []
+    if request.user.is_authenticated:
+        from portal.models import UserAddress
+        saved_addresses = list(UserAddress.objects.filter(user=request.user))
+
+    default_addr = None
+    if saved_addresses:
+        default_addr = next((a for a in saved_addresses if a.is_default), saved_addresses[0])
+
     initial = {
-        'full_name': request.user.get_full_name() if request.user.is_authenticated else '',
+        'full_name': (default_addr.full_name if default_addr else '') or (request.user.get_full_name() if request.user.is_authenticated else ''),
         'company_name': getattr(profile, 'company_name', ''),
         'email': request.user.email if request.user.is_authenticated else '',
-        'phone': getattr(profile, 'phone', ''),
-        'address_line1': getattr(profile, 'address_line1', ''),
-        'address_line2': getattr(profile, 'address_line2', ''),
-        'city': getattr(profile, 'city', ''),
-        'state': getattr(profile, 'state', ''),
-        'pincode': getattr(profile, 'pincode', ''),
+        'phone': (default_addr.phone if default_addr else '') or getattr(profile, 'phone', ''),
+        'address_line1': (default_addr.house_no if default_addr else '') or getattr(profile, 'address_line1', ''),
+        'address_line2': ((default_addr.street_area + (f", Near {default_addr.landmark}" if default_addr.landmark else "")) if default_addr else '') or getattr(profile, 'address_line2', ''),
+        'city': (default_addr.city if default_addr else '') or getattr(profile, 'city', ''),
+        'state': (default_addr.state if default_addr else '') or getattr(profile, 'state', ''),
+        'pincode': (default_addr.pincode if default_addr else '') or getattr(profile, 'pincode', ''),
         'gstin': getattr(profile, 'gstin', ''),
         'payment_method': 'cod',
         'upi_utr': '',
@@ -1039,6 +1048,7 @@ def checkout_view(request):
         'tax_amount': tax_amount,
         'total_amount': total_amount,
         'initial': initial,
+        'saved_addresses': saved_addresses,
         'page_title': 'Checkout',
     }
     return render(request, 'products/checkout.html', context)

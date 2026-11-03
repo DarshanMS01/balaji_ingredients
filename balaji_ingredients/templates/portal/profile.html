@@ -2,34 +2,448 @@
 
 {% block extra_head %}
 <style>
-  .profile-grid-layout {
-    display: grid;
-    grid-template-columns: 2fr 1.2fr;
-    gap: 28px;
+  /* ═════════════════════════════════════════════════════════════════
+     BLINKIT / ZOMATO INSPIRED USER PROFILE STYLES
+     ═════════════════════════════════════════════════════════════════ */
+  .profile-page-wrapper {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-bottom: 60px;
   }
 
-  .profile-card {
+  /* Top Hero Profile Banner Card */
+  .profile-hero-card {
+    background: linear-gradient(135deg, #173823 0%, #1f4a2f 60%, #2a613f 100%);
+    border: 1px solid rgba(200, 142, 43, 0.35);
+    border-radius: 20px;
+    padding: 32px 36px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: 0 12px 30px rgba(11, 15, 23, 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-hero-card::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(200, 142, 43, 0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-user-flex {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    z-index: 1;
+  }
+
+  /* Circular Avatar */
+  .avatar-container {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: #FAF8F5;
+    border: 3.5px solid #C88E2B;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #173823;
+    font-size: 36px;
+    font-weight: 800;
+    overflow: hidden;
+  }
+
+  .avatar-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .avatar-badge-edit {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 28px;
+    height: 28px;
+    background: #C88E2B;
+    color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border: 2px solid #173823;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .avatar-badge-edit:hover {
+    transform: scale(1.1);
+  }
+
+  .hero-info-col h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .verified-pill {
+    background: rgba(16, 185, 129, 0.18);
+    border: 1px solid #10B981;
+    color: #6EE7B7;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: #D1D5DB;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .hero-contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hero-meta-badges {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    z-index: 1;
+  }
+
+  .meta-badge-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 10px 16px;
+    text-align: right;
+  }
+
+  .meta-badge-label {
+    font-size: 11px;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .meta-badge-val {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FBBF24;
+    font-family: var(--font-mono, monospace);
+  }
+
+  /* Navigation Pills Bar (Blinkit style tab bar) */
+  .profile-nav-pills {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
+    overflow-x: auto;
+  }
+
+  .profile-pill-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text-body);
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    padding: 32px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
   }
 
-  .profile-section-title {
+  .profile-pill-link:hover {
+    color: #FFFFFF;
+    background: var(--bg-surface-elevated);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .profile-pill-link.active {
+    background: #173823;
+    color: #FAF8F5;
+    border-color: #C88E2B;
+    box-shadow: 0 4px 12px rgba(23, 56, 35, 0.4);
+  }
+
+  /* Two Column Profile Layout */
+  .profile-main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .section-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .section-card-title {
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 800;
     color: #FFFFFF;
     margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
-  .profile-section-sub {
-    font-size: 13px;
+  .section-card-desc {
+    font-size: 13.5px;
     color: var(--text-body);
-    margin-bottom: 24px;
+    margin-bottom: 22px;
+  }
+
+  /* Form Controls */
+  .form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #D1D5DB;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+
+  .form-label .req {
+    color: #EF4444;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    background: rgba(17, 24, 39, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #FFFFFF;
+    font-family: inherit;
+    transition: all 0.2s;
+    box-sizing: border-box;
+  }
+
+  .form-input:focus, .form-select:focus {
+    outline: none;
+    border-color: #C88E2B;
+    background: rgba(17, 24, 39, 1);
+    box-shadow: 0 0 0 3px rgba(200, 142, 43, 0.18);
+  }
+
+  .form-input[readonly] {
+    background: rgba(255, 255, 255, 0.04);
+    color: #9CA3AF;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  /* Gender Radio Pills */
+  .gender-pills-wrap {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .gender-pill-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #D1D5DB;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .gender-pill-label input {
+    accent-color: #C88E2B;
+  }
+
+  .gender-pill-label:hover {
+    border-color: #C88E2B;
+  }
+
+  /* Avatar File Upload styling */
+  .avatar-upload-box {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px dashed rgba(200, 142, 43, 0.35);
+    border-radius: 12px;
+    margin-bottom: 22px;
+  }
+
+  .btn-upload-avatar {
+    background: #173823;
+    color: #FAF8F5;
+    border: 1px solid #C88E2B;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-upload-avatar:hover {
+    background: #2D5A43;
+  }
+
+  /* Buttons */
+  .btn-save-profile {
+    background: #173823;
+    color: #FFFFFF;
+    border: 1.5px solid #C88E2B;
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(23, 56, 35, 0.4);
+    transition: all 0.2s ease;
+  }
+  .btn-save-profile:hover {
+    background: #2D5A43;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(200, 142, 43, 0.3);
+  }
+
+  /* Right Column: Account Status & Quick Hub */
+  .account-stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .stat-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .stat-row-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .stat-label-col span {
+    display: block;
+    font-size: 12px;
+    color: #9CA3AF;
+  }
+  .stat-label-col strong {
+    font-size: 14px;
+    color: #FFFFFF;
+  }
+
+  /* Quick action cards */
+  .quick-link-tile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .quick-link-tile:hover {
+    background: rgba(200, 142, 43, 0.12);
+    border-color: #C88E2B;
+    transform: translateX(4px);
+  }
+  .tile-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tile-icon {
+    font-size: 20px;
+  }
+  .tile-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .tile-sub {
+    font-size: 12px;
+    color: #9CA3AF;
   }
 
   @media (max-width: 900px) {
-    .profile-grid-layout {
+    .profile-hero-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px 20px;
+    }
+    .profile-main-grid {
+      grid-template-columns: 1fr;
+    }
+    .form-row-2 {
       grid-template-columns: 1fr;
     }
   }
@@ -37,133 +451,288 @@
 {% endblock %}
 
 {% block content %}
+<div class="profile-page-wrapper">
 
-<!-- Header -->
-<div style="margin-bottom:28px;">
-  <h1 style="font-size:24px; font-weight:800; color:#FFFFFF; letter-spacing:-0.03em;">
-    Enterprise Profile & Corporate Settings
-  </h1>
-  <p style="font-size:13.5px; color:var(--text-body); margin-top:2px;">
-    Manage your registered company details, GSTIN compliance, delivery addresses, and login security credentials.
-  </p>
-</div>
-
-<div class="profile-grid-layout">
-  
-  <!-- Left: Company Profile Info Form -->
-  <div class="profile-card">
-    <div class="profile-section-title">Company & Operational Information</div>
-    <div class="profile-section-sub">Update contact credentials for tax invoices and delivery consignments.</div>
-
-    <form method="POST" action="/profile/">
-      {% csrf_token %}
-      <input type="hidden" name="action" value="update_profile">
-
-      <div class="portal-input-grid-2">
-        <div class="portal-form-group">
-          <label class="portal-label">First Name</label>
-          <input type="text" name="first_name" class="portal-input" value="{{ request.user.first_name }}" required>
-        </div>
-        <div class="portal-form-group">
-          <label class="portal-label">Last Name</label>
-          <input type="text" name="last_name" class="portal-input" value="{{ request.user.last_name }}">
-        </div>
+  <!-- ══════════════════════════════════════════════════════════════
+       HERO PROFILE HEADER (Blinkit / Zomato style)
+       ══════════════════════════════════════════════════════════════ -->
+  <div class="profile-hero-card">
+    <div class="hero-user-flex">
+      <div class="avatar-container" id="heroAvatarCircle">
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}" alt="{{ user.get_full_name|default:user.username }}">
+        {% else %}
+          <span>{{ user.first_name|default:user.username|slice:":1"|upper }}</span>
+        {% endif %}
+        <label for="id_avatar_input" class="avatar-badge-edit" title="Upload new photo">✎</label>
       </div>
 
-      <div class="portal-input-grid-2">
-        <div class="portal-form-group">
-          <label class="portal-label">Registered E-mail Address</label>
-          <input type="email" name="email" class="portal-input" value="{{ request.user.email }}" required>
-        </div>
-        <div class="portal-form-group">
-          <label class="portal-label">Official Contact Mobile</label>
-          <input type="tel" name="phone" class="portal-input" value="{{ profile.phone }}" required>
+      <div class="hero-info-col">
+        <h1>
+          {{ user.get_full_name|default:user.username }}
+          <span class="verified-pill">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Active Customer
+          </span>
+        </h1>
+        <div class="hero-contact-row">
+          <span class="hero-contact-item">✉️ {{ user.email }}</span>
+          {% if profile.phone %}
+            <span class="hero-contact-item">📞 {{ profile.phone }}</span>
+          {% endif %}
         </div>
       </div>
+    </div>
 
-      <div class="portal-input-grid-2">
-        <div class="portal-form-group">
-          <label class="portal-label">Registered Company Name</label>
-          <input type="text" name="company_name" class="portal-input" value="{{ profile.company_name }}" required>
-        </div>
-        <div class="portal-form-group">
-          <label class="portal-label">Business Enterprise Type</label>
-          <select name="business_type" class="portal-select">
-            <option value="manufacturer" {% if profile.business_type == 'manufacturer' %}selected{% endif %}>Food Manufacturer / FMCG</option>
-            <option value="processor" {% if profile.business_type == 'processor' %}selected{% endif %}>Flour Mill / Spice Processor</option>
-            <option value="distributor" {% if profile.business_type == 'distributor' %}selected{% endif %}>Wholesaler / Distributor</option>
-            <option value="retail_chain" {% if profile.business_type == 'retail_chain' %}selected{% endif %}>Supermarket / Retail Chain</option>
-            <option value="horeca" {% if profile.business_type == 'horeca' %}selected{% endif %}>HoReCa Institutional Supply</option>
-            <option value="exporter" {% if profile.business_type == 'exporter' %}selected{% endif %}>Export / Trading House</option>
-          </select>
-        </div>
+    <div class="hero-meta-badges">
+      <div class="meta-badge-box">
+        <div class="meta-badge-label">Customer ID</div>
+        <div class="meta-badge-val">{{ profile.customer_id }}</div>
       </div>
-
-      <div class="portal-input-grid-2">
-        <div class="portal-form-group">
-          <label class="portal-label">GSTIN / Tax ID</label>
-          <input type="text" name="gstin" class="portal-input" value="{{ profile.gstin }}" placeholder="29AAACA9876Q1Z2">
-        </div>
-        <div class="portal-form-group">
-          <label class="portal-label">PAN Number</label>
-          <input type="text" name="pan_number" class="portal-input" value="{{ profile.pan_number }}" placeholder="AAACA9876Q">
-        </div>
+      <div class="meta-badge-box">
+        <div class="meta-badge-label">Member Since</div>
+        <div class="meta-badge-val">{{ user.date_joined|date:"M Y" }}</div>
       </div>
-
-      <div class="portal-form-group">
-        <label class="portal-label">Primary Delivery & Billing Address</label>
-        <input type="text" name="address_line1" class="portal-input" value="{{ profile.address_line1 }}" placeholder="Plot 48-A, Industrial Area" required>
-      </div>
-
-      <div class="portal-input-grid-2">
-        <div class="portal-form-group">
-          <label class="portal-label">City</label>
-          <input type="text" name="city" class="portal-input" value="{{ profile.city }}" required>
-        </div>
-        <div class="portal-form-group">
-          <label class="portal-label">State & Pincode</label>
-          <input type="text" name="state" class="portal-input" value="{{ profile.state }} {{ profile.pincode }}" required>
-        </div>
-      </div>
-
-      <div style="display:flex; justify-content:flex-end; margin-top:16px;">
-        <button type="submit" class="btn-primary-gold" style="padding:12px 32px;">
-          Save Profile Changes
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 
-  <!-- Right: Change Password Card -->
-  <div class="profile-card" style="height:fit-content;">
-    <div class="profile-section-title">Change Password</div>
-    <div class="profile-section-sub">Update authentication password for this enterprise login.</div>
+  <!-- ══════════════════════════════════════════════════════════════
+       NAVIGATION PILLS
+       ══════════════════════════════════════════════════════════════ -->
+  <nav class="profile-nav-pills" aria-label="Account Navigation">
+    <a href="{% url 'portal:profile' %}" class="profile-pill-link active">
+      <span>👤</span> Personal Information
+    </a>
+    <a href="{% url 'portal:addresses' %}" class="profile-pill-link">
+      <span>📍</span> My Addresses ({{ saved_addresses.count }})
+    </a>
+    <a href="{% url 'portal:orders' %}" class="profile-pill-link">
+      <span>📦</span> My Orders ({{ orders_count }})
+    </a>
+    <a href="/products/cart/" class="profile-pill-link">
+      <span>🛒</span> My Cart
+    </a>
+    <a href="{% url 'portal:account_settings' %}" class="profile-pill-link">
+      <span>⚙️</span> Account Settings
+    </a>
+  </nav>
 
-    <form method="POST" action="/profile/">
-      {% csrf_token %}
-      <input type="hidden" name="action" value="change_password">
+  <!-- ══════════════════════════════════════════════════════════════
+       MAIN PROFILE GRID
+       ══════════════════════════════════════════════════════════════ -->
+  <div class="profile-main-grid">
 
-      <div class="portal-form-group">
-        <label class="portal-label">Current Password</label>
-        <input type="password" name="old_password" class="portal-input" required>
+    <!-- Left Column: Personal Information Form -->
+    <div class="profile-content-col">
+      <div class="section-card">
+        <div class="section-card-title">
+          <span>👤</span> Personal Information
+        </div>
+        <div class="section-card-desc">
+          Update your personal details, profile picture, and contact credentials for orders and invoices.
+        </div>
+
+        <form method="POST" action="{% url 'portal:profile' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="update_profile">
+
+          <!-- Avatar Uploader Box -->
+          <div class="avatar-upload-box">
+            <div style="width: 54px; height: 54px; border-radius: 50%; background: #FAF8F5; border: 2px solid #C88E2B; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #173823; overflow: hidden; flex-shrink: 0;">
+              {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" style="width:100%;height:100%;object-fit:cover;" alt="Avatar">
+              {% else %}
+                {{ user.first_name|default:user.username|slice:":1"|upper }}
+              {% endif %}
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 13.5px; font-weight: 700; color: #FFFFFF; margin-bottom: 2px;">Profile Photograph</div>
+              <div style="font-size: 12px; color: #9CA3AF; margin-bottom: 8px;">Upload JPG, PNG or WEBP (Max 2MB)</div>
+              <input type="file" name="avatar" id="id_avatar_input" accept="image/*" style="font-size: 12px; color: #D1D5DB;">
+            </div>
+            {% if profile.avatar %}
+              <button type="submit" name="action" value="remove_avatar" class="profile-pill-link" style="padding: 6px 12px; font-size: 12px; color: #EF4444; border-color: rgba(239, 68, 68, 0.4);">
+                Remove Photo
+              </button>
+            {% endif %}
+          </div>
+
+          <!-- Name Row -->
+          <div class="form-row-2">
+            <div>
+              <label class="form-label" for="id_first_name">First Name <span class="req">*</span></label>
+              <input type="text" name="first_name" id="id_first_name" class="form-input" value="{{ user.first_name }}" required placeholder="Enter first name">
+            </div>
+            <div>
+              <label class="form-label" for="id_last_name">Last Name</label>
+              <input type="text" name="last_name" id="id_last_name" class="form-input" value="{{ user.last_name }}" placeholder="Enter last name">
+            </div>
+          </div>
+
+          <!-- Contact Row -->
+          <div class="form-row-2">
+            <div>
+              <label class="form-label" for="id_email">Email Address <span class="req">*</span></label>
+              <input type="email" name="email" id="id_email" class="form-input" value="{{ user.email }}" required placeholder="your.email@company.com">
+            </div>
+            <div>
+              <label class="form-label" for="id_phone">Mobile Number <span class="req">*</span></label>
+              <input type="tel" name="phone" id="id_phone" class="form-input" value="{{ profile.phone }}" required placeholder="+91 99021 55348">
+            </div>
+          </div>
+
+          <!-- DOB & Gender Row -->
+          <div class="form-row-2">
+            <div>
+              <label class="form-label" for="id_dob">Date of Birth (Optional)</label>
+              <input type="date" name="date_of_birth" id="id_dob" class="form-input" value="{{ profile.date_of_birth|date:'Y-m-d'|default:'' }}">
+            </div>
+            <div>
+              <label class="form-label">Gender (Optional)</label>
+              <div class="gender-pills-wrap">
+                <label class="gender-pill-label">
+                  <input type="radio" name="gender" value="male" {% if profile.gender == 'male' %}checked{% endif %}> Male
+                </label>
+                <label class="gender-pill-label">
+                  <input type="radio" name="gender" value="female" {% if profile.gender == 'female' %}checked{% endif %}> Female
+                </label>
+                <label class="gender-pill-label">
+                  <input type="radio" name="gender" value="other" {% if profile.gender == 'other' %}checked{% endif %}> Other
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company / Commercial Details (B2B Expansion) -->
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="font-size: 15px; font-weight: 700; color: #FBBF24; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <span>🏢</span> Company &amp; Tax Information (Optional for B2B Invoicing)
+            </div>
+
+            <div class="form-row-2">
+              <div>
+                <label class="form-label" for="id_company">Company / Business Name</label>
+                <input type="text" name="company_name" id="id_company" class="form-input" value="{{ profile.company_name }}" placeholder="e.g. Balaji Agro Industries">
+              </div>
+              <div>
+                <label class="form-label" for="id_gstin">GSTIN (Optional)</label>
+                <input type="text" name="gstin" id="id_gstin" class="form-input" value="{{ profile.gstin }}" placeholder="29AAACA9876Q1Z2">
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn-save-profile">
+              <span>💾</span> Save Profile Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Column: Account Status & Quick Navigation Hub -->
+    <div class="profile-sidebar-col">
+
+      <!-- Account Summary Card -->
+      <div class="section-card">
+        <div class="section-card-title">
+          <span>📋</span> Account Summary
+        </div>
+        <div class="account-stat-list">
+          <div class="stat-row-item">
+            <div class="stat-label-col">
+              <span>Customer ID</span>
+              <strong>{{ profile.customer_id }}</strong>
+            </div>
+            <span style="font-size:11px; padding:2px 8px; border-radius:6px; background:rgba(200,142,43,0.18); color:#FBBF24; font-weight:700;">OFFICIAL</span>
+          </div>
+          <div class="stat-row-item">
+            <div class="stat-label-col">
+              <span>Account Status</span>
+              <strong style="color:#10B981; display:flex; align-items:center; gap:6px;">
+                <span style="width:8px; height:8px; border-radius:50%; background:#10B981; display:inline-block;"></span>
+                Active &amp; Verified
+              </strong>
+            </div>
+          </div>
+          <div class="stat-row-item">
+            <div class="stat-label-col">
+              <span>Account Created</span>
+              <strong>{{ user.date_joined|date:"d M Y, h:i A" }}</strong>
+            </div>
+          </div>
+          <div class="stat-row-item">
+            <div class="stat-label-col">
+              <span>Total Orders</span>
+              <strong>{{ orders_count }} Orders Placed</strong>
+            </div>
+            <a href="{% url 'portal:orders' %}" style="color:#FBBF24; font-size:12px; font-weight:700; text-decoration:none;">View →</a>
+          </div>
+          <div class="stat-row-item">
+            <div class="stat-label-col">
+              <span>Saved Addresses</span>
+              <strong>{{ saved_addresses.count }} Addresses</strong>
+            </div>
+            <a href="{% url 'portal:addresses' %}" style="color:#FBBF24; font-size:12px; font-weight:700; text-decoration:none;">Manage →</a>
+          </div>
+        </div>
       </div>
 
-      <div class="portal-form-group">
-        <label class="portal-label">New Password (Min 6 chars)</label>
-        <input type="password" name="new_password" class="portal-input" required>
+      <!-- Quick Action Navigation Tiles (Blinkit style) -->
+      <div class="section-card">
+        <div class="section-card-title">
+          <span>⚡</span> Quick Actions
+        </div>
+        <div style="margin-top: 14px;">
+          <a href="{% url 'portal:orders' %}" class="quick-link-tile">
+            <div class="tile-content">
+              <span class="tile-icon">📦</span>
+              <div>
+                <div class="tile-title">My Orders</div>
+                <div class="tile-sub">Track active consignments &amp; history</div>
+              </div>
+            </div>
+            <span>➔</span>
+          </a>
+
+          <a href="{% url 'portal:addresses' %}" class="quick-link-tile">
+            <div class="tile-content">
+              <span class="tile-icon">📍</span>
+              <div>
+                <div class="tile-title">Delivery Addresses</div>
+                <div class="tile-sub">Manage default shipping locations</div>
+              </div>
+            </div>
+            <span>➔</span>
+          </a>
+
+          <a href="{% url 'portal:account_settings' %}" class="quick-link-tile">
+            <div class="tile-content">
+              <span class="tile-icon">⚙️</span>
+              <div>
+                <div class="tile-title">Account Settings</div>
+                <div class="tile-sub">Change password, email &amp; security</div>
+              </div>
+            </div>
+            <span>➔</span>
+          </a>
+
+          <a href="javascript:void(0)" onclick="openLogoutModal()" class="quick-link-tile" style="border-color: rgba(239, 68, 68, 0.3);">
+            <div class="tile-content">
+              <span class="tile-icon">🚪</span>
+              <div>
+                <div class="tile-title" style="color: #F87171;">Log Out</div>
+                <div class="tile-sub">Safely end your session</div>
+              </div>
+            </div>
+            <span style="color: #F87171;">➔</span>
+          </a>
+        </div>
       </div>
 
-      <div class="portal-form-group">
-        <label class="portal-label">Confirm New Password</label>
-        <input type="password" name="confirm_new_password" class="portal-input" required>
-      </div>
+    </div>
 
-      <button type="submit" class="btn-secondary-outline" style="width:100%; justify-content:center; padding:12px; margin-top:8px;">
-        Update Password
-      </button>
-    </form>
   </div>
 
 </div>
-
 {% endblock %}

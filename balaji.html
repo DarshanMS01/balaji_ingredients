@@ -2480,7 +2480,277 @@
       }
     }
   
-  </style>
+  
+    /* ==========================================
+       BLINKIT / ZOMATO STYLE PROFILE DROPDOWN
+    ========================================== */
+    .user-profile-menu-container {
+      position: relative;
+    }
+
+    .btn-profile-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: #FFFFFF;
+      border: 1.5px solid rgba(23, 56, 35, 0.2);
+      padding: 4px 14px 4px 5px;
+      border-radius: 9999px;
+      cursor: pointer;
+      color: #173823;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-profile-pill:hover,
+    .btn-profile-pill.active {
+      background: #FAF8F5;
+      border-color: #C88E2B;
+      box-shadow: 0 4px 14px rgba(200, 142, 43, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .profile-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #173823, #2E6641);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1.5px solid #C88E2B;
+    }
+
+    .profile-user-name {
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #173823;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .profile-chevron-icon {
+      color: #78716C;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-profile-pill.active .profile-chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .profile-dropdown-card {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 250px;
+      background: #FFFFFF;
+      border: 1px solid rgba(23, 56, 35, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.05);
+      z-index: 10000;
+      overflow: hidden;
+      animation: dropdownPop 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes dropdownPop {
+      from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .profile-dropdown-header {
+      padding: 14px 16px 12px;
+      background: linear-gradient(180deg, #FAF8F5, #FFFFFF);
+      border-bottom: 1px solid #F0ECE6;
+    }
+
+    .profile-dropdown-user {
+      font-weight: 800;
+      font-size: 0.94rem;
+      color: #173823;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-dropdown-email {
+      font-size: 0.74rem;
+      color: #78716C;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-dropdown-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      background: rgba(30, 107, 62, 0.1);
+      color: #1E6B3E;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .profile-dropdown-body {
+      padding: 6px;
+    }
+
+    .profile-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: #292524;
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+    }
+
+    .profile-dropdown-item:hover {
+      background: #F5EFEB;
+      color: #173823;
+      transform: translateX(2px);
+    }
+
+    .p-item-icon {
+      font-size: 1rem;
+      width: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-dropdown-separator {
+      height: 1px;
+      background: #F0ECE6;
+      margin: 4px 6px;
+    }
+
+    .profile-dropdown-item.item-logout {
+      color: #A82B1D;
+    }
+
+    .profile-dropdown-item.item-logout:hover {
+      background: #FDF2F2;
+      color: #872015;
+    }
+
+    /* Logout Modal */
+    .home-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: modalFadeIn 0.2s ease;
+    }
+
+    .home-logout-modal-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      max-width: 420px;
+      width: 100%;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .home-logout-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #FDF2F2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      border: 1px solid rgba(168, 43, 29, 0.2);
+    }
+
+    .home-logout-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1E293B;
+      margin-bottom: 8px;
+    }
+
+    .home-logout-desc {
+      font-size: 0.85rem;
+      color: #64748B;
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+
+    .home-logout-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-home-logout-cancel {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 9999px;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      color: #334155;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-home-logout-cancel:hover {
+      background: #E2E8F0;
+    }
+
+    .btn-home-logout-confirm {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 9999px;
+      background: #A82B1D;
+      border: none;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 14px rgba(168, 43, 29, 0.3);
+    }
+
+    .btn-home-logout-confirm:hover {
+      background: #872015;
+    }
+
+</style>
 </head>
 <body>
 
@@ -2578,20 +2848,63 @@
             <a href="#contact" class="btn-quote">Request a Quote</a>
           </div>
 
-          <!-- Logged In State: Orders, Dashboard, Sign Out -->
-          <div id="navAuthLoggedIn" style="display: none; align-items: center; gap: 8px;">
-            <button type="button" class="btn-nav-orders" onclick="openMyOrdersModal()">
-              📦 My Orders
-            </button>
-            <a href="dashboard.html" class="btn-quote" style="background: #A82B1D; display: inline-flex; align-items: center; gap: 8px;">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-              </svg>
-              <span id="navUserBadge">Dashboard</span>
-            </a>
-            <button type="button" class="btn-nav-orders" style="background: transparent; border-color: rgba(28,25,23,0.25);" onclick="handleLogout()" title="Sign Out">
-              🚪 Sign Out
-            </button>
+                    <!-- Logged In State: Blinkit / Zomato Style User Profile Dropdown -->
+          <div id="navAuthLoggedIn" style="display: none; align-items: center; gap: 10px; position: relative;">
+            <div class="user-profile-menu-container" style="position: relative;">
+              <button type="button" class="btn-profile-pill" id="navProfileTrigger" onclick="toggleNavProfileDropdown(event)" aria-expanded="false" aria-haspopup="true">
+                <div class="profile-avatar-circle" id="navProfileAvatar">
+                  <span id="navProfileInitial">U</span>
+                  <img id="navProfileAvatarImg" src="" alt="Profile" style="display: none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                </div>
+                <span class="profile-user-name" id="navProfileName">My Account</span>
+                <svg class="profile-chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <!-- 7-Item Profile Dropdown Menu -->
+              <div class="profile-dropdown-card" id="navProfileDropdown" style="display: none;">
+                <div class="profile-dropdown-header">
+                  <div class="profile-dropdown-user" id="navDropdownFullName">Client Partner</div>
+                  <div class="profile-dropdown-email" id="navDropdownEmail">partner@balajiingredients.com</div>
+                  <div class="profile-dropdown-badge">
+                    <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    Verified Account
+                  </div>
+                </div>
+                <div class="profile-dropdown-body">
+                  <a href="/profile/" class="profile-dropdown-item">
+                    <span class="p-item-icon">👤</span>
+                    <span class="p-item-text">My Profile</span>
+                  </a>
+                  <a href="/orders/" class="profile-dropdown-item">
+                    <span class="p-item-icon">📦</span>
+                    <span class="p-item-text">My Orders</span>
+                  </a>
+                  <a href="/addresses/" class="profile-dropdown-item">
+                    <span class="p-item-icon">📍</span>
+                    <span class="p-item-text">My Addresses</span>
+                  </a>
+                  <a href="/products/cart/" class="profile-dropdown-item">
+                    <span class="p-item-icon">🛒</span>
+                    <span class="p-item-text">My Cart</span>
+                  </a>
+                  <a href="/account-settings/" class="profile-dropdown-item">
+                    <span class="p-item-icon">⚙️</span>
+                    <span class="p-item-text">Account Settings</span>
+                  </a>
+                  <a href="/portal/support/" class="profile-dropdown-item">
+                    <span class="p-item-icon">💬</span>
+                    <span class="p-item-text">Help &amp; Support</span>
+                  </a>
+                  <div class="profile-dropdown-separator"></div>
+                  <button type="button" class="profile-dropdown-item item-logout" onclick="openHomeLogoutModal()">
+                    <span class="p-item-icon">🚪</span>
+                    <span class="p-item-text">Logout</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Mobile Hamburger Toggle Button -->
@@ -2631,6 +2944,21 @@
         <a href="#story" class="mobile-nav-link" onclick="closeMobileNav()">Our Story</a>
         <a href="#contact" class="mobile-nav-link" onclick="closeMobileNav()">Contact</a>
         <a href="feedback.html" class="mobile-nav-link" onclick="closeMobileNav()">Feedback</a>
+
+                <!-- Mobile Profile Options for Logged In User -->
+        <div id="mobileDrawerProfileGroup" style="display: none; margin-top: 10px; border-top: 1px solid rgba(28,25,23,0.12); padding-top: 12px;">
+          <div style="padding: 10px 14px; background: rgba(23, 56, 35, 0.08); border-radius: 12px; margin-bottom: 10px;">
+            <div style="font-weight: 800; color: #173823; font-size: 0.92rem;" id="mobileDrawerUserName">Client Partner</div>
+            <div style="font-size: 0.74rem; color: #78716C;" id="mobileDrawerUserEmail">user@balajiingredients.com</div>
+          </div>
+          <a href="/profile/" class="mobile-nav-link" onclick="closeMobileNav()">👤 My Profile</a>
+          <a href="/orders/" class="mobile-nav-link" onclick="closeMobileNav()">📦 My Orders</a>
+          <a href="/addresses/" class="mobile-nav-link" onclick="closeMobileNav()">📍 My Addresses</a>
+          <a href="/products/cart/" class="mobile-nav-link" onclick="closeMobileNav()">🛒 My Cart</a>
+          <a href="/account-settings/" class="mobile-nav-link" onclick="closeMobileNav()">⚙️ Account Settings</a>
+          <a href="/portal/support/" class="mobile-nav-link" onclick="closeMobileNav()">💬 Help &amp; Support</a>
+          <a href="javascript:void(0)" onclick="closeMobileNav(); openHomeLogoutModal();" class="mobile-nav-link" style="color: #A82B1D; font-weight: 700;">🚪 Logout</a>
+        </div>
 
         <div class="mobile-drawer-bottom">
           <a href="tel:+919902155348" class="mobile-phone-link">
@@ -4403,11 +4731,91 @@
       document.body.style.overflow = 'auto';
     }
 
+    function toggleNavProfileDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('navProfileDropdown');
+      const trigger = document.getElementById('navProfileTrigger');
+      if (!dropdown) return;
+      const isOpen = dropdown.style.display === 'block';
+      dropdown.style.display = isOpen ? 'none' : 'block';
+      if (trigger) {
+        if (isOpen) trigger.classList.remove('active');
+        else trigger.classList.add('active');
+      }
+    }
+
+    function openHomeLogoutModal() {
+      const dropdown = document.getElementById('navProfileDropdown');
+      if (dropdown) dropdown.style.display = 'none';
+      const trigger = document.getElementById('navProfileTrigger');
+      if (trigger) trigger.classList.remove('active');
+      const modal = document.getElementById('homeLogoutModalOverlay');
+      if (modal) modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeHomeLogoutModal() {
+      const modal = document.getElementById('homeLogoutModalOverlay');
+      if (modal) modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function getCookie(name) {
+      const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return v ? v[2] : null;
+    }
+
+    async function confirmHomeLogout() {
+      try {
+        await fetch('/api/auth/logout/', { 
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken') || ''
+          }
+        });
+      } catch (e) {}
+      localStorage.removeItem('balaji_logged_in');
+      localStorage.removeItem('balaji_user');
+      closeHomeLogoutModal();
+      if (typeof updateNavAuthState === 'function') {
+        updateNavAuthState();
+      }
+      if (typeof showHomeToast === 'function') {
+        showHomeToast('✓ You have been signed out.');
+      }
+    }
+
+    window.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('navProfileDropdown');
+      const trigger = document.getElementById('navProfileTrigger');
+      if (dropdown && dropdown.style.display === 'block') {
+        if (!dropdown.contains(e.target) && (!trigger || !trigger.contains(e.target))) {
+          dropdown.style.display = 'none';
+          if (trigger) trigger.classList.remove('active');
+        }
+      }
+    });
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const dropdown = document.getElementById('navProfileDropdown');
+        if (dropdown) dropdown.style.display = 'none';
+        closeHomeLogoutModal();
+      }
+    });
+
     async function updateNavAuthState() {
       let isLoggedIn = localStorage.getItem('balaji_logged_in') === 'true';
       const outBox = document.getElementById('navAuthLoggedOut');
       const inBox = document.getElementById('navAuthLoggedIn');
-      const badge = document.getElementById('navUserBadge');
+      const profileName = document.getElementById('navProfileName');
+      const profileInitial = document.getElementById('navProfileInitial');
+      const profileImg = document.getElementById('navProfileAvatarImg');
+      const dropFullName = document.getElementById('navDropdownFullName');
+      const dropEmail = document.getElementById('navDropdownEmail');
+      const mobileDrawerProfile = document.getElementById('mobileDrawerProfileGroup');
+      const mobileDrawerUserName = document.getElementById('mobileDrawerUserName');
+      const mobileDrawerUserEmail = document.getElementById('mobileDrawerUserEmail');
 
       // Sync with backend session status if available
       try {
@@ -4417,13 +4825,18 @@
           if (data.authenticated && data.user) {
             isLoggedIn = true;
             localStorage.setItem('balaji_logged_in', 'true');
-            if (!localStorage.getItem('balaji_user')) {
-              localStorage.setItem('balaji_user', JSON.stringify({
-                name: data.user.name,
-                email: data.user.email,
-                role: 'Wholesale Partner'
-              }));
-            }
+            localStorage.setItem('balaji_user', JSON.stringify({
+              name: data.user.name,
+              first_name: data.user.first_name,
+              email: data.user.email,
+              initials: data.user.initials,
+              avatar_url: data.user.avatar_url,
+              role: data.user.role || 'Wholesale Partner'
+            }));
+          } else {
+            isLoggedIn = false;
+            localStorage.removeItem('balaji_logged_in');
+            localStorage.removeItem('balaji_user');
           }
         }
       } catch (e) {}
@@ -4431,27 +4844,36 @@
       if (isLoggedIn) {
         if (outBox) outBox.style.display = 'none';
         if (inBox) inBox.style.display = 'flex';
+        if (mobileDrawerProfile) mobileDrawerProfile.style.display = 'block';
+
         try {
           const u = JSON.parse(localStorage.getItem('balaji_user') || '{}');
-          if (badge && u.name) {
-            badge.textContent = u.name.split(' ')[0] || 'Dashboard';
+          const displayName = u.first_name || (u.name ? u.name.split(' ')[0] : 'Partner');
+          const initial = u.initials || (displayName ? displayName.charAt(0).toUpperCase() : 'U');
+
+          if (profileName) profileName.textContent = displayName;
+          if (profileInitial) profileInitial.textContent = initial;
+          if (dropFullName) dropFullName.textContent = u.name || displayName;
+          if (dropEmail) dropEmail.textContent = u.email || 'partner@balajiingredients.com';
+
+          if (mobileDrawerUserName) mobileDrawerUserName.textContent = u.name || displayName;
+          if (mobileDrawerUserEmail) mobileDrawerUserEmail.textContent = u.email || 'partner@balajiingredients.com';
+
+          if (profileImg) {
+            if (u.avatar_url) {
+              profileImg.src = u.avatar_url;
+              profileImg.style.display = 'block';
+              if (profileInitial) profileInitial.style.display = 'none';
+            } else {
+              profileImg.style.display = 'none';
+              if (profileInitial) profileInitial.style.display = 'inline';
+            }
           }
         } catch (e) {}
       } else {
         if (outBox) outBox.style.display = 'flex';
         if (inBox) inBox.style.display = 'none';
-      }
-    }
-
-    async function handleLogout() {
-      try {
-        await fetch('/api/auth/logout/', { method: 'POST' });
-      } catch (e) {}
-      localStorage.removeItem('balaji_logged_in');
-      localStorage.removeItem('balaji_user');
-      updateNavAuthState();
-      if (typeof showHomeToast === 'function') {
-        showHomeToast('✓ You have been signed out.');
+        if (mobileDrawerProfile) mobileDrawerProfile.style.display = 'none';
       }
     }
 

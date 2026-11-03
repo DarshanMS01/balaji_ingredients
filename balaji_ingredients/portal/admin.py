@@ -1,6 +1,14 @@
 from django.contrib import admin
 from django.contrib import messages
-from .models import CompanyProfile, Order, OrderItem, PaymentConfig
+from .models import CompanyProfile, Order, OrderItem, PaymentConfig, UserAddress
+
+
+@admin.register(UserAddress)
+class UserAddressAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'user', 'phone', 'address_type', 'city', 'state', 'pincode', 'is_default', 'created_at')
+    list_filter = ('address_type', 'is_default', 'state')
+    search_fields = ('full_name', 'phone', 'city', 'state', 'pincode', 'user__username', 'user__email')
+
 
 
 class OrderItemInline(admin.TabularInline):

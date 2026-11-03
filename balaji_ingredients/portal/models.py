@@ -31,6 +31,17 @@ class CompanyProfile(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     pincode = models.CharField(max_length=15)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=20, choices=[
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+        ('prefer_not_to_say', 'Prefer not to say'),
+    ], blank=True)
+    email_notifications = models.BooleanField(default=True)
+    sms_notifications = models.BooleanField(default=True)
+    whatsapp_notifications = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False, help_text="Checked after GST verification")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -41,6 +52,63 @@ class CompanyProfile(models.Model):
 
     def __str__(self):
         return f"{self.company_name} ({self.user.username})"
+
+    @property
+    def customer_id(self):
+        return f"BI-CUST-{self.user.id:05d}"
+
+
+class UserAddress(models.Model):
+    """
+    Saved customer delivery addresses (e-commerce style: Home, Work, Other)
+    with one-click selection during checkout and full CRUD support.
+    """
+    ADDRESS_TYPES = [
+        ('home', 'Home'),
+        ('work', 'Work'),
+        ('other', 'Other'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_addresses')
+    full_name = models.CharField(max_length=150)
+    phone = models.CharField(max_length=30)
+    house_no = models.CharField(max_length=150, verbose_name="House / Building Number")
+    street_area = models.CharField(max_length=250, verbose_name="Street / Area")
+    landmark = models.CharField(max_length=150, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
+    address_type = models.CharField(max_length=20, choices=ADDRESS_TYPES, default='home')
+    is_default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'User Address'
+        verbose_name_plural = 'User Addresses'
+        ordering = ['-is_default', '-created_at']
+
+    def __str__(self):
+        return f"{self.full_name} - {self.address_type.title()} ({self.city})"
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            # Ensure only one default address exists per user
+            UserAddress.objects.filter(user=self.user, is_default=True).exclude(pk=self.pk).update(is_default=False)
+        super().save(*args, **kwargs)
+
+    @property
+    def formatted_address(self):
+        parts = []
+        if self.house_no:
+            parts.append(self.house_no)
+        if self.street_area:
+            parts.append(self.street_area)
+        if self.landmark:
+            parts.append(f"Near {self.landmark}")
+        parts.append(self.city)
+        parts.append(f"{self.state} - {self.pincode}")
+        return ", ".join(parts)
 
 
 class Order(models.Model):

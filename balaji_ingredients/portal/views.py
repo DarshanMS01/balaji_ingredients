@@ -23,7 +23,7 @@ from datetime import date, timedelta
 import json
 import uuid
 
-from .models import CompanyProfile, Order, OrderItem, B2BDocument, Notification, SupportTicket
+from .models import UserAddress, CompanyProfile, Order, OrderItem, B2BDocument, Notification, SupportTicket
 from products.models import Category, Product, ProductSpecification, QuoteRequest
 from core.models import CustomerFeedback
 from django.core.validators import validate_email, ValidationError
@@ -446,61 +446,354 @@ def documents_view(request):
 @login_required(login_url='/login/')
 def profile_view(request):
     """
-    User and Company Profile view and edit form.
+    Professional User Profile view & edit page (Blinkit / Zomato style).
+    Displays Personal Information, Avatar, Account Information, and B2B details.
     """
     user = request.user
     profile, _ = CompanyProfile.objects.get_or_create(
         user=user,
-        defaults={'company_name': f"{user.first_name or user.username}'s Company"}
+        defaults={'company_name': f"{user.first_name or user.username}'s Enterprise"}
     )
 
     if request.method == 'POST':
         action = request.POST.get('action', 'update_profile')
 
         if action == 'update_profile':
-            user.first_name = request.POST.get('first_name', user.first_name)
-            user.last_name = request.POST.get('last_name', user.last_name)
-            user.email = request.POST.get('email', user.email)
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip().lower()
+            phone = request.POST.get('phone', '').strip()
+            date_of_birth = request.POST.get('date_of_birth', '').strip()
+            gender = request.POST.get('gender', '').strip()
+            company_name = request.POST.get('company_name', '').strip()
+
+            if first_name:
+                user.first_name = first_name
+            if last_name:
+                user.last_name = last_name
+
+            # Email validation if modified
+            if email and email != user.email:
+                try:
+                    from django.core.validators import validate_email, ValidationError
+                    validate_email(email)
+                    if User.objects.filter(email__iexact=email).exclude(pk=user.pk).exists():
+                        messages.error(request, 'This email address is already in use by another account.')
+                        return redirect(request.path)
+                    user.email = email
+                except ValidationError:
+                    messages.error(request, 'Please enter a valid email address.')
+                    return redirect(request.path)
+
             user.save()
 
-            profile.company_name = request.POST.get('company_name', profile.company_name)
-            profile.phone = request.POST.get('phone', profile.phone)
-            profile.gstin = request.POST.get('gstin', profile.gstin)
-            profile.pan_number = request.POST.get('pan_number', profile.pan_number)
-            profile.business_type = request.POST.get('business_type', profile.business_type)
-            profile.address_line1 = request.POST.get('address_line1', profile.address_line1)
-            profile.city = request.POST.get('city', profile.city)
-            profile.state = request.POST.get('state', profile.state)
-            profile.pincode = request.POST.get('pincode', profile.pincode)
+            if phone:
+                profile.phone = phone
+            if company_name:
+                profile.company_name = company_name
+            if gender in ('male', 'female', 'other', 'prefer_not_to_say', ''):
+                profile.gender = gender
+
+            if date_of_birth:
+                try:
+                    profile.date_of_birth = date_of_birth
+                except Exception:
+                    pass
+            elif date_of_birth == '':
+                profile.date_of_birth = None
+
+            if 'avatar' in request.FILES:
+                profile.avatar = request.FILES['avatar']
+
+            # Optional company fields
+            profile.gstin = request.POST.get('gstin', profile.gstin).strip()
+            profile.pan_number = request.POST.get('pan_number', profile.pan_number).strip()
+            profile.business_type = request.POST.get('business_type', profile.business_type).strip()
+            profile.address_line1 = request.POST.get('address_line1', profile.address_line1).strip()
+            profile.city = request.POST.get('city', profile.city).strip()
+            profile.state = request.POST.get('state', profile.state).strip()
+            profile.pincode = request.POST.get('pincode', profile.pincode).strip()
             profile.save()
 
-            messages.success(request, 'Company profile updated successfully.')
-            return redirect('/profile/')
+            messages.success(request, 'Your personal profile has been updated successfully.')
+            return redirect(request.path)
+
+        elif action == 'remove_avatar':
+            if profile.avatar:
+                profile.avatar.delete(save=False)
+                profile.avatar = None
+                profile.save()
+                messages.success(request, 'Profile photograph removed.')
+            return redirect(request.path)
+
+    saved_addresses = UserAddress.objects.filter(user=user)
+    orders_count = Order.objects.filter(user=user).count()
+
+    context = {
+        'page_title': 'My Profile - Balaji Ingredients',
+        'active_nav': 'profile',
+        'profile': profile,
+        'user': user,
+        'saved_addresses': saved_addresses,
+        'orders_count': orders_count,
+    }
+    return render(request, 'portal/profile.html', context)
+
+
+@login_required(login_url='/login/')
+def addresses_view(request):
+    """
+    My Addresses management page (Blinkit / Zomato style address book).
+    Supports Add, Edit, Delete, and Set Default.
+    """
+    user = request.user
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        address_id = request.POST.get('address_id')
+
+        if action == 'delete' and address_id:
+            addr = get_object_or_404(UserAddress, id=address_id, user=user)
+            addr.delete()
+            messages.success(request, 'Address removed successfully.')
+            return redirect(request.path)
+
+        elif action == 'set_default' and address_id:
+            addr = get_object_or_404(UserAddress, id=address_id, user=user)
+            addr.is_default = True
+            addr.save()
+            messages.success(request, f'Default delivery address set to {addr.address_type.title()}.')
+            return redirect(request.path)
+
+        elif action in ('add', 'edit'):
+            full_name = request.POST.get('full_name', '').strip()
+            phone = request.POST.get('phone', '').strip()
+            house_no = request.POST.get('house_no', '').strip()
+            street_area = request.POST.get('street_area', '').strip()
+            landmark = request.POST.get('landmark', '').strip()
+            city = request.POST.get('city', '').strip()
+            state = request.POST.get('state', '').strip()
+            pincode = request.POST.get('pincode', '').strip()
+            address_type = request.POST.get('address_type', 'home').strip().lower()
+            is_default = request.POST.get('is_default') in ('true', 'True', '1', 'on', 1)
+
+            if not full_name or not phone or not house_no or not street_area or not city or not state or not pincode:
+                messages.error(request, 'Please fill in all mandatory address fields marked with *.')
+                return redirect(request.path)
+
+            if len(re.sub(r'[^0-9]', '', pincode)) != 6:
+                messages.error(request, 'Please enter a valid 6-digit Indian PIN Code.')
+                return redirect(request.path)
+
+            if action == 'edit' and address_id:
+                addr = get_object_or_404(UserAddress, id=address_id, user=user)
+            else:
+                addr = UserAddress(user=user)
+
+            addr.full_name = full_name
+            addr.phone = phone
+            addr.house_no = house_no
+            addr.street_area = street_area
+            addr.landmark = landmark
+            addr.city = city
+            addr.state = state
+            addr.pincode = pincode
+            addr.address_type = address_type if address_type in ('home', 'work', 'other') else 'home'
+
+            if not UserAddress.objects.filter(user=user).exclude(pk=addr.pk).exists():
+                is_default = True
+            addr.is_default = is_default
+            addr.save()
+
+            messages.success(request, f'Address successfully {"updated" if action == "edit" else "added"}.')
+            return redirect(request.path)
+
+    addresses = UserAddress.objects.filter(user=user)
+    context = {
+        'page_title': 'My Addresses - Balaji Ingredients',
+        'active_nav': 'addresses',
+        'addresses': addresses,
+    }
+    return render(request, 'portal/addresses.html', context)
+
+
+@login_required(login_url='/login/')
+def api_addresses(request):
+    """
+    JSON API for address selection, addition, and management during checkout.
+    """
+    user = request.user
+    if request.method == 'GET':
+        addresses = UserAddress.objects.filter(user=user)
+        data = [{
+            'id': a.id,
+            'full_name': a.full_name,
+            'phone': a.phone,
+            'house_no': a.house_no,
+            'street_area': a.street_area,
+            'landmark': a.landmark,
+            'city': a.city,
+            'state': a.state,
+            'pincode': a.pincode,
+            'address_type': a.address_type,
+            'is_default': a.is_default,
+            'formatted': a.formatted_address,
+        } for a in addresses]
+        return JsonResponse({'success': True, 'addresses': data})
+
+    elif request.method == 'POST':
+        try:
+            body = json.loads(request.body) if request.content_type == 'application/json' else request.POST
+            action = body.get('action', 'add')
+
+            if action == 'set_default':
+                addr = get_object_or_404(UserAddress, id=body.get('id'), user=user)
+                addr.is_default = True
+                addr.save()
+                return JsonResponse({'success': True, 'message': 'Default address set.'})
+
+            elif action == 'delete':
+                addr = get_object_or_404(UserAddress, id=body.get('id'), user=user)
+                addr.delete()
+                return JsonResponse({'success': True, 'message': 'Address deleted.'})
+
+            elif action in ('add', 'edit'):
+                addr_id = body.get('id')
+                if action == 'edit' and addr_id:
+                    addr = get_object_or_404(UserAddress, id=addr_id, user=user)
+                else:
+                    addr = UserAddress(user=user)
+
+                addr.full_name = body.get('full_name', '').strip()
+                addr.phone = body.get('phone', '').strip()
+                addr.house_no = body.get('house_no', '').strip()
+                addr.street_area = body.get('street_area', '').strip()
+                addr.landmark = body.get('landmark', '').strip()
+                addr.city = body.get('city', '').strip()
+                addr.state = body.get('state', '').strip()
+                addr.pincode = body.get('pincode', '').strip()
+                addr.address_type = body.get('address_type', 'home').strip().lower()
+
+                if not UserAddress.objects.filter(user=user).exclude(pk=addr.pk).exists():
+                    addr.is_default = True
+                else:
+                    addr.is_default = bool(body.get('is_default', False))
+                addr.save()
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Address saved successfully.',
+                    'address': {
+                        'id': addr.id,
+                        'full_name': addr.full_name,
+                        'phone': addr.phone,
+                        'house_no': addr.house_no,
+                        'street_area': addr.street_area,
+                        'city': addr.city,
+                        'state': addr.state,
+                        'pincode': addr.pincode,
+                        'address_type': addr.address_type,
+                        'is_default': addr.is_default,
+                        'formatted': addr.formatted_address,
+                    }
+                })
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+    return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+
+
+@login_required(login_url='/login/')
+def account_settings_view(request):
+    """
+    Dedicated Account Settings page (Change Email, Phone, Password,
+    Notification Preferences, Privacy, and Account Deactivation).
+    """
+    user = request.user
+    profile, _ = CompanyProfile.objects.get_or_create(
+        user=user,
+        defaults={'company_name': f"{user.first_name or user.username}'s Enterprise"}
+    )
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'change_email':
+            new_email = request.POST.get('new_email', '').strip().lower()
+            password = request.POST.get('password', '')
+
+            if not user.check_password(password):
+                messages.error(request, 'Incorrect current password. Email modification was rejected.')
+            elif not new_email or '@' not in new_email:
+                messages.error(request, 'Please enter a valid email address.')
+            elif User.objects.filter(email__iexact=new_email).exclude(pk=user.pk).exists():
+                messages.error(request, 'This email address is already linked to another account.')
+            else:
+                user.email = new_email
+                user.save()
+                messages.success(request, 'Your account email address has been successfully updated.')
+            return redirect(request.path)
+
+        elif action == 'change_phone':
+            new_phone = request.POST.get('new_phone', '').strip()
+            password = request.POST.get('password', '')
+
+            if not user.check_password(password):
+                messages.error(request, 'Incorrect current password. Mobile number change was rejected.')
+            elif not new_phone or len(re.sub(r'[^0-9]', '', new_phone)) < 10:
+                messages.error(request, 'Please enter a valid 10-digit mobile number.')
+            else:
+                profile.phone = new_phone
+                profile.save()
+                messages.success(request, 'Your mobile number has been updated successfully.')
+            return redirect(request.path)
 
         elif action == 'change_password':
-            old_password = request.POST.get('old_password')
-            new_password = request.POST.get('new_password')
-            confirm_new_password = request.POST.get('confirm_new_password')
+            old_password = request.POST.get('old_password', '')
+            new_password = request.POST.get('new_password', '')
+            confirm_new_password = request.POST.get('confirm_new_password', '')
 
             if not user.check_password(old_password):
                 messages.error(request, 'Current password is incorrect.')
             elif new_password != confirm_new_password:
                 messages.error(request, 'New passwords do not match.')
             elif len(new_password) < 6:
-                messages.error(request, 'New password must be at least 6 characters.')
+                messages.error(request, 'New password must be at least 6 characters long.')
             else:
                 user.set_password(new_password)
                 user.save()
+                from django.contrib.auth import update_session_auth_hash
                 update_session_auth_hash(request, user)
-                messages.success(request, 'Password changed successfully.')
-            return redirect('/profile/')
+                messages.success(request, 'Your password has been changed successfully.')
+            return redirect(request.path)
+
+        elif action == 'update_notifications':
+            profile.email_notifications = request.POST.get('email_notifications') in ('on', 'true', '1')
+            profile.sms_notifications = request.POST.get('sms_notifications') in ('on', 'true', '1')
+            profile.whatsapp_notifications = request.POST.get('whatsapp_notifications') in ('on', 'true', '1')
+            profile.save()
+            messages.success(request, 'Notification preferences updated successfully.')
+            return redirect(request.path)
+
+        elif action == 'deactivate_account':
+            password = request.POST.get('password', '')
+            if not user.check_password(password):
+                messages.error(request, 'Incorrect password. Account deactivation cancelled.')
+                return redirect(request.path)
+
+            user.is_active = False
+            user.save()
+            from django.contrib.auth import logout
+            logout(request)
+            messages.info(request, 'Your account has been deactivated. Contact Balaji Ingredients support if you wish to reactivate.')
+            return redirect('/')
 
     context = {
-        'page_title': 'Company Profile & Settings',
-        'active_nav': 'profile',
+        'page_title': 'Account Settings - Balaji Ingredients',
+        'active_nav': 'account_settings',
+        'user': user,
         'profile': profile,
     }
-    return render(request, 'portal/profile.html', context)
+    return render(request, 'portal/account_settings.html', context)
 
 
 @login_required(login_url='/login/')
@@ -655,12 +948,23 @@ def api_me(request):
     Returns current authenticated user status for frontend synchronization.
     """
     if request.user.is_authenticated:
+        profile = getattr(request.user, 'company_profile', None)
+        first_letter = (request.user.first_name[:1] if request.user.first_name else request.user.username[:1]).upper()
+        avatar_url = profile.avatar.url if (profile and profile.avatar) else ''
+        phone = profile.phone if profile else ''
         return JsonResponse({
             'authenticated': True,
             'user': {
+                'id': request.user.id,
+                'customer_id': f"BI-CUST-{request.user.id:05d}",
                 'username': request.user.username,
                 'name': request.user.get_full_name() or request.user.username,
+                'first_name': request.user.first_name or request.user.username,
                 'email': request.user.email,
+                'phone': phone,
+                'initials': first_letter,
+                'avatar_url': avatar_url,
+                'role': 'Verified Member' if (profile and profile.is_verified) else 'Wholesale Partner',
             }
         })
     return JsonResponse({'authenticated': False})

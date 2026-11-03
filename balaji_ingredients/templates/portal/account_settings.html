@@ -1,0 +1,505 @@
+{% extends 'portal/base_portal.html' %}
+
+{% block extra_head %}
+<style>
+  /* ═════════════════════════════════════════════════════════════════
+     ACCOUNT SETTINGS (BLINKIT / ZOMATO STYLE)
+     ═════════════════════════════════════════════════════════════════ */
+  .settings-page-wrapper {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-bottom: 60px;
+  }
+
+  .settings-header-area {
+    margin-bottom: 24px;
+  }
+  .settings-header-area h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .settings-header-area p {
+    font-size: 13.5px;
+    color: var(--text-body);
+    margin: 0;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .settings-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  .settings-card-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .settings-card-desc {
+    font-size: 13px;
+    color: var(--text-body);
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #D1D5DB;
+    margin-bottom: 6px;
+  }
+  .form-input {
+    width: 100%;
+    background: rgba(17, 24, 39, 0.85);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #FFFFFF;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: #C88E2B;
+    background: rgba(17, 24, 39, 1);
+    box-shadow: 0 0 0 3px rgba(200, 142, 43, 0.18);
+  }
+
+  .btn-submit-setting {
+    background: #173823;
+    color: #FAF8F5;
+    border: 1.5px solid #C88E2B;
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .btn-submit-setting:hover {
+    background: #2D5A43;
+    transform: translateY(-1px);
+  }
+
+  /* Toggle Switches for Notifications */
+  .pref-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .pref-row:last-child {
+    border-bottom: none;
+  }
+  .pref-info h4 {
+    margin: 0 0 2px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  .pref-info p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #9CA3AF;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: .3s;
+    border-radius: 24px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: #10B981;
+  }
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+
+  /* Deactivation Warning Box */
+  .deactivate-box {
+    border: 1.5px solid rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.08);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 10px;
+  }
+  .deactivate-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #F87171;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .deactivate-desc {
+    font-size: 13px;
+    color: #D1D5DB;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .btn-deactivate {
+    background: #DC2626;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-deactivate:hover {
+    background: #B91C1C;
+  }
+
+  @media (max-width: 900px) {
+    .settings-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-page-wrapper">
+
+  <div class="settings-header-area">
+    <h1>Account Settings &amp; Security</h1>
+    <p>Manage your login credentials, password, notification preferences, and privacy controls.</p>
+  </div>
+
+  <!-- Navigation Pills -->
+  <nav class="profile-nav-pills" style="display:flex;gap:10px;margin-bottom:28px;border-bottom:1px solid var(--border-subtle);padding-bottom:12px;overflow-x:auto;">
+    <a href="{% url 'portal:profile' %}" class="profile-pill-link" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:var(--text-body);background:var(--bg-surface);border:1px solid var(--border-subtle);">
+      <span>👤</span> Personal Information
+    </a>
+    <a href="{% url 'portal:addresses' %}" class="profile-pill-link" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:var(--text-body);background:var(--bg-surface);border:1px solid var(--border-subtle);">
+      <span>📍</span> My Addresses
+    </a>
+    <a href="{% url 'portal:orders' %}" class="profile-pill-link" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:var(--text-body);background:var(--bg-surface);border:1px solid var(--border-subtle);">
+      <span>📦</span> My Orders
+    </a>
+    <a href="/products/cart/" class="profile-pill-link" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:var(--text-body);background:var(--bg-surface);border:1px solid var(--border-subtle);">
+      <span>🛒</span> My Cart
+    </a>
+    <a href="{% url 'portal:account_settings' %}" class="profile-pill-link active" style="display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:700;text-decoration:none;color:#FAF8F5;background:#173823;border:1px solid #C88E2B;">
+      <span>⚙️</span> Account Settings
+    </a>
+  </nav>
+
+  <div class="settings-grid">
+
+    <!-- Left Column: Settings Forms -->
+    <div>
+
+      <!-- 1. Change Password -->
+      <div class="settings-card">
+        <div class="settings-card-title">
+          <span>🔒</span> Change Password
+        </div>
+        <div class="settings-card-desc">
+          Update your login password regularly to protect your wholesale pricing and order history.
+        </div>
+
+        <form method="POST" action="{% url 'portal:account_settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="change_password">
+
+          <div class="form-group">
+            <label class="form-label" for="id_old_pass">Current Password <span style="color:#EF4444;">*</span></label>
+            <input type="password" name="old_password" id="id_old_pass" class="form-input" required placeholder="Enter current password">
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div>
+              <label class="form-label" for="id_new_pass">New Password <span style="color:#EF4444;">*</span></label>
+              <input type="password" name="new_password" id="id_new_pass" class="form-input" required minlength="6" placeholder="Min 6 characters">
+            </div>
+            <div>
+              <label class="form-label" for="id_conf_pass">Confirm New Password <span style="color:#EF4444;">*</span></label>
+              <input type="password" name="confirm_new_password" id="id_conf_pass" class="form-input" required minlength="6" placeholder="Re-enter new password">
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="submit" class="btn-submit-setting">
+              <span>🔑</span> Update Password
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 2. Change Registered Email -->
+      <div class="settings-card">
+        <div class="section-card-title" style="font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:10px;">
+          <span>✉️</span> Change Email Address
+        </div>
+        <div class="settings-card-desc">
+          Current email: <strong style="color:#FBBF24;">{{ user.email }}</strong>. Requires current password verification.
+        </div>
+
+        <form method="POST" action="{% url 'portal:account_settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="change_email">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div>
+              <label class="form-label" for="id_new_email">New Email Address <span style="color:#EF4444;">*</span></label>
+              <input type="email" name="new_email" id="id_new_email" class="form-input" required placeholder="new.email@example.com">
+            </div>
+            <div>
+              <label class="form-label" for="id_pass_email">Current Password <span style="color:#EF4444;">*</span></label>
+              <input type="password" name="password" id="id_pass_email" class="form-input" required placeholder="Verify password">
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="submit" class="btn-submit-setting">
+              <span>✉️</span> Save New Email
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 3. Change Mobile Number -->
+      <div class="settings-card">
+        <div class="settings-card-title">
+          <span>📞</span> Change Mobile Number
+        </div>
+        <div class="settings-card-desc">
+          Current mobile: <strong style="color:#FBBF24;">{{ profile.phone|default:"Not configured" }}</strong>. Used for order dispatch notifications.
+        </div>
+
+        <form method="POST" action="{% url 'portal:account_settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="change_phone">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div>
+              <label class="form-label" for="id_new_phone">New Mobile Number <span style="color:#EF4444;">*</span></label>
+              <input type="tel" name="new_phone" id="id_new_phone" class="form-input" required placeholder="10-digit mobile number">
+            </div>
+            <div>
+              <label class="form-label" for="id_pass_phone">Current Password <span style="color:#EF4444;">*</span></label>
+              <input type="password" name="password" id="id_pass_phone" class="form-input" required placeholder="Verify password">
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="submit" class="btn-submit-setting">
+              <span>📞</span> Save New Mobile
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 4. Notification Preferences -->
+      <div class="settings-card">
+        <div class="settings-card-title">
+          <span>🔔</span> Notification Preferences
+        </div>
+        <div class="settings-card-desc">
+          Choose how Balaji Ingredients communicates order dispatches, batch CoAs, and delivery updates.
+        </div>
+
+        <form method="POST" action="{% url 'portal:account_settings' %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="update_notifications">
+
+          <div class="pref-row">
+            <div class="pref-info">
+              <h4>Order Invoices &amp; Email Notifications</h4>
+              <p>Receive order confirmations, payment receipts, and digital weighbridge slips via email.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" name="email_notifications" {% if profile.email_notifications %}checked{% endif %}>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="pref-row">
+            <div class="pref-info">
+              <h4>SMS Delivery Alerts</h4>
+              <p>Receive live truck departure, arrival, and OTP delivery alerts on your mobile phone.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" name="sms_notifications" {% if profile.sms_notifications %}checked{% endif %}>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="pref-row">
+            <div class="pref-info">
+              <h4>WhatsApp Commercial Updates</h4>
+              <p>Direct consignment LR numbers and batch Certificate of Analysis (CoA) via WhatsApp.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" name="whatsapp_notifications" {% if profile.whatsapp_notifications %}checked{% endif %}>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div style="margin-top:18px;display:flex;justify-content:flex-end;">
+            <button type="submit" class="btn-submit-setting">
+              <span>✓</span> Save Preferences
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 5. Account Deactivation -->
+      <div class="settings-card" style="border-color:rgba(239, 68, 68, 0.35);">
+        <div class="deactivate-box">
+          <div class="deactivate-title">
+            <span>⚠️</span> Account Deactivation
+          </div>
+          <div class="deactivate-desc">
+            Deactivating your account will suspend your wholesale pricing, disable active quote requests, and sign you out of all sessions. You can contact support at any time to reactivate your account.
+          </div>
+
+          <button type="button" class="btn-deactivate" onclick="openDeactivateModal()">
+            Deactivate My Account
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Security Status & Logout Card -->
+    <div>
+      <div class="settings-card">
+        <div class="settings-card-title">
+          <span>🛡️</span> Login &amp; Security
+        </div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px;">
+          <div style="padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:11.5px;color:#9CA3AF;">Registered Username</div>
+            <div style="font-size:14px;color:#fff;font-weight:700;">{{ user.username }}</div>
+          </div>
+          <div style="padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:11.5px;color:#9CA3AF;">Last Login</div>
+            <div style="font-size:13.5px;color:#fff;">{{ user.last_login|date:"d M Y, h:i A"|default:"Active now" }}</div>
+          </div>
+          <div style="padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:11.5px;color:#9CA3AF;">Password Security</div>
+            <div style="font-size:13px;color:#10B981;font-weight:700;">✓ Encrypted PBKDF2-SHA256</div>
+          </div>
+          <div>
+            <div style="font-size:11.5px;color:#9CA3AF;">Active Session Protection</div>
+            <div style="font-size:13px;color:#10B981;font-weight:700;">✓ Protected with CSRF &amp; HTTPS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prominent Logout Card (Section 7 Requirement) -->
+      <div class="settings-card" style="border-color:rgba(200, 142, 43, 0.4);">
+        <div class="settings-card-title" style="color:#FBBF24;">
+          <span>🚪</span> Sign Out of Account
+        </div>
+        <p style="font-size:13px;color:#D1D5DB;margin:8px 0 16px;">
+          Safely terminate your active authentication session across this browser.
+        </p>
+        <button type="button" onclick="openLogoutModal()" style="width:100%;background:#DC2626;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s;">
+          <span>🚪</span> Log Out
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Account Deactivation Modal -->
+<div class="addr-modal-overlay" id="deactivateModal" onclick="closeDeactivateModal(event)">
+  <div class="addr-modal-box" onclick="event.stopPropagation()" style="max-width:500px;border-color:rgba(239, 68, 68, 0.6);">
+    <div class="addr-modal-header" style="background:#1C1917;">
+      <h3 style="color:#F87171;">⚠️ Confirm Account Deactivation</h3>
+      <button type="button" class="addr-modal-close" onclick="closeDeactivateModal()">&times;</button>
+    </div>
+    <form method="POST" action="{% url 'portal:account_settings' %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="deactivate_account">
+      <div class="addr-modal-body">
+        <p style="font-size:13.5px;color:#D1D5DB;line-height:1.5;margin-bottom:16px;">
+          Are you sure you want to deactivate your Balaji Ingredients customer account? Your saved addresses and orders will remain securely preserved, but you will not be able to log in until an administrator re-activates your account.
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="id_deact_pass">Enter your password to confirm <span style="color:#EF4444;">*</span></label>
+          <input type="password" name="password" id="id_deact_pass" class="form-input" required placeholder="Your password">
+        </div>
+      </div>
+      <div class="addr-modal-footer">
+        <button type="button" class="btn-modal-cancel" onclick="closeDeactivateModal()">Cancel</button>
+        <button type="submit" class="btn-deactivate" style="padding:10px 22px;">Yes, Deactivate Account</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function openDeactivateModal() {
+    document.getElementById('deactivateModal').classList.add('open');
+  }
+  function closeDeactivateModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('addr-modal-close') && !e.target.classList.contains('btn-modal-cancel')) return;
+    document.getElementById('deactivateModal').classList.remove('open');
+  }
+</script>
+{% endblock %}

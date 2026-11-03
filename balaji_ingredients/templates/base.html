@@ -41,7 +41,7 @@
             <span class="portal-indicator"></span> <strong>{{ user.username }} (Portal)</strong>
           </a>
           <span class="utility-sep">|</span>
-          <a href="{% url 'portal:logout' %}" class="utility-link">Logout</a>
+          <a href="javascript:void(0)" onclick="openBaseLogoutModal()" class="utility-link">Logout</a>
         {% else %}
           <a href="javascript:void(0)" onclick="openAuthModal()" class="utility-link portal-link">
             <span class="utility-icon">🔒</span> B2B Client Portal
@@ -157,7 +157,46 @@
         <a href="{% url 'products:cart' %}" class="btn-pill btn-pill-primary">🛒 Cart{% if CART_COUNT %} ({{ CART_COUNT }}){% endif %}</a>
         <a href="{% url 'products:quote_request' %}" class="btn-pill btn-pill-primary">Request a Quote</a>
         {% if user.is_authenticated %}
-          <a href="{% url 'portal:dashboard' %}" class="btn-pill btn-pill-ghost">Portal Dashboard</a>
+          <div class="base-profile-dropdown-wrap" style="position: relative;">
+            <button type="button" class="btn-base-profile" id="baseProfileBtn" onclick="toggleBaseProfile(event)" aria-expanded="false" aria-haspopup="true">
+              <span class="base-profile-avatar">
+                {{ user.first_name|default:user.username|slice:":1"|upper }}
+              </span>
+              <span class="base-profile-name">{{ user.first_name|default:user.username }}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="base-profile-menu-card" id="baseProfileMenu" style="display: none;">
+              <div class="base-menu-head">
+                <div class="base-menu-user">{{ user.get_full_name|default:user.username }}</div>
+                <div class="base-menu-email">{{ user.email }}</div>
+                <span class="base-menu-tag">Verified Partner</span>
+              </div>
+              <div class="base-menu-links">
+                <a href="{% url 'portal:profile' %}" class="base-menu-item">
+                  <span class="bmi-icon">👤</span> My Profile
+                </a>
+                <a href="{% url 'portal:orders' %}" class="base-menu-item">
+                  <span class="bmi-icon">📦</span> My Orders
+                </a>
+                <a href="{% url 'portal:addresses' %}" class="base-menu-item">
+                  <span class="bmi-icon">📍</span> My Addresses
+                </a>
+                <a href="{% url 'products:cart' %}" class="base-menu-item">
+                  <span class="bmi-icon">🛒</span> My Cart
+                </a>
+                <a href="{% url 'portal:account_settings' %}" class="base-menu-item">
+                  <span class="bmi-icon">⚙️</span> Account Settings
+                </a>
+                <a href="{% url 'portal:support' %}" class="base-menu-item">
+                  <span class="bmi-icon">💬</span> Help &amp; Support
+                </a>
+                <div class="base-menu-divider"></div>
+                <button type="button" class="base-menu-item bmi-logout" onclick="openBaseLogoutModal()">
+                  <span class="bmi-icon">🚪</span> Logout
+                </button>
+              </div>
+            </div>
+          </div>
         {% else %}
           <a href="javascript:void(0)" onclick="openAuthModal()" class="btn-pill btn-pill-ghost">Client Sign In</a>
         {% endif %}
@@ -182,8 +221,17 @@
       <a href="{% url 'core:about' %}" class="mobile-link">About Us</a>
       <a href="{% url 'core:contact' %}" class="mobile-link">Contact Desk</a>
       {% if user.is_authenticated %}
-        <a href="{% url 'portal:dashboard' %}" class="mobile-cta">Go to Client Portal</a>
-        <a href="{% url 'portal:logout' %}" class="mobile-link">Sign Out</a>
+        <div style="padding: 10px 14px; background: rgba(23, 56, 35, 0.08); border-radius: 8px; margin: 8px 0;">
+          <div style="font-weight: 800; color: #173823; font-size: 0.9rem;">{{ user.get_full_name|default:user.username }}</div>
+          <div style="font-size: 0.75rem; color: #64748B;">{{ user.email }}</div>
+        </div>
+        <a href="{% url 'portal:profile' %}" class="mobile-link">👤 My Profile</a>
+        <a href="{% url 'portal:orders' %}" class="mobile-link">📦 My Orders</a>
+        <a href="{% url 'portal:addresses' %}" class="mobile-link">📍 My Addresses</a>
+        <a href="{% url 'products:cart' %}" class="mobile-link">🛒 My Cart</a>
+        <a href="{% url 'portal:account_settings' %}" class="mobile-link">⚙️ Account Settings</a>
+        <a href="{% url 'portal:support' %}" class="mobile-link">💬 Help &amp; Support</a>
+        <a href="javascript:void(0)" onclick="openBaseLogoutModal()" class="mobile-link" style="color: #A82B1D; font-weight: 700;">🚪 Logout</a>
       {% else %}
         <a href="{% url 'portal:login' %}" class="mobile-link">Client Portal Sign In</a>
         <a href="{% url 'products:quote_request' %}" class="mobile-cta">Request a Quote</a>
@@ -1033,6 +1081,226 @@
   });
 })();
 </script>
+
+
+  <!-- Base Profile Dropdown & Logout Modal Styles -->
+  <style>
+    .btn-base-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(23, 56, 35, 0.08);
+      border: 1.5px solid rgba(23, 56, 35, 0.2);
+      padding: 4px 14px 4px 6px;
+      border-radius: 9999px;
+      cursor: pointer;
+      color: #173823;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all 0.2s ease;
+    }
+    .btn-base-profile:hover, .btn-base-profile.active {
+      background: #FAF8F5;
+      border-color: #C88E2B;
+      transform: translateY(-1px);
+    }
+    .base-profile-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #173823, #2E6641);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.8rem;
+      border: 1.5px solid #C88E2B;
+    }
+    .base-profile-name {
+      max-width: 110px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .base-profile-menu-card {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 250px;
+      background: #FFFFFF;
+      border: 1px solid rgba(23, 56, 35, 0.14);
+      border-radius: 16px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+      z-index: 9999;
+      padding: 6px;
+      animation: modalFadeIn 0.18s ease;
+    }
+    .base-menu-head {
+      padding: 12px 14px 10px;
+      background: #FAF8F5;
+      border-radius: 10px;
+      margin-bottom: 4px;
+    }
+    .base-menu-user {
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #173823;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .base-menu-email {
+      font-size: 0.74rem;
+      color: #78716C;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .base-menu-tag {
+      display: inline-block;
+      margin-top: 4px;
+      background: rgba(30, 107, 62, 0.12);
+      color: #1E6B3E;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .base-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #334155;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s ease;
+      cursor: pointer;
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+    }
+    .base-menu-item:hover {
+      background: #F1F5F9;
+      color: #173823;
+    }
+    .bmi-icon {
+      font-size: 0.95rem;
+      width: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .base-menu-divider {
+      height: 1px;
+      background: #E2E8F0;
+      margin: 4px 6px;
+    }
+    .base-menu-item.bmi-logout {
+      color: #A82B1D;
+    }
+    .base-menu-item.bmi-logout:hover {
+      background: #FEF2F2;
+      color: #872015;
+    }
+
+    /* Modal Overlay */
+    .base-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .base-logout-modal-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 20px;
+      max-width: 420px;
+      width: 100%;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+
+  <!-- LOGOUT CONFIRMATION MODAL -->
+  <div class="base-modal-overlay" id="baseLogoutModal" style="display: none;">
+    <div class="base-logout-modal-card">
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: #FDF2F2; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; border: 1px solid rgba(168, 43, 29, 0.2);">
+        <svg width="28" height="28" fill="none" stroke="#A82B1D" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+        </svg>
+      </div>
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: #1E293B; margin-bottom: 8px;">Sign Out of Your Account?</h3>
+      <p style="font-size: 0.85rem; color: #64748B; line-height: 1.5; margin-bottom: 22px;">Are you sure you want to end your current session? You will need to sign back in with your credentials.</p>
+      <div style="display: flex; gap: 12px;">
+        <button type="button" onclick="closeBaseLogoutModal()" style="flex: 1; padding: 10px 16px; border-radius: 9999px; background: #F1F5F9; border: 1px solid #CBD5E1; color: #334155; font-weight: 700; font-size: 0.88rem; cursor: pointer;">Cancel</button>
+        <form method="POST" action="{% url 'portal:logout' %}" style="flex: 1; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="width: 100%; padding: 10px 16px; border-radius: 9999px; background: #A82B1D; border: none; color: #FFFFFF; font-weight: 700; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 14px rgba(168, 43, 29, 0.3);">Yes, Sign Out</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleBaseProfile(e) {
+      if (e) e.stopPropagation();
+      var menu = document.getElementById('baseProfileMenu');
+      var btn = document.getElementById('baseProfileBtn');
+      if (!menu) return;
+      var isOpen = menu.style.display === 'block';
+      menu.style.display = isOpen ? 'none' : 'block';
+      if (btn) {
+        if (isOpen) btn.classList.remove('active');
+        else btn.classList.add('active');
+      }
+    }
+
+    function openBaseLogoutModal() {
+      var menu = document.getElementById('baseProfileMenu');
+      if (menu) menu.style.display = 'none';
+      var modal = document.getElementById('baseLogoutModal');
+      if (modal) modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBaseLogoutModal() {
+      var modal = document.getElementById('baseLogoutModal');
+      if (modal) modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    window.addEventListener('click', function(e) {
+      var menu = document.getElementById('baseProfileMenu');
+      var btn = document.getElementById('baseProfileBtn');
+      if (menu && menu.style.display === 'block') {
+        if (!menu.contains(e.target) && (!btn || !btn.contains(e.target))) {
+          menu.style.display = 'none';
+          if (btn) btn.classList.remove('active');
+        }
+      }
+    });
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var menu = document.getElementById('baseProfileMenu');
+        if (menu) menu.style.display = 'none';
+        closeBaseLogoutModal();
+      }
+    });
+  </script>
 
 </body>
 </html>

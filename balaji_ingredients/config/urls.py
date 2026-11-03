@@ -23,6 +23,13 @@ urlpatterns = [
     path('dashboard/', portal_views.dashboard_page_view, name='dashboard'),
     path('dashboard.html', portal_views.dashboard_page_view, name='dashboard_html'),
 
+    # Direct User Profile & Account Settings routes (Blinkit/Zomato style)
+    path('profile/', portal_views.profile_view, name='direct_profile'),
+    path('addresses/', portal_views.addresses_view, name='direct_addresses'),
+    path('account-settings/', portal_views.account_settings_view, name='direct_account_settings'),
+    path('orders/', portal_views.orders_view, name='direct_orders'),
+    path('api/user/addresses/', portal_views.api_addresses, name='api_user_addresses'),
+
     # Customer Feedback routes
     path('feedback/', portal_views.feedback_page_view, name='feedback'),
     path('feedback.html', portal_views.feedback_page_view, name='feedback_html'),
